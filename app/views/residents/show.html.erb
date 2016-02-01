@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @resident.name %>
+</p>
+
+<p>
+  <strong>Multiplier:</strong>
+  <%= @resident.multiplier %>
+</p>
+
+<p>
+  <strong>Unit:</strong>
+  <%= @resident.unit.name %>
+</p>
+
+<p>
+  <strong>Balance:</strong>
+  <%= @resident.balance %>
+</p>
+
+<%= link_to 'Edit', edit_resident_path(@resident) %> |
+<%= link_to 'Back', residents_path %>

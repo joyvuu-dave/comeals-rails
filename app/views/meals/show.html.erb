@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Date:</strong>
+  <%= @meal.date %>
+</p>
+
+<p>
+  <strong>Cost per Person:</strong>
+  <%= 2 * @meal.chargeable_unit_cost %>
+</p>
+
+<p>
+  <strong>Is Subsidized:</strong>
+  <%= @meal.is_subsidized %>
+</p>
+
+<%= link_to 'Edit', edit_meal_path(@meal) %> |
+<%= link_to 'Back', meals_path %>

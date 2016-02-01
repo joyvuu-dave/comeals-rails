@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Comeals6</title>
+    <%= csrf_meta_tags %>
+    <%= action_cable_meta_tag %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  </head>
+
+  <body>
+
+    <%= link_to 'Communities', communities_path %>
+    <%= link_to 'Meals', meals_path %>
+    <%= link_to 'Bills', bills_path %>
+    <%= link_to 'Residents', residents_path %>
+    <%= link_to 'Units', units_path %>
+    <%= link_to 'Attendances', attendances_path %>
+
+    <%= yield %>
+  </body>
+</html>

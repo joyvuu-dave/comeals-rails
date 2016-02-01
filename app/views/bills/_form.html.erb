@@ -1,0 +1,32 @@
+<%= form_for(bill) do |f| %>
+  <% if bill.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(bill.errors.count, "error") %> prohibited this bill from being saved:</h2>
+
+      <ul>
+      <% bill.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :meal_id %>
+    <%= f.collection_select(:meal_id, Meal.all, :id, :date) %>
+  </div>
+
+  <div class="field">
+    <%= f.label :resident_id %>
+    <%= f.collection_select(:resident_id, Resident.all, :id, :name) %>
+  </div>
+
+  <div class="field">
+    <%= f.label :amount %>
+    <%= f.number_field :amount %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
