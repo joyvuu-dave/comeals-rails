@@ -40,7 +40,7 @@ class MealsController < ApplicationController
 
   # GET /meals/new
   def new
-    @meal = Meal.new(community_id: Community.first.id)
+    @meal = Meal.new
   end
 
   # GET /meals/1/edit
@@ -51,6 +51,7 @@ class MealsController < ApplicationController
   # POST /meals.json
   def create
     @meal = Meal.new(meal_params)
+    @meal.community_id = Community.first.id
 
     respond_to do |format|
       if @meal.save
