@@ -18,14 +18,14 @@
   <div class="form-group">
     <%= f.label :meal_id, :class => 'control-label col-xs-3' %>
     <div class="col-xs-4">
-      <%= f.collection_select(:meal_id, Meal.all, :id, :date, :class => 'form-control') %>
+      <%= f.collection_select(:meal_id, Meal.order(:date).all, :id, :date, :class => 'form-control') %>
     </div>
     <%=f.error_span(:meal_id) %>
   </div>
   <div class="form-group">
     <%= f.label :resident_id, :class => 'control-label col-xs-3' %>
     <div class="col-xs-4">
-      <%= f.collection_select(:resident_id, Resident.all, :id, :name, :class => 'form-control') %>
+      <%= f.collection_select(:resident_id, Resident.order(:name).all, :id, :name, :class => 'form-control') %>
     </div>
     <%=f.error_span(:resident_id) %>
   </div>

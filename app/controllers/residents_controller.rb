@@ -27,7 +27,7 @@ class ResidentsController < ApplicationController
   # GET /residents
   # GET /residents.json
   def index
-    @residents = Resident.order(:name).includes({ :bills => :meal }, { :meal_residents => :meal }, { :guests => :meal }, :unit).all.page(params[:page])
+    @residents = Resident.order("units.name").includes({ :bills => :meal }, { :meal_residents => :meal }, { :guests => :meal }, :unit).all.page(params[:page])
   end
 
   # GET /residents/1
@@ -52,7 +52,7 @@ class ResidentsController < ApplicationController
 
     respond_to do |format|
       if @resident.save
-        format.html { redirect_to @resident, notice: 'Resident was successfully created.' }
+        format.html { redirect_to residents_url, notice: 'Resident was successfully created.' }
         format.json { render :show, status: :created, location: @resident }
       else
         format.html { render :new }
@@ -66,7 +66,7 @@ class ResidentsController < ApplicationController
   def update
     respond_to do |format|
       if @resident.update(resident_params)
-        format.html { redirect_to @resident, notice: 'Resident was successfully updated.' }
+        format.html { redirect_to residents_url, notice: 'Resident was successfully updated.' }
         format.json { render :show, status: :ok, location: @resident }
       else
         format.html { render :edit }

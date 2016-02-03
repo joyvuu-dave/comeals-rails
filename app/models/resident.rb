@@ -31,6 +31,10 @@ class Resident < ApplicationRecord
   validates :name, uniqueness: true
   validates :multiplier, numericality: { only_integer: true }
 
+  def full_identifier
+    "#{name} - #{unit.name}"
+  end
+
   # DERIVED DATA
   def bill_reimbursements
     bills.reduce(0) { |sum, bill| sum + bill.reimburseable_amount }

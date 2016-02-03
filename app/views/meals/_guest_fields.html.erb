@@ -1,23 +1,20 @@
 <div class="nested-fields">
   <div class="form-group">
-    <%= f.label :name, :class => 'control-label col-xs-3' %>
-    <div class="col-xs-8">
+    <div class="col-xs-offset-3 col-xs-8">
       <%= f.input :name, :class => 'form-control' %>
     </div>
     <%=f.error_span(:name) %>
   </div>
 
   <div class="form-group">
-    <%= f.label :multiplier, :class => 'control-label col-xs-3' %>
-    <div class="col-xs-8">
+    <div class="col-xs-offset-3 col-xs-8">
       <%= f.input :multiplier, :class => 'form-control' %>
     </div>
     <%=f.error_span(:multiplier) %>
   </div>
 
   <div class="form-group">
-    <%= f.label :resident, :class => 'control-label col-xs-3' %>
-    <div class="col-xs-8">
+    <div class="col-xs-offset-3 col-xs-8">
       <%= f.association :resident, :class => 'form-control' %>
     </div>
     <%=f.error_span(:resident) %>
@@ -25,7 +22,7 @@
 
   <div class="form-group">
     <div class="col-xs-offset-3 col-xs-9">
-      <%= link_to_remove_association "remove guest", f, :class => 'btn btn-default' %>
+      <%= link_to_remove_association "remove guest", f, :class => 'btn btn-danger' %>
     </div>
   </div>
 </div>

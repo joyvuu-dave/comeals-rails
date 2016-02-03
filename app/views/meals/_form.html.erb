@@ -25,20 +25,20 @@
 
   <div class="form-group">
     <%= f.label :residents, :class => 'control-label col-xs-3' %>
-    <div class="col-xs-8 checkbox inline">
-      <%= f.collection_check_boxes :resident_ids, Resident.all, :id, :name %>
+    <div class="well col-xs-8">
+      <%= f.collection_check_boxes :resident_ids, Resident.order("units.name").includes(:unit).all, :id, :full_identifier, {:item_wrapper_class => 'checkbox'} %>
     </div>
     <%=f.error_span(:resident_ids) %>
   </div>
 
   <div class="form-group">
     <h3 class="col-xs-offset-3 col-xs-9">Guests</h3>
-    <div id="guests" class="col-xs-offset-3 col-xs-9">
+    <div id="guests" class="col-xs-9">
       <%= f.simple_fields_for :guests do |guest| %>
         <%= render 'guest_fields', f: guest %>
       <% end %>
       <div class="links">
-        <%= link_to_add_association 'add guest', f, :guests, :class => 'btn btn-default' %>
+        <%= link_to_add_association 'add guest', f, :guests, :class => 'btn btn-warning' %>
       </div>
     </div>
   </div>
