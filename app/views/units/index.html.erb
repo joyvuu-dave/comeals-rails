@@ -18,7 +18,6 @@
   <tbody>
     <% @units.each do |unit| %>
       <tr>
-        <td><%= unit.id %></td>
         <td><%= unit.name %></td>
         <td><%= number_to_currency(unit.balance/100.to_f) %></td>
         <td>
