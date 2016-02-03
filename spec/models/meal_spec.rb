@@ -1,15 +1,19 @@
 # == Schema Information
-# Schema version: 20160131201418
+# Schema version: 20160202150722
 #
 # Table name: meals
 #
-#  id                :integer          not null, primary key
-#  date              :date             not null
-#  community_id      :integer
-#  cap               :integer
-#  attendances_count :integer
-#  created_at        :datetime         not null
-#  updated_at        :datetime         not null
+#  id                        :integer          not null, primary key
+#  date                      :date             not null
+#  community_id              :integer
+#  cap                       :integer
+#  meal_residents_count      :integer          default(0), not null
+#  guests_count              :integer          default(0), not null
+#  cost                      :integer          default(0), not null
+#  meal_residents_multiplier :integer          default(0), not null
+#  guests_multiplier         :integer          default(0), not null
+#  created_at                :datetime         not null
+#  updated_at                :datetime         not null
 #
 # Indexes
 #

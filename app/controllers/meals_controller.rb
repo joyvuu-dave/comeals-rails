@@ -1,15 +1,19 @@
 # == Schema Information
-# Schema version: 20160131201418
+# Schema version: 20160202150722
 #
 # Table name: meals
 #
-#  id                :integer          not null, primary key
-#  date              :date             not null
-#  community_id      :integer
-#  cap               :integer
-#  attendances_count :integer
-#  created_at        :datetime         not null
-#  updated_at        :datetime         not null
+#  id                        :integer          not null, primary key
+#  date                      :date             not null
+#  community_id              :integer
+#  cap                       :integer
+#  meal_residents_count      :integer          default(0), not null
+#  guests_count              :integer          default(0), not null
+#  cost                      :integer          default(0), not null
+#  meal_residents_multiplier :integer          default(0), not null
+#  guests_multiplier         :integer          default(0), not null
+#  created_at                :datetime         not null
+#  updated_at                :datetime         not null
 #
 # Indexes
 #
@@ -26,7 +30,7 @@ class MealsController < ApplicationController
   # GET /meals
   # GET /meals.json
   def index
-    @meals = Meal.includes(:bills, :attendances).all
+    @meals = Meal.order(date: :desc).all.page(params[:page])
   end
 
   # GET /meals/1
@@ -36,7 +40,7 @@ class MealsController < ApplicationController
 
   # GET /meals/new
   def new
-    @meal = Meal.new
+    @meal = Meal.new(community_id: Community.first.id)
   end
 
   # GET /meals/1/edit
@@ -64,6 +68,8 @@ class MealsController < ApplicationController
   def update
     respond_to do |format|
       if @meal.update(meal_params)
+        # Hack b/c counter_cache doesn't support polymophic relationships
+        MealResident.counter_culture_fix_counts
         format.html { redirect_to @meal, notice: 'Meal was successfully updated.' }
         format.json { render :show, status: :ok, location: @meal }
       else
@@ -86,11 +92,11 @@ class MealsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_meal
-      @meal = Meal.includes(bills: [:resident, :meal], attendances: [:resident, :meal]).find(params[:id])
+      @meal = Meal.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def meal_params
-      params.require(:meal).permit(:date, :community_id)
+      params.require(:meal).permit(:date, :community_id, :resident_ids => [], guests_attributes: [:id, :meal_id, :resident_id, :multiplier, :name, :_destroy])
     end
 end

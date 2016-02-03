@@ -1,6 +1,5 @@
-<h1>Editing Community</h1>
-
-<%= render 'form', community: @community %>
-
-<%= link_to 'Show', @community %> |
-<%= link_to 'Back', communities_path %>
+<%- model_class = Community -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => [:'helpers.titles.edit', 'Edit %{model}'], :model => model_class.model_name.human.titleize %></h1>
+</div>
+<%= render :partial => 'form' %>

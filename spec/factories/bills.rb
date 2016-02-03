@@ -23,9 +23,8 @@
 
 FactoryGirl.define do
   factory :bill do
-    meal nil
-resident nil
-amount 1
+    meal
+    resident
+    amount 4000
   end
-
 end

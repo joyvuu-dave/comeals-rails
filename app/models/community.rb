@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20160131201418
+# Schema version: 20160202150722
 #
 # Table name: communities
 #
@@ -9,9 +9,13 @@
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
+# Indexes
+#
+#  index_communities_on_name  (name) UNIQUE
+#
 
 class Community < ApplicationRecord
-  validates :name, presence: true
+  validates :name, uniqueness: true
   has_many :meals, dependent: :destroy
 
   def cap

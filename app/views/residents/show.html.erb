@@ -1,24 +1,33 @@
-<p id="notice"><%= notice %></p>
+<%- model_class = Resident -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human.titleize %></h1>
+</div>
 
-<p>
-  <strong>Name:</strong>
-  <%= @resident.name %>
-</p>
+<dl class="dl-horizontal">
+  <dt><strong><%= model_class.human_attribute_name(:name) %>:</strong></dt>
+  <dd><%= @resident.name %></dd>
+  <dt><strong>Category:</strong></dt>
+  <dd><%= category_helper(@resident.multiplier) %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:unit_id) %>:</strong></dt>
+  <dd><%= @resident.unit.name %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:bill_costs) %>:</strong></dt>
+  <dd><%= number_to_currency(@resident.bill_costs/100.to_f) %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:bill_reimbursements) %>:</strong></dt>
+  <dd><%= number_to_currency(@resident.bill_reimbursements/100.to_f) %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:meal_resident_costs) %>:</strong></dt>
+  <dd><%= number_to_currency(@resident.meal_resident_costs/100.to_f) %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:guest_costs) %>:</strong></dt>
+  <dd><%= number_to_currency(@resident.guest_costs/100.to_f) %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:balance) %>:</strong></dt>
+  <dd><%= number_to_currency(@resident.balance/100.to_f) %></dd>
+</dl>
 
-<p>
-  <strong>Multiplier:</strong>
-  <%= @resident.multiplier %>
-</p>
-
-<p>
-  <strong>Unit:</strong>
-  <%= @resident.unit.name %>
-</p>
-
-<p>
-  <strong>Balance:</strong>
-  <%= @resident.balance %>
-</p>
-
-<%= link_to 'Edit', edit_resident_path(@resident) %> |
-<%= link_to 'Back', residents_path %>
+<%= link_to t('.back', :default => t("helpers.links.back")),
+              residents_path, :class => 'btn btn-default'  %>
+<%= link_to t('.edit', :default => t("helpers.links.edit")),
+              edit_resident_path(@resident), :class => 'btn btn-default' %>
+<%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+              resident_path(@resident),
+              :method => 'delete',
+              :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+              :class => 'btn btn-danger' %>

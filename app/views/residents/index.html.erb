@@ -1,31 +1,43 @@
-<p id="notice"><%= notice %></p>
+<%- model_class = Resident -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human.pluralize.titleize %></h1>
+</div>
 
-<h1>Residents</h1>
+<%= link_to t('.new', :default => t("helpers.links.new")),
+            new_resident_path,
+            :class => 'btn btn-primary' %>
 
-<table>
+<table class="table table-striped">
   <thead>
     <tr>
-      <th>Name</th>
-      <th>Multiplier</th>
-      <th>Unit</th>
-      <th colspan="3"></th>
+      <th><%= model_class.human_attribute_name(:id) %></th>
+      <th><%= model_class.human_attribute_name(:name) %></th>
+      <th>Category</th>
+      <th><%= model_class.human_attribute_name(:unit_id) %></th>
+      <th><%= model_class.human_attribute_name(:balance) %></th>
+      <th><%=t '.actions', :default => t("helpers.actions") %></th>
     </tr>
   </thead>
-
   <tbody>
     <% @residents.each do |resident| %>
       <tr>
+        <td><%= link_to resident.id, resident_path(resident) %></td>
         <td><%= resident.name %></td>
-        <td><%= resident.multiplier %></td>
+        <td><%= category_helper(resident.multiplier) %></td>
         <td><%= resident.unit.name %></td>
-        <td><%= link_to 'Show', resident %></td>
-        <td><%= link_to 'Edit', edit_resident_path(resident) %></td>
-        <td><%= link_to 'Destroy', resident, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= number_to_currency(resident.balance/100.to_f) %></td>
+        <td>
+          <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                      edit_resident_path(resident), :class => 'btn btn-default btn-xs' %>
+          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                      resident_path(resident),
+                      :method => :delete,
+                      :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                      :class => 'btn btn-xs btn-danger' %>
+        </td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
-<br>
-
-<%= link_to 'New Resident', new_resident_path %>
+<%= paginate @residents %>

@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20160131201418
+# Schema version: 20160202150722
 #
 # Table name: communities
 #
@@ -9,6 +9,10 @@
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
+# Indexes
+#
+#  index_communities_on_name  (name) UNIQUE
+#
 
 class CommunitiesController < ApplicationController
   before_action :set_community, only: [:show, :edit, :update, :destroy]
@@ -16,12 +20,7 @@ class CommunitiesController < ApplicationController
   # GET /communities
   # GET /communities.json
   def index
-    @communities = Community.includes(:meals).all
-  end
-
-  # GET /communities/1
-  # GET /communities/1.json
-  def show
+    @communities = Community.all
   end
 
   # GET /communities/new

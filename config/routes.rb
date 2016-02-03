@@ -1,7 +1,6 @@
 Rails.application.routes.draw do
   root to: 'static_pages#index'
 
-  resources :attendances
   resources :residents
   resources :bills
   resources :units

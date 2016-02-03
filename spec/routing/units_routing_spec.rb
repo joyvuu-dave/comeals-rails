@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20160131201418
+# Schema version: 20160202150722
 #
 # Table name: units
 #
@@ -7,6 +7,10 @@
 #  name       :string           not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#
+# Indexes
+#
+#  index_units_on_name  (name) UNIQUE
 #
 
 require "rails_helper"

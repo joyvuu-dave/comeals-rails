@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20160131201418
+# Schema version: 20160202150722
 #
 # Table name: residents
 #
@@ -7,11 +7,13 @@
 #  name       :string           not null
 #  multiplier :integer          default(2), not null
 #  unit_id    :integer
+#  bill_costs :integer          default(0), not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
 # Indexes
 #
+#  index_residents_on_name     (name) UNIQUE
 #  index_residents_on_unit_id  (unit_id)
 #
 # Foreign Keys
@@ -21,26 +23,28 @@
 
 class Resident < ApplicationRecord
   belongs_to :unit
-  has_many :bills
-  has_many :attendances
+  has_many :bills, dependent: :destroy
+  has_many :meal_residents, dependent: :destroy
+  has_many :meals, through: :meal_residents
+  has_many :guests, dependent: :destroy
 
   validates :name, uniqueness: true
   validates :multiplier, numericality: { only_integer: true }
 
   # DERIVED DATA
-  def bill_costs
-    bills.pluck(:amount).reduce(&:+)
-  end
-
   def bill_reimbursements
     bills.reduce(0) { |sum, bill| sum + bill.reimburseable_amount }
   end
 
-  def attendance_costs
-    attendances.reduce(0) { |sum, attendance| sum + attendance.cost }
+  def meal_resident_costs
+    meal_residents.reduce(0) { |sum, meal_resident| sum + meal_resident.cost }
+  end
+
+  def guest_costs
+    guests.reduce(0) { |sum, guest| sum + guest.cost }
   end
 
   def balance
-    bill_reimbursements - attendance_costs
+    bill_reimbursements - meal_resident_costs - guest_costs
   end
 end

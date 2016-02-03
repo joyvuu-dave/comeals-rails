@@ -11,22 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160131201418) do
+ActiveRecord::Schema.define(version: 20160202150722) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "attendances", force: :cascade do |t|
-    t.string   "name"
-    t.integer  "multiplier",                  null: false
-    t.boolean  "is_guest",    default: false, null: false
-    t.integer  "resident_id"
-    t.integer  "meal_id"
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
-    t.index ["meal_id"], name: "index_attendances_on_meal_id", using: :btree
-    t.index ["resident_id"], name: "index_attendances_on_resident_id", using: :btree
-  end
 
   create_table "bills", force: :cascade do |t|
     t.integer  "meal_id"
@@ -43,15 +31,42 @@ ActiveRecord::Schema.define(version: 20160131201418) do
     t.integer  "cap"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_communities_on_name", unique: true, using: :btree
+  end
+
+  create_table "guests", force: :cascade do |t|
+    t.integer  "meal_id"
+    t.integer  "resident_id"
+    t.integer  "multiplier",  default: 2, null: false
+    t.string   "name",                    null: false
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.index ["meal_id"], name: "index_guests_on_meal_id", using: :btree
+    t.index ["resident_id"], name: "index_guests_on_resident_id", using: :btree
+  end
+
+  create_table "meal_residents", force: :cascade do |t|
+    t.integer  "meal_id"
+    t.integer  "resident_id"
+    t.integer  "multiplier",  null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["meal_id", "resident_id"], name: "index_meal_residents_on_meal_id_and_resident_id", using: :btree
+    t.index ["meal_id"], name: "index_meal_residents_on_meal_id", using: :btree
+    t.index ["resident_id"], name: "index_meal_residents_on_resident_id", using: :btree
   end
 
   create_table "meals", force: :cascade do |t|
-    t.date     "date",              null: false
+    t.date     "date",                                  null: false
     t.integer  "community_id"
     t.integer  "cap"
-    t.integer  "attendances_count"
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
+    t.integer  "meal_residents_count",      default: 0, null: false
+    t.integer  "guests_count",              default: 0, null: false
+    t.integer  "cost",                      default: 0, null: false
+    t.integer  "meal_residents_multiplier", default: 0, null: false
+    t.integer  "guests_multiplier",         default: 0, null: false
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
     t.index ["community_id"], name: "index_meals_on_community_id", using: :btree
   end
 
@@ -59,8 +74,10 @@ ActiveRecord::Schema.define(version: 20160131201418) do
     t.string   "name",                   null: false
     t.integer  "multiplier", default: 2, null: false
     t.integer  "unit_id"
+    t.integer  "bill_costs", default: 0, null: false
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
+    t.index ["name"], name: "index_residents_on_name", unique: true, using: :btree
     t.index ["unit_id"], name: "index_residents_on_unit_id", using: :btree
   end
 
@@ -68,12 +85,15 @@ ActiveRecord::Schema.define(version: 20160131201418) do
     t.string   "name",       null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_units_on_name", unique: true, using: :btree
   end
 
-  add_foreign_key "attendances", "meals"
-  add_foreign_key "attendances", "residents"
   add_foreign_key "bills", "meals"
   add_foreign_key "bills", "residents"
+  add_foreign_key "guests", "meals"
+  add_foreign_key "guests", "residents"
+  add_foreign_key "meal_residents", "meals"
+  add_foreign_key "meal_residents", "residents"
   add_foreign_key "meals", "communities"
   add_foreign_key "residents", "units"
 end

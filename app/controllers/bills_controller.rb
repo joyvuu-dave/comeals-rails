@@ -27,12 +27,7 @@ class BillsController < ApplicationController
   # GET /bills
   # GET /bills.json
   def index
-    @bills = Bill.includes(:meal, :resident).all
-  end
-
-  # GET /bills/1
-  # GET /bills/1.json
-  def show
+    @bills = Bill.order("meals.date desc").includes(:resident, :meal).all.page(params[:page])
   end
 
   # GET /bills/new
@@ -87,7 +82,7 @@ class BillsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_bill
-      @bill = Bill.find(params[:id])
+      @bill = Bill.includes(:resident, :meal).find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

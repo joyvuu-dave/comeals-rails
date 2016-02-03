@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20160131201418
+# Schema version: 20160202150722
 #
 # Table name: communities
 #
@@ -9,11 +9,14 @@
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
+# Indexes
+#
+#  index_communities_on_name  (name) UNIQUE
+#
 
 FactoryGirl.define do
   factory :community do
-    name "MyString"
-cap 1
+    name "Swan's Way"
+    cap 250
   end
-
 end

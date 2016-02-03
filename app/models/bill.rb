@@ -25,6 +25,9 @@ class Bill < ApplicationRecord
   belongs_to :meal
   belongs_to :resident
 
+  counter_culture :meal, column_name: 'cost', delta_column: 'amount'
+  counter_culture :resident, column_name: 'bill_costs', delta_column: 'amount'
+
   validates :meal, presence: true
   validates :resident, presence: true
   validates :amount, numericality: { only_integer: true }

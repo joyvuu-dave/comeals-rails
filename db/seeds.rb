@@ -9,6 +9,8 @@
 # Community
 community = Community.create(name: "Swan's Way", cap: 250)
 
+puts "#{Community.count} Community created"
+
 # Units / Residents
 ('A'..'Z').to_a.each_with_index do |letter, index|
   unit = Unit.create(name: letter)
@@ -20,6 +22,9 @@ community = Community.create(name: "Swan's Way", cap: 250)
                   multiplier: 2, unit_id: unit.id)
 end
 
+puts "#{Unit.count} Units created"
+puts "#{Resident.count} Residents created"
+
 # Meals
 require 'date'
 now = Date.today
@@ -27,26 +32,31 @@ now = Date.today
   Meal.create(date: now - num, community_id: community.id)
 end
 
-# Attendance
+puts "#{Meal.count} Meals created"
+
+# MealResidents & Guests
 Meal.all.each do |meal|
   Resident.all.shuffle[0..20].each_with_index do |resident, index|
     if index % 10 === 0
-      Attendance.create(name: "Guest #{resident.id}",
-                        multiplier: 2,
-                        resident_id: resident.id,
-                        is_guest: true,
-                        meal_id: meal.id)
+      Guest.create(name: "Guest #{resident.id}",
+                   multiplier: 2,
+                   resident_id: resident.id,
+                   meal_id: meal.id)
     else
-      Attendance.create(resident_id: resident.id,
-                        meal_id: meal.id)
+      MealResident.create(resident_id: resident.id,
+                          meal_id: meal.id,
+                          multiplier: resident.multiplier)
     end
   end
 end
 
+puts "#{Guest.count} Guests created"
+puts "#{MealResident.count} MealResidents created"
+
 # Bills
 Meal.all.each_with_index do |meal, index|
   ids = Resident.pluck(:id).shuffle[0..1]
-  if index % 5 == 0
+  if index % 2 == 0
     Bill.create(meal_id: meal.id, resident_id: ids[0],
                 amount: (2500..3500).to_a.shuffle[0])
     Bill.create(meal_id: meal.id, resident_id: ids[1],
@@ -58,3 +68,5 @@ Meal.all.each_with_index do |meal, index|
                 amount: (6500..7500).to_a.shuffle[0])
   end
 end
+
+puts "#{Bill.count} Bills created"

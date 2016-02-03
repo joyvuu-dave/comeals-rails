@@ -5,5 +5,7 @@ class CreateUnits < ActiveRecord::Migration[5.0]
 
       t.timestamps
     end
+
+    add_index :units, :name, unique: true
   end
 end

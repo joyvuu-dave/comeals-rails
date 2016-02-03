@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', github: "rails/rails"
+gem 'rails', github: 'rails/rails'
 
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 0.18'
@@ -9,7 +9,7 @@ gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .coffee assets and views
-gem 'coffee-rails', github: "rails/coffee-rails"
+gem 'coffee-rails', github: 'rails/coffee-rails'
 
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
@@ -18,14 +18,17 @@ gem 'coffee-rails', github: "rails/coffee-rails"
 gem 'jquery-rails'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
-# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 2.0'
 # Action Cable dependencies for the Redis adapter
 gem 'em-hiredis', '~> 0.3.0'
 # Action Cable dependencies for the Redis adapter
 gem 'redis', '~> 3.0'
 # Use Puma as the app server
 gem 'puma'
+gem 'counter_culture'
+gem 'kaminari', github: 'amatsuda/kaminari'
+gem 'twitter-bootstrap-rails'
+gem 'simple_form'
+gem 'cocoon'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
@@ -38,6 +41,7 @@ group :development, :test do
   gem 'byebug'
   gem 'faker'
   gem 'factory_girl_rails'
+  gem 'rails-controller-testing'
 
   %w[rspec-core rspec-expectations rspec-mocks rspec-rails rspec-support].each do |lib|
     gem lib, :git => "https://github.com/rspec/#{lib}.git", :branch => 'master'
@@ -51,6 +55,10 @@ group :development do
   gem 'spring'
   gem 'annotate'
   gem 'pry-rails'
+  gem 'bullet'
+  gem 'quiet_assets'
+  gem 'better_errors'
+  gem 'binding_of_caller'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20160131201418
+# Schema version: 20160202150722
 #
 # Table name: residents
 #
@@ -7,11 +7,13 @@
 #  name       :string           not null
 #  multiplier :integer          default(2), not null
 #  unit_id    :integer
+#  bill_costs :integer          default(0), not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
 # Indexes
 #
+#  index_residents_on_name     (name) UNIQUE
 #  index_residents_on_unit_id  (unit_id)
 #
 # Foreign Keys

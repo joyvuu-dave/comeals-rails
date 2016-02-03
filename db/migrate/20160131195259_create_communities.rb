@@ -6,5 +6,7 @@ class CreateCommunities < ActiveRecord::Migration[5.0]
 
       t.timestamps
     end
+
+    add_index :communities, :name, unique: true
   end
 end

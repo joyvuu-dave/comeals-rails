@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20160131201418
+# Schema version: 20160202150722
 #
 # Table name: units
 #
@@ -8,6 +8,10 @@
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
+# Indexes
+#
+#  index_units_on_name  (name) UNIQUE
+#
 
 class UnitsController < ApplicationController
   before_action :set_unit, only: [:show, :edit, :update, :destroy]
@@ -15,12 +19,7 @@ class UnitsController < ApplicationController
   # GET /units
   # GET /units.json
   def index
-    @units = Unit.includes(:residents).all
-  end
-
-  # GET /units/1
-  # GET /units/1.json
-  def show
+    @units = Unit.order(:name).includes({ :residents => { :bills => :meal }}, { :residents => { :meal_residents => :meal }}, { :residents => { :guests => :meal }}).all.page(params[:page])
   end
 
   # GET /units/new
