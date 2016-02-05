@@ -5,7 +5,6 @@
 #
 #  id                        :integer          not null, primary key
 #  date                      :date             not null
-#  community_id              :integer
 #  cap                       :integer
 #  meal_residents_count      :integer          default(0), not null
 #  guests_count              :integer          default(0), not null
@@ -15,37 +14,18 @@
 #  created_at                :datetime         not null
 #  updated_at                :datetime         not null
 #
-# Indexes
-#
-#  index_meals_on_community_id  (community_id)
-#
-# Foreign Keys
-#
-#  fk_rails_0336f048cd  (community_id => communities.id)
-#
 
 class Meal < ApplicationRecord
   attr_readonly :cap
-
-  belongs_to :community
 
   has_many :bills, dependent: :destroy
   has_many :meal_residents, inverse_of: :meal, dependent: :destroy
   has_many :guests, inverse_of: :meal, dependent: :destroy
   has_many :residents, through: :meal_residents
 
-  validates :date, presence: true
-  validates :community, presence: true
-
-  accepts_nested_attributes_for :guests, allow_destroy: true
-
-  before_create :set_cap
-
   validates :date, uniqueness: true
 
-  def set_cap
-    self.cap = community.cap
-  end
+  accepts_nested_attributes_for :guests, allow_destroy: true
 
   def cap
     read_attribute(:cap) || Float::INFINITY

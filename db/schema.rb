@@ -58,7 +58,6 @@ ActiveRecord::Schema.define(version: 20160202150722) do
 
   create_table "meals", force: :cascade do |t|
     t.date     "date",                                  null: false
-    t.integer  "community_id"
     t.integer  "cap"
     t.integer  "meal_residents_count",      default: 0, null: false
     t.integer  "guests_count",              default: 0, null: false
@@ -67,7 +66,6 @@ ActiveRecord::Schema.define(version: 20160202150722) do
     t.integer  "guests_multiplier",         default: 0, null: false
     t.datetime "created_at",                            null: false
     t.datetime "updated_at",                            null: false
-    t.index ["community_id"], name: "index_meals_on_community_id", using: :btree
   end
 
   create_table "residents", force: :cascade do |t|
@@ -94,6 +92,5 @@ ActiveRecord::Schema.define(version: 20160202150722) do
   add_foreign_key "guests", "residents"
   add_foreign_key "meal_residents", "meals"
   add_foreign_key "meal_residents", "residents"
-  add_foreign_key "meals", "communities"
   add_foreign_key "residents", "units"
 end

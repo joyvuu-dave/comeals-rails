@@ -16,7 +16,6 @@
 
 class Community < ApplicationRecord
   validates :name, uniqueness: true
-  has_many :meals, dependent: :destroy
 
   def cap
     read_attribute(:cap) || Float::INFINITY
