@@ -15,10 +15,10 @@
 
 class UnitsController < ApplicationController
   before_action :authenticate
+  before_action :authorize, except: [:index]
   before_action :set_unit, only: [:show, :edit, :update, :destroy]
 
   # GET /units
-  # GET /units.json
   def index
     @units = Unit.order(:name).includes({ :residents => { :bills => :meal }}, { :residents => { :meal_residents => :meal }}, { :residents => { :guests => :meal }}).all.page(params[:page])
   end
@@ -33,7 +33,6 @@ class UnitsController < ApplicationController
   end
 
   # POST /units
-  # POST /units.json
   def create
     @unit = Unit.new(unit_params)
     if @unit.save
@@ -44,27 +43,18 @@ class UnitsController < ApplicationController
   end
 
   # PATCH/PUT /units/1
-  # PATCH/PUT /units/1.json
   def update
-    respond_to do |format|
-      if @unit.update(unit_params)
-        format.html { redirect_to units_url, notice: 'Unit was successfully updated.' }
-        format.json { render :show, status: :ok, location: @unit }
-      else
-        format.html { render :edit }
-        format.json { render json: @unit.errors, status: :unprocessable_entity }
-      end
+    if @unit.update(unit_params)
+      redirect_to units_url, notice: 'Unit was successfully updated.'
+    else
+      render :edit
     end
   end
 
   # DELETE /units/1
-  # DELETE /units/1.json
   def destroy
     @unit.destroy
-    respond_to do |format|
-      format.html { redirect_to units_url, notice: 'Unit was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    redirect_to units_url, notice: 'Unit was successfully destroyed.'
   end
 
   private

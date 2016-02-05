@@ -23,23 +23,21 @@
 
 class ResidentsController < ApplicationController
   before_action :authenticate
+  before_action :authorize, except: [:index, :show]
   before_action :set_resident, only: [:show, :edit, :update, :destroy]
 
   # GET /residents
-  # GET /residents.json
   def index
     @residents = Resident.order("units.name").includes({ :bills => :meal }, :guests, :meal_residents, :unit).all.page(params[:page])
   end
 
   # GET /residents/1
-  # GET /residents/1.json
   def show
   end
 
   # GET /residents/new
   def new
     @resident = Resident.new
-    @units = Unit.all
   end
 
   # GET /residents/1/edit
@@ -47,43 +45,28 @@ class ResidentsController < ApplicationController
   end
 
   # POST /residents
-  # POST /residents.json
   def create
     @resident = Resident.new(resident_params)
-
-    respond_to do |format|
-      if @resident.save
-        format.html { redirect_to residents_url, notice: 'Resident was successfully created.' }
-        format.json { render :show, status: :created, location: @resident }
-      else
-        format.html { render :new }
-        format.json { render json: @resident.errors, status: :unprocessable_entity }
-      end
+    if @resident.save
+      redirect_to residents_url, notice: 'Resident was successfully created.'
+    else
+      render :new
     end
   end
 
   # PATCH/PUT /residents/1
-  # PATCH/PUT /residents/1.json
   def update
-    respond_to do |format|
-      if @resident.update(resident_params)
-        format.html { redirect_to residents_url, notice: 'Resident was successfully updated.' }
-        format.json { render :show, status: :ok, location: @resident }
-      else
-        format.html { render :edit }
-        format.json { render json: @resident.errors, status: :unprocessable_entity }
-      end
+    if @resident.update(resident_params)
+      redirect_to residents_url, notice: 'Resident was successfully updated.'
+    else
+      render :edit
     end
   end
 
   # DELETE /residents/1
-  # DELETE /residents/1.json
   def destroy
     @resident.destroy
-    respond_to do |format|
-      format.html { redirect_to residents_url, notice: 'Resident was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    redirect_to residents_url, notice: 'Resident was successfully destroyed.'
   end
 
   private

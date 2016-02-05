@@ -21,4 +21,14 @@ class ApplicationController < ActionController::Base
   def authenticate
     redirect_to :root unless @signed_in == true
   end
+
+  def authorize
+    unless @admin
+      begin
+        redirect_to(:back)
+      rescue
+        redirect_to(:root)
+      end
+    end
+  end
 end

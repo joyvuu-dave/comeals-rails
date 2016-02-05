@@ -9,7 +9,6 @@
 
     <%= stylesheet_link_tag    'application', media: 'all' %>
     <%= javascript_include_tag 'application' %>
-    <script src="https://npmcdn.com/history/umd/History.min.js"></script>
   </head>
 
   <body>
@@ -28,7 +27,7 @@
           <%= link_to 'Bills', bills_path, class: "btn btn-info btn-xs" %>
           <%= link_to 'Residents', residents_path, class: "btn btn-info btn-xs" %>
           <%= link_to 'Units', units_path, class: "btn btn-info btn-xs" %>
-          <%= link_to 'Logout', logout_path, method: :post, class: "btn btn-default btn-xs pull-right" %>
+          <%= link_to "Logout#{' Admin' if @admin}", logout_path, method: :post, class: "btn btn-default btn-xs pull-right" %>
         </div>
       <% end %>
 
