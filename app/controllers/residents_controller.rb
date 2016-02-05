@@ -28,7 +28,7 @@ class ResidentsController < ApplicationController
 
   # GET /residents
   def index
-    @residents = Resident.order("units.name").includes({ :bills => :meal }, :guests, :meal_residents, :unit).all.page(params[:page])
+    @residents = Resident.order("units.name").includes({ :bills => :meal }, { :guests => :meal }, { :meal_residents => :meal }, :unit).all.page(params[:page])
   end
 
   # GET /residents/1

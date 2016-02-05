@@ -29,7 +29,7 @@ puts "#{Resident.count} Residents created"
 require 'date'
 now = Date.today
 (1..365).to_a.each do |num|
-  Meal.create(date: now - num, community_id: community.id)
+  Meal.create(date: now - num, cap: community.cap)
 end
 
 puts "#{Meal.count} Meals created"
