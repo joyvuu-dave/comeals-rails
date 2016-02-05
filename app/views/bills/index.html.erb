@@ -2,8 +2,6 @@
   <h1>Bills</h1>
 </div>
 
-
-
 <table class="table table-striped">
   <thead>
     <tr>
@@ -17,10 +15,23 @@
   <tbody>
     <% @bills.each do |bill| %>
       <tr>
+        <!-- Date -->
         <td><%= bill.meal.date.inspect %></td>
+
+        <!-- Name -->
         <td><%= bill.resident.name %></td>
+
+        <!-- Amount -->
         <td><%= number_to_currency(bill.amount/100.to_f) %></td>
-        <td><%= number_to_currency(bill.reimburseable_amount/100.to_f) %></td>
+
+        <!-- Reimbursable Amount -->
+        <% if bill.reimburseable_amount == bill.amount %>
+          <td>same</td>
+        <% else %>
+          <td class="text-danger"><%= number_to_currency(bill.reimburseable_amount/100.to_f) %></td>
+        <% end %>
+
+        <!-- Edit / Delete buttons -->
         <td>
           <%= link_to('Edit',
                       edit_bill_path(bill),
