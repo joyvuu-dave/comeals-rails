@@ -16,12 +16,7 @@ gem 'coffee-rails', github: 'rails/coffee-rails'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
-# Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
-gem 'turbolinks'
-# Action Cable dependencies for the Redis adapter
-gem 'em-hiredis', '~> 0.3.0'
-# Action Cable dependencies for the Redis adapter
-gem 'redis', '~> 3.0'
+
 # Use Puma as the app server
 gem 'puma'
 gem 'counter_culture'
@@ -59,6 +54,7 @@ group :development do
   gem 'quiet_assets'
   gem 'better_errors'
   gem 'binding_of_caller'
+  gem 'sextant' # go to /rails/routes
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

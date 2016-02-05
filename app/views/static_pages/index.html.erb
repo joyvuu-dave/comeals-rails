@@ -2,3 +2,7 @@
   <h1>Comeals</h1>
   <p>Where co-housing communities come to manage their common meals.</p>
 </div>
+
+<% unless @signed_in %>
+  <%= render 'login' %>
+<% end %>

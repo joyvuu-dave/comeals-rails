@@ -1,5 +1,6 @@
-<%= form_for @bill, :html => { :class => "form-horizontal bill" } do |f| %>
+<%= form_for @bill, html: { class: "form-horizontal bill" } do |f| %>
 
+  <!-- Errors -->
   <% if @bill.errors.any? %>
     <div id="error_expl" class="panel panel-danger">
       <div class="panel-heading">
@@ -15,34 +16,55 @@
     </div>
   <% end %>
 
+  <!-- Meal Select -->
   <div class="form-group">
-    <%= f.label :meal_id, :class => 'control-label col-xs-3' %>
+    <%= f.label :meal_id, class: "control-label col-xs-3" %>
     <div class="col-xs-4">
-      <%= f.collection_select(:meal_id, Meal.order(:date).all, :id, :date, :class => 'form-control') %>
+      <%= f.collection_select(
+          :meal_id,
+          Meal.order(:date).all,
+          :id,
+          lambda { |meal| meal.date.inspect },
+          {},
+          { class: "select optional form-control" }
+      ) %>
     </div>
-    <%=f.error_span(:meal_id) %>
-  </div>
-  <div class="form-group">
-    <%= f.label :resident_id, :class => 'control-label col-xs-3' %>
-    <div class="col-xs-4">
-      <%= f.collection_select(:resident_id, Resident.order(:name).all, :id, :name, :class => 'form-control') %>
-    </div>
-    <%=f.error_span(:resident_id) %>
-  </div>
-  <div class="form-group">
-    <%= f.label :amount, :class => 'control-label col-xs-3' %>
-    <div class="col-xs-4">
-      <%= f.text_field :amount, :class => 'form-control' %>
-    </div>
-    <%=f.error_span(:amount) %>
+    <%= f.error_span(:meal_id) %>
   </div>
 
+  <!-- Resident Select -->
   <div class="form-group">
-    <div class="col-xs-offset-2 col-xs-10">
-      <%= f.submit nil, :class => 'btn btn-primary' %>
-      <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
-                bills_path, :class => 'btn btn-default' %>
+    <%= f.label 'Cook', class: "control-label col-xs-3" %>
+    <div class="col-xs-4">
+      <%= f.collection_select(
+          :resident_id,
+          Resident.order("units.name").includes(:unit).all,
+          :id,
+          lambda { |r| "#{r.name} - #{r.unit.name}" },
+          {},
+          { class: "select optional form-control" }
+      ) %>
+    </div>
+    <%= f.error_span(:resident_id) %>
+  </div>
+
+  <!-- Amount Input -->
+  <div class="form-group">
+    <%= f.label :amount, class: "control-label col-xs-3" %>
+    <div class="input-group col-xs-4">
+      <span class="input-group-addon">$</span>
+      <%= f.text_field :amount, class: "form-control" %>
+    </div>
+    <%= f.error_span(:amount) %>
+  </div>
+
+  <!-- Submit / Cancel Buttons -->
+  <div class="form-group">
+    <div class="col-xs-offset-3 col-xs-8">
+      <%= f.submit nil, class: "btn btn-primary js-submit-bill" %>
+      <%= link_to "Cancel", bills_path, class: "btn btn-default" %>
     </div>
   </div>
 
 <% end %>
+

@@ -30,7 +30,7 @@ class Bill < ApplicationRecord
 
   validates :meal, presence: true
   validates :resident, presence: true
-  validates :amount, numericality: { only_integer: true }
+  validates :amount, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
 
   # DERIVED DATA
   def reimburseable_amount

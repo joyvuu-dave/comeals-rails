@@ -1,24 +1,16 @@
-## README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Deploy for our community
+  [] allow signup / login w/ a confirmed Swans email address
+  [] prevent deleting of community / units / residents except by admin
+  [] prevent editing of community except by admin
+  [x] meal / bill dates include day of week
+  [] meal can accept description
 
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+## Future Features
+ [] allow cooks to lock meal
+ [] fullcalendar.io
+ [] if meal doesn't have description less than 72 hrs before, all cooks are emailed
+ [] if meal doesn't have cook less than 1 week before, entire community is emailed
+ [] costs reconciled through paypal / dwalla
+    [] would necessitate community having its own account for colating payments
+    [] units should have email address linked to paypal

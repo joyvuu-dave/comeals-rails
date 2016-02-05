@@ -14,6 +14,7 @@
 #
 
 class UnitsController < ApplicationController
+  before_action :authenticate
   before_action :set_unit, only: [:show, :edit, :update, :destroy]
 
   # GET /units

@@ -1,37 +1,35 @@
-<%- model_class = Bill -%>
 <div class="page-header">
-  <h1><%=t '.title', :default => model_class.model_name.human.pluralize.titleize %></h1>
+  <h1>Bills</h1>
 </div>
 
-<%= link_to t('.new', :default => t("helpers.links.new")),
-            new_bill_path,
-            :class => 'btn btn-primary' %>
+
 
 <table class="table table-striped">
   <thead>
     <tr>
-      <th><%= model_class.human_attribute_name(:meal_id) %></th>
-      <th><%= model_class.human_attribute_name(:resident_id) %></th>
+      <th>Meal</th>
+      <th>Resident</th>
       <th>Original Amount</th>
-      <th><%= model_class.human_attribute_name(:reimbursable_amount) %></th>
-      <th><%=t '.actions', :default => t("helpers.actions") %></th>
+      <th>Reimburseable Amount</th>
+      <th>Actions</th>
     </tr>
   </thead>
   <tbody>
     <% @bills.each do |bill| %>
       <tr>
-        <td><%= bill.meal.date %></td>
+        <td><%= bill.meal.date.inspect %></td>
         <td><%= bill.resident.name %></td>
         <td><%= number_to_currency(bill.amount/100.to_f) %></td>
         <td><%= number_to_currency(bill.reimburseable_amount/100.to_f) %></td>
         <td>
-          <%= link_to t('.edit', :default => t("helpers.links.edit")),
-                      edit_bill_path(bill), :class => 'btn btn-default btn-xs' %>
-          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+          <%= link_to('Edit',
+                      edit_bill_path(bill),
+                      class: "btn btn-default btn-xs") %>
+          <%= link_to('Delete',
                       bill_path(bill),
-                      :method => :delete,
-                      :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
-                      :class => 'btn btn-xs btn-danger' %>
+                      method: :delete,
+                      data: { confirm: 'Are you sure?' },
+                      class: "btn btn-danger btn-xs") %>
         </td>
       </tr>
     <% end %>

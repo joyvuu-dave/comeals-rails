@@ -1,28 +1,45 @@
-<div class="nested-fields">
+<div class="col-xs-offset-3 nested-fields well">
+
+  <!-- Name -->
   <div class="form-group">
-    <div class="col-xs-offset-3 col-xs-8">
-      <%= f.input :name, :class => 'form-control' %>
+    <div class="col-xs-offset-1 col-xs-8">
+      <%= f.input :name, class: "form-control" %>
     </div>
     <%=f.error_span(:name) %>
   </div>
 
+  <!-- Host select -->
   <div class="form-group">
-    <div class="col-xs-offset-3 col-xs-8">
-      <%= f.input :multiplier, :class => 'form-control' %>
+    <div class="col-xs-offset-1 col-xs-8">
+      <div class="form-group select optional">
+        <%= f.collection_select(
+          :resident_id,
+          Resident.order("units.name").includes(:unit).all,
+          :id,
+          lambda { |r| "#{r.name} - #{r.unit.name}" },
+          { include_blank: "Host" },
+          { class: "select optional form-control" }
+        ) %>
+      </div>
     </div>
-    <%=f.error_span(:multiplier) %>
+    <%= f.error_span(:resident) %>
   </div>
 
+  <!-- Category radio buttons -->
   <div class="form-group">
-    <div class="col-xs-offset-3 col-xs-8">
-      <%= f.association :resident, :class => 'form-control' %>
+    <div class="col-xs-offset-1 col-xs-8">
+      <%= radio_button_tag(:multiplier, 2, :checked) %>
+      <%= label_tag(:multiplier_adult, 'Adult') %>
+      <%= radio_button_tag(:multiplier, 1) %>
+      <%= label_tag(:multiplier_child, 'Child') %>
     </div>
-    <%=f.error_span(:resident) %>
+    <%= f.error_span(:multiplier) %>
   </div>
 
+  <!-- Remove button -->
   <div class="form-group">
-    <div class="col-xs-offset-3 col-xs-9">
-      <%= link_to_remove_association "remove guest", f, :class => 'btn btn-danger' %>
+    <div class="col-xs-offset-1 col-xs-8">
+      <%= link_to_remove_association "remove", f, class: "btn btn-danger" %>
     </div>
   </div>
 </div>

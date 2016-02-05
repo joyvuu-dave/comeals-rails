@@ -1,5 +1,6 @@
-<%= simple_form_for @resident, :html => { :class => "form-horizontal resident" } do |f| %>
+<%= simple_form_for @resident, html: { class: "form-horizontal resident" } do |f| %>
 
+  <!-- Errors -->
   <% if @resident.errors.any? %>
     <div id="error_expl" class="panel panel-danger">
       <div class="panel-heading">
@@ -15,32 +16,35 @@
     </div>
   <% end %>
 
+  <!-- Attributes -->
   <div class="form-group">
-    <%= f.label :name, :class => 'control-label col-xs-2' %>
+    <%= f.label :name, class: "control-label col-xs-2" %>
     <div class="col-xs-10">
-      <%= f.text_field :name, :class => 'form-control', autofocus: true %>
+      <%= f.text_field :name, class: "form-control", autofocus: true %>
     </div>
-    <%=f.error_span(:name) %>
-  </div>
-  <div class="form-group">
-    <%= f.label :multiplier, :class => 'control-label col-xs-2' %>
-    <div class="col-xs-10">
-      <%= f.text_field :multiplier, :class => 'form-control' %>
-    </div>
-    <%=f.error_span(:multiplier) %>
-  </div>
-  <div class="form-group">
-    <div class="col-xs-offset-2 col-xs-4">
-      <%= f.association :unit, collection: Unit.order(:name), :class => 'form-control' %>
-    </div>
-    <%=f.error_span(:unit_id) %>
+    <%= f.error_span(:name) %>
   </div>
 
   <div class="form-group">
+    <%= f.label :multiplier, class: "control-label col-xs-2" %>
+    <div class="col-xs-10">
+      <%= f.text_field :multiplier, class: "form-control" %>
+    </div>
+    <%= f.error_span(:multiplier) %>
+  </div>
+
+  <div class="form-group">
+    <div class="col-xs-offset-2 col-xs-4">
+      <%= f.association :unit, collection: Unit.order(:name), class: "form-control" %>
+    </div>
+    <%= f.error_span(:unit_id) %>
+  </div>
+
+  <!-- Submit / Cancel buttons -->
+  <div class="form-group">
     <div class="col-xs-offset-2 col-xs-10">
-      <%= f.submit nil, :class => 'btn btn-primary' %>
-      <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
-                residents_path, :class => 'btn btn-default' %>
+      <%= f.submit nil, class: "btn btn-primary" %>
+      <%= link_to('Cancel', residents_path, class: "btn btn-default") %>
     </div>
   </div>
 

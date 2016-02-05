@@ -6,25 +6,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Comeals</title>
     <%= csrf_meta_tags %>
-    <%= action_cable_meta_tag %>
 
-    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+    <%= stylesheet_link_tag    'application', media: 'all' %>
+    <%= javascript_include_tag 'application' %>
+    <script src="https://npmcdn.com/history/umd/History.min.js"></script>
   </head>
 
   <body>
     <div class="container">
+
+
+      <!-- Spinner -->
       <div id="spinner"></div>
-      <div class="page-header">
-        <%= link_to 'Community', communities_path, :class => 'btn btn-info btn-xs' %>
-        <%= link_to 'Meals', meals_path, :class => 'btn btn-info btn-xs' %>
-        <%= link_to 'Bills', bills_path, :class => 'btn btn-info btn-xs' %>
-        <%= link_to 'Residents', residents_path, :class => 'btn btn-info btn-xs' %>
-        <%= link_to 'Units', units_path, :class => 'btn btn-info btn-xs' %>
-      </div>
+
+
+      <!-- Header -->
+      <% if @signed_in %>
+        <div class="page-header">
+          <%= link_to 'Community', communities_path, class: "btn btn-info btn-xs" %>
+          <%= link_to 'Meals', meals_path, class: "btn btn-info btn-xs" %>
+          <%= link_to 'Bills', bills_path, class: "btn btn-info btn-xs" %>
+          <%= link_to 'Residents', residents_path, class: "btn btn-info btn-xs" %>
+          <%= link_to 'Units', units_path, class: "btn btn-info btn-xs" %>
+          <%= link_to 'Logout', logout_path, method: :post, class: "btn btn-default btn-xs pull-right" %>
+        </div>
+      <% end %>
+
 
       <%= yield %>
     </div>
+
+
+    <!-- Spinner js for header -->
     <script>
       $('.page-header a').click(function() {
         var opts = {
@@ -52,6 +65,17 @@
         var target = document.getElementById('spinner');
         var spinner = new Spinner(opts).spin(target);
       });
+    </script>
+
+
+    <!-- Notie js -->
+    <script>
+      var readyStateCheckInterval = setInterval(function() {
+        if (document.readyState === "complete") {
+            clearInterval(readyStateCheckInterval);
+            window.notie = notieInit();
+        }
+      }, 10);
     </script>
   </body>
 </html>
