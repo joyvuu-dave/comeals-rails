@@ -26,6 +26,8 @@ gem 'kaminari', github: 'amatsuda/kaminari'
 gem 'twitter-bootstrap-rails'
 gem 'simple_form'
 gem 'cocoon'
+gem 'dalli'
+gem 'connection_pool'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'

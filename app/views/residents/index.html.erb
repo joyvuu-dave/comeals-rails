@@ -16,25 +16,7 @@
     </tr>
   </thead>
   <tbody>
-    <% @residents.each do |resident| %>
-      <tr>
-        <td><%= link_to resident.id, resident_path(resident) %></td>
-        <td><%= resident.name %></td>
-        <td><%= category_helper(resident.multiplier) %></td>
-        <td><%= resident.unit.name %></td>
-        <td><%= number_to_currency(resident.balance/100.to_f) %></td>
-        <td>
-          <%= link_to('Edit',
-                      edit_resident_path(resident),
-                      class: "btn btn-default btn-xs") if @admin %>
-          <%= link_to('Delete',
-                      resident_path(resident),
-                      method: :delete,
-                      data: { confirm: 'Are you sure?' },
-                      class: "btn btn-xs btn-danger") if @admin %>
-        </td>
-      </tr>
-    <% end %>
+    <%= render @residents %>
   </tbody>
 </table>
 
