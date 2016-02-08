@@ -15,7 +15,7 @@
 
 class Unit < ApplicationRecord
   has_many :residents, dependent: :destroy
-  validates :name, uniqueness: true
+  validates :name, uniqueness: true, presence: true
 
   # DERIVED DATA
   def balance

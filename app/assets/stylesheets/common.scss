@@ -1,0 +1,29 @@
+// bring jumbotron down
+.jumbotron-lower {
+  margin-top: 60px;
+}
+
+// make id links wider
+.id-link {
+  padding-right: 25px;
+}
+
+// make checkbox links wider
+input[type=checkbox] {
+  margin-left: -10px !important;
+}
+
+.scrollable {
+  overflow-y: auto;
+  height: 350px;
+}
+
+.meal_guests_name {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+.collection_radio_buttons {
+  margin-left: 10px;
+  margin-right: 10px;
+}

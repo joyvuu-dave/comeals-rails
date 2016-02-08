@@ -1,5 +1,6 @@
 <div class="page-header">
-  <h1>Edit Meal</h1>
+  <%= link_to 'Add Bill', new_bill_path(meal: @meal.id), class: 'btn btn-warning pull-right' %>
+  <h1><%= @meal.date.inspect %></h1>
 </div>
 
 <%= render partial: 'form' %>

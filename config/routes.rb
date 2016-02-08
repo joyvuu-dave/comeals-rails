@@ -4,13 +4,16 @@ Rails.application.routes.draw do
   post '/login',  to: 'sessions#login',  as: :login
   post '/logout', to: 'sessions#logout', as: :logout
 
+  get '/calendar', to: 'calendar#index', as: :calendar
+
+  namespace :api do
+    get '/meals' => 'meals#index'
+    get '/bills' => 'bills#index'
+  end
+
   resources :residents
   resources :bills
   resources :units
   resources :meals
   resources :communities
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-
-  # Serve websocket cable requests in-process
-  # mount ActionCable.server => '/cable'
 end

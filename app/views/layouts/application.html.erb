@@ -14,67 +14,35 @@
   <body>
     <div class="container">
 
+      <!-- Notice -->
+      <% if notice %>
+        <div class="alert alert-success alert-dismissible" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <%= notice %>
+        </div>
+      <% end %>
 
       <!-- Spinner -->
       <div id="spinner"></div>
 
-
       <!-- Header -->
       <% if @signed_in %>
         <div class="page-header">
-          <%= link_to 'Community', communities_path, class: "btn btn-info btn-xs" %>
-          <%= link_to 'Meals', meals_path, class: "btn btn-info btn-xs" %>
-          <%= link_to 'Bills', bills_path, class: "btn btn-info btn-xs" %>
-          <%= link_to 'Residents', residents_path, class: "btn btn-info btn-xs" %>
-          <%= link_to 'Units', units_path, class: "btn btn-info btn-xs" %>
+          <%= link_to('Community', communities_path, class: "btn btn-info btn-xs") if @admin %>
+          <%= link_to('Meals', meals_path, class: "btn btn-info btn-xs") if @admin %>
+          <%= link_to('Bills', bills_path, class: "btn btn-info btn-xs") if @admin %>
+          <%= link_to('Residents', residents_path, class: "btn btn-info btn-xs") if @admin %>
+          <%= link_to('Units', units_path, class: "btn btn-info btn-xs") if @admin %>
+          <%= link_to 'Calendar', calendar_path, class: "btn btn-info btn-xs" %>
           <%= link_to "Logout#{' Admin' if @admin}", logout_path, method: :post, class: "btn btn-default btn-xs pull-right" %>
         </div>
       <% end %>
 
-
       <%= yield %>
+
     </div>
-
-
-    <!-- Spinner js for header -->
-    <script>
-      $('.page-header a').click(function() {
-        var opts = {
-          lines: 13 // The number of lines to draw
-        , length: 28 // The length of each line
-        , width: 14 // The line thickness
-        , radius: 42 // The radius of the inner circle
-        , scale: 1 // Scales overall size of the spinner
-        , corners: 1 // Corner roundness (0..1)
-        , color: '#000' // #rgb or #rrggbb or array of colors
-        , opacity: 0.25 // Opacity of the lines
-        , rotate: 0 // The rotation offset
-        , direction: 1 // 1: clockwise, -1: counterclockwise
-        , speed: 1 // Rounds per second
-        , trail: 60 // Afterglow percentage
-        , fps: 20 // Frames per second when using setTimeout() as a fallback for CSS
-        , zIndex: 2e9 // The z-index (defaults to 2000000000)
-        , className: 'spinner' // The CSS class to assign to the spinner
-        , top: '50%' // Top position relative to parent
-        , left: '50%' // Left position relative to parent
-        , shadow: false // Whether to render a shadow
-        , hwaccel: false // Whether to use hardware acceleration
-        , position: 'absolute' // Element positioning
-        }
-        var target = document.getElementById('spinner');
-        var spinner = new Spinner(opts).spin(target);
-      });
-    </script>
-
-
-    <!-- Notie js -->
-    <script>
-      var readyStateCheckInterval = setInterval(function() {
-        if (document.readyState === "complete") {
-            clearInterval(readyStateCheckInterval);
-            window.notie = notieInit();
-        }
-      }, 10);
-    </script>
+    <%= javascript_include_tag 'common' %>
   </body>
 </html>

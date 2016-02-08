@@ -17,10 +17,10 @@
   <tbody>
     <% @meals.each do |meal| %>
       <tr>
-        <td><%= link_to meal.id, meal_path(meal) %></td>
+        <td><%= link_to meal.id, meal_path(meal), class: 'id-link' %></td>
         <td><%= meal.date.inspect %></td>
         <td><%= Resident.find(meal.bills.pluck(:resident_id)).pluck(:name).join(', ') %>
-        <td><%= meal.meal_residents_count + meal.guests_count %></td>
+        <td><%= meal.attendees %></td>
         <td>
           <%= link_to 'Add Bill', new_bill_path(meal: meal), class: "btn btn-success btn-xs" %>
           <%= link_to 'Edit', edit_meal_path(meal), class: "btn btn-default btn-xs" %>

@@ -1,5 +1,5 @@
 <tr>
-  <td><%= link_to resident.id, resident_path(resident) %></td>
+  <td><%= link_to resident.id, resident_path(resident), class: 'id-link' %></td>
   <td><%= resident.name %></td>
   <td><%= category_helper(resident.multiplier) %></td>
   <td><%= resident.unit.name %></td>

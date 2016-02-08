@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20160131201418
+# Schema version: 20160202150722
 #
 # Table name: bills
 #
@@ -21,5 +21,20 @@
 #  fk_rails_d7e3fd1337  (resident_id => residents.id)
 #
 
-module BillsHelper
+class BillSerializer < ActiveModel::Serializer
+  attributes :title,
+             :start,
+             :url
+
+  def title
+    "Cook\n#{object.resident.name} - $#{sprintf('%0.02f', (object.amount/100.to_f))}"
+  end
+
+  def start
+    object.meal.date
+  end
+
+  def url
+    "/bills/#{object.id}/edit"
+  end
 end

@@ -15,5 +15,20 @@
 #  updated_at                :datetime         not null
 #
 
-module MealsHelper
+class MealSerializer < ActiveModel::Serializer
+  attributes :title,
+             :start,
+             :url
+
+  def title
+    "Common Dinner\n#{object.attendees} people"
+  end
+
+  def start
+    object.date
+  end
+
+  def url
+    "/meals/#{object.id}/edit"
+  end
 end

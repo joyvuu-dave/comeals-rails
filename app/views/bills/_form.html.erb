@@ -1,20 +1,6 @@
-<%= form_for @bill, html: { class: "form-horizontal bill" } do |f| %>
+<%= javascript_include_tag "bills" %>
 
-  <!-- Errors -->
-  <% if @bill.errors.any? %>
-    <div id="error_expl" class="panel panel-danger">
-      <div class="panel-heading">
-        <h3 class="panel-title"><%= pluralize(@bill.errors.count, "error") %> prohibited this bill from being saved:</h3>
-      </div>
-      <div class="panel-body">
-        <ul>
-        <% @bill.errors.full_messages.each do |msg| %>
-          <li><%= msg %></li>
-        <% end %>
-        </ul>
-      </div>
-    </div>
-  <% end %>
+<%= simple_form_for @bill, html: { class: "form-horizontal bill" } do |f| %>
 
   <!-- Meal Select -->
   <div class="form-group">
@@ -29,7 +15,6 @@
           { class: "select optional form-control" }
       ) %>
     </div>
-    <%= f.error_span(:meal_id) %>
   </div>
 
   <!-- Resident Select -->
@@ -45,7 +30,6 @@
           { class: "select optional form-control" }
       ) %>
     </div>
-    <%= f.error_span(:resident_id) %>
   </div>
 
   <!-- Amount Input -->
@@ -55,7 +39,6 @@
       <span class="input-group-addon">$</span>
       <%= f.text_field :amount, class: "form-control" %>
     </div>
-    <%= f.error_span(:amount) %>
   </div>
 
   <!-- Submit / Cancel Buttons -->

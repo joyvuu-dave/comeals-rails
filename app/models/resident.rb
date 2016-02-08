@@ -28,7 +28,7 @@ class Resident < ApplicationRecord
   has_many :meals, through: :meal_residents
   has_many :guests, dependent: :destroy
 
-  validates :name, uniqueness: true
+  validates :name, presence: true, uniqueness: true
   validates :multiplier, numericality: { only_integer: true }
 
   # DERIVED DATA

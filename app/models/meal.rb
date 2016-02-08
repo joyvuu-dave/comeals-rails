@@ -36,8 +36,12 @@ class Meal < ApplicationRecord
     meal_residents_multiplier + guests_multiplier
   end
 
+  def attendees
+    meal_residents_count + guests_count
+  end
+
   def chargeable_unit_cost
-    if meal_residents_count + guests_count == 0
+    if attendees == 0
       0
     else
       fraction = cost / multiplier.to_f

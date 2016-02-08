@@ -24,7 +24,7 @@
 class ResidentsController < ApplicationController
   before_action :authenticate
   before_action :authorize, except: [:index, :show]
-  before_action :set_resident, only: [:show, :edit, :update, :destroy]
+  before_action :set_resident, only: [:show, :update, :destroy]
 
   # GET /residents
   def index
@@ -42,6 +42,7 @@ class ResidentsController < ApplicationController
 
   # GET /residents/1/edit
   def edit
+    @resident = Resident.find(params[:id])
   end
 
   # POST /residents

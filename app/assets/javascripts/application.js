@@ -12,8 +12,9 @@
 //
 //= require jquery2
 //= require jquery_ujs
-//= require twitter/bootstrap
+//= require bootstrap-sprockets
 //= require cocoon
 //= require spin
 //= require notie
-//= require_tree .
+//= require moment.min
+//= require fullcalendar

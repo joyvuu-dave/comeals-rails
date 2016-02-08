@@ -55,7 +55,7 @@ class MealsController < ApplicationController
     if @meal.update(meal_params)
       # Hack b/c counter_cache won't update this automatically
       MealResident.counter_culture_fix_counts
-      redirect_to meals_url, notice: 'Meal was successfully updated.'
+      redirect_to calendar_path, notice: 'Meal was successfully updated.'
     else
       render :edit
     end

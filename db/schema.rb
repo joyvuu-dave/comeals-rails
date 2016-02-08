@@ -22,17 +22,19 @@ ActiveRecord::Schema.define(version: 20160202150722) do
     t.integer  "amount",      default: 0, null: false
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
-    t.index ["meal_id"], name: "index_bills_on_meal_id", using: :btree
-    t.index ["resident_id"], name: "index_bills_on_resident_id", using: :btree
   end
+
+  add_index "bills", ["meal_id"], name: "index_bills_on_meal_id", using: :btree
+  add_index "bills", ["resident_id"], name: "index_bills_on_resident_id", using: :btree
 
   create_table "communities", force: :cascade do |t|
     t.string   "name",       null: false
     t.integer  "cap"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["name"], name: "index_communities_on_name", unique: true, using: :btree
   end
+
+  add_index "communities", ["name"], name: "index_communities_on_name", unique: true, using: :btree
 
   create_table "guests", force: :cascade do |t|
     t.integer  "meal_id"
@@ -41,9 +43,10 @@ ActiveRecord::Schema.define(version: 20160202150722) do
     t.string   "name",                    null: false
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
-    t.index ["meal_id"], name: "index_guests_on_meal_id", using: :btree
-    t.index ["resident_id"], name: "index_guests_on_resident_id", using: :btree
   end
+
+  add_index "guests", ["meal_id"], name: "index_guests_on_meal_id", using: :btree
+  add_index "guests", ["resident_id"], name: "index_guests_on_resident_id", using: :btree
 
   create_table "meal_residents", force: :cascade do |t|
     t.integer  "meal_id"
@@ -51,10 +54,11 @@ ActiveRecord::Schema.define(version: 20160202150722) do
     t.integer  "multiplier",  null: false
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
-    t.index ["meal_id", "resident_id"], name: "index_meal_residents_on_meal_id_and_resident_id", using: :btree
-    t.index ["meal_id"], name: "index_meal_residents_on_meal_id", using: :btree
-    t.index ["resident_id"], name: "index_meal_residents_on_resident_id", using: :btree
   end
+
+  add_index "meal_residents", ["meal_id", "resident_id"], name: "index_meal_residents_on_meal_id_and_resident_id", using: :btree
+  add_index "meal_residents", ["meal_id"], name: "index_meal_residents_on_meal_id", using: :btree
+  add_index "meal_residents", ["resident_id"], name: "index_meal_residents_on_resident_id", using: :btree
 
   create_table "meals", force: :cascade do |t|
     t.date     "date",                                  null: false
@@ -75,16 +79,18 @@ ActiveRecord::Schema.define(version: 20160202150722) do
     t.integer  "bill_costs", default: 0, null: false
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
-    t.index ["name"], name: "index_residents_on_name", unique: true, using: :btree
-    t.index ["unit_id"], name: "index_residents_on_unit_id", using: :btree
   end
+
+  add_index "residents", ["name"], name: "index_residents_on_name", unique: true, using: :btree
+  add_index "residents", ["unit_id"], name: "index_residents_on_unit_id", using: :btree
 
   create_table "units", force: :cascade do |t|
     t.string   "name",       null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["name"], name: "index_units_on_name", unique: true, using: :btree
   end
+
+  add_index "units", ["name"], name: "index_units_on_name", unique: true, using: :btree
 
   add_foreign_key "bills", "meals"
   add_foreign_key "bills", "residents"
