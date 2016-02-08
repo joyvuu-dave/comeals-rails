@@ -16,8 +16,8 @@
 #
 
 class MealsController < ApplicationController
-  before_action :authenticate
-  before_action :authorize, only: [:destroy]
+  before_action :signed_in?
+  before_action :admin?, only: [:destroy]
   before_action :set_meal, only: [:show, :edit, :update, :destroy]
 
   # GET /meals

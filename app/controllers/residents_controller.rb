@@ -22,13 +22,13 @@
 #
 
 class ResidentsController < ApplicationController
-  before_action :authenticate
-  before_action :authorize, except: [:index, :show]
+  before_action :signed_in?
+  before_action :admin?, except: [:index, :show]
   before_action :set_resident, only: [:show, :update, :destroy]
 
   # GET /residents
   def index
-    @residents = Resident.order("units.name").includes({ :bills => :meal }, { :guests => :meal }, { :meal_residents => :meal }, :unit).all.page(params[:page])
+    @residents = Resident.order("units.name").includes(:unit).all.page(params[:page])
   end
 
   # GET /residents/1

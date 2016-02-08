@@ -14,13 +14,13 @@
 #
 
 class UnitsController < ApplicationController
-  before_action :authenticate
-  before_action :authorize, except: [:index]
+  before_action :signed_in?
+  before_action :admin?, except: [:index]
   before_action :set_unit, only: [:show, :edit, :update, :destroy]
 
   # GET /units
   def index
-    @units = Unit.order(:name).includes({ :residents => { :bills => :meal }}, { :residents => { :meal_residents => :meal }}, { :residents => { :guests => :meal }}).all.page(params[:page])
+    @units = Unit.order(:name).page(params[:page])
   end
 
   # GET /units/new

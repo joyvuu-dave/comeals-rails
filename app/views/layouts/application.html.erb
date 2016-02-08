@@ -13,33 +13,12 @@
 
   <body>
     <div class="container">
-
-      <!-- Notice -->
-      <% if notice %>
-        <div class="alert alert-success alert-dismissible" role="alert">
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-          <%= notice %>
-        </div>
-      <% end %>
+      <%= render partial: 'layouts/flash' %>
 
       <!-- Spinner -->
       <div id="spinner"></div>
 
-      <!-- Header -->
-      <% if @signed_in %>
-        <div class="page-header">
-          <%= link_to('Community', communities_path, class: "btn btn-info btn-xs") if @admin %>
-          <%= link_to('Meals', meals_path, class: "btn btn-info btn-xs") if @admin %>
-          <%= link_to('Bills', bills_path, class: "btn btn-info btn-xs") if @admin %>
-          <%= link_to('Residents', residents_path, class: "btn btn-info btn-xs") if @admin %>
-          <%= link_to('Units', units_path, class: "btn btn-info btn-xs") if @admin %>
-          <%= link_to 'Calendar', calendar_path, class: "btn btn-info btn-xs" %>
-          <%= link_to "Logout#{' Admin' if @admin}", logout_path, method: :post, class: "btn btn-default btn-xs pull-right" %>
-        </div>
-      <% end %>
-
+      <%= render partial: 'layouts/header' %>
       <%= yield %>
 
     </div>

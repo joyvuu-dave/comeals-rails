@@ -52,4 +52,14 @@ class Meal < ApplicationRecord
   def is_subsidized
     chargeable_unit_cost * multiplier - cost < 0
   end
+
+  # Report Methods
+  def self.ave_cost
+    val = 2 * ((Meal.pluck(:cost).reduce(&:+) / Meal.all.reduce(0) { |sum, meal| sum + meal.multiplier }.to_f) / 100.to_f)
+    "$#{sprintf('%0.02f', val)}/adult"
+  end
+
+  def self.ave_number_of_attendees
+    (Meal.all.reduce(0) { |sum, meal| sum + meal.attendees } / Meal.count.to_f).round(1)
+  end
 end

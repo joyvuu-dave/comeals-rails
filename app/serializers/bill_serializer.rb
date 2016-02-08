@@ -22,6 +22,7 @@
 #
 
 class BillSerializer < ActiveModel::Serializer
+  cache key: 'bill'
   attributes :title,
              :start,
              :url

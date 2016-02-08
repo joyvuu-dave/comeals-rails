@@ -1,5 +1,5 @@
 class CalendarController < ApplicationController
-  before_action :authenticate
+  before_action :signed_in?
 
   def index
   end

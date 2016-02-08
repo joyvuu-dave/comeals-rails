@@ -8,7 +8,6 @@
   <thead>
     <tr>
       <th>Name</th>
-      <th>Balance</th>
       <th><%= 'Actions' if @admin %></th>
     </tr>
   </thead>
@@ -16,7 +15,6 @@
     <% @units.each do |unit| %>
       <tr>
         <td><%= unit.name %></td>
-        <td><%= number_to_currency(unit.balance/100.to_f) %></td>
         <td>
           <%= link_to('Edit',
                       edit_unit_path(unit),

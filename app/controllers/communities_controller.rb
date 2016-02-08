@@ -15,8 +15,8 @@
 #
 
 class CommunitiesController < ApplicationController
-  before_action :authenticate
-  before_action :authorize, except: [:index]
+  before_action :signed_in?
+  before_action :admin?, except: [:index]
   before_action :set_community, only: [:show, :edit, :update, :destroy]
 
   # GET /communities

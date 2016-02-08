@@ -22,7 +22,7 @@
 #
 
 class BillsController < ApplicationController
-  before_action :authenticate
+  before_action :signed_in?
   before_action :set_bill, only: [:show, :edit, :update, :destroy]
 
   # GET /bills

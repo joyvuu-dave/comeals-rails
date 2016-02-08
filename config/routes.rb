@@ -5,15 +5,19 @@ Rails.application.routes.draw do
   post '/logout', to: 'sessions#logout', as: :logout
 
   get '/calendar', to: 'calendar#index', as: :calendar
+  get '/report', to: 'report#show', as: :report
 
   namespace :api do
     get '/meals' => 'meals#index'
     get '/bills' => 'bills#index'
+    get '/residents' => 'residents#index'
+    get '/units' => 'units#index'
+    get '/report' => 'report#show'
   end
 
   resources :residents
-  resources :bills
-  resources :units
+  resources :bills, except: [:show]
+  resources :units, except: [:show]
   resources :meals
-  resources :communities
+  resources :communities, except: [:show]
 end

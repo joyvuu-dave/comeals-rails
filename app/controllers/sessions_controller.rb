@@ -4,6 +4,8 @@ class SessionsController < ApplicationController
       cookies.permanent[:user] = 'admin'
     elsif params[:username] == 'user' && params[:password] == 'user'
       cookies.permanent[:user] = 'user'
+    else
+      flash[:error] = 'Incorrect username / password'
     end
 
     redirect_to :root

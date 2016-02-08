@@ -3,7 +3,6 @@
   <td><%= resident.name %></td>
   <td><%= category_helper(resident.multiplier) %></td>
   <td><%= resident.unit.name %></td>
-  <td><%= number_to_currency(resident.balance/100.to_f) %></td>
   <td>
     <%= link_to('Edit',
                 edit_resident_path(resident),

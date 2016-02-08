@@ -47,4 +47,8 @@ class Resident < ApplicationRecord
   def balance
     bill_reimbursements - meal_resident_costs - guest_costs
   end
+
+  def meals_attended
+    meal_residents.count
+  end
 end

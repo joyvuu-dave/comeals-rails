@@ -13,16 +13,13 @@
 #  index_units_on_name  (name) UNIQUE
 #
 
-class Unit < ApplicationRecord
-  has_many :residents, dependent: :destroy
-  validates :name, uniqueness: true, presence: true
+class UnitSerializer < ActiveModel::Serializer
+  cache key: 'unit'
+  attributes :name,
+             :balance,
+             :meals_cooked
 
-  # DERIVED DATA
   def balance
-    residents.reduce(0) { |sum, resident| sum + resident.balance }
-  end
-
-  def meals_cooked
-    residents.reduce(0) { |sum, resident| sum + resident.bills.count }
+    ActionController::Base.helpers.number_to_currency(object.balance/100.to_f)
   end
 end

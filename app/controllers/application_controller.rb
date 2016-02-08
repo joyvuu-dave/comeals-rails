@@ -3,9 +3,9 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
-  before_action :set_controller_variables
+  before_action :authenticate
 
-  def set_controller_variables
+  def authenticate
     if cookies[:user] == 'admin'
       @signed_in = true
       @admin = true
@@ -18,11 +18,11 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def authenticate
+  def signed_in?
     redirect_to :root unless @signed_in == true
   end
 
-  def authorize
+  def admin?
     unless @admin
       begin
         redirect_to(:back)
