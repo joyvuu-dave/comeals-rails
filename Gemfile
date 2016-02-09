@@ -28,7 +28,7 @@ gem 'simple_form'
 gem 'cocoon'
 gem 'dalli'
 gem 'connection_pool'
-gem 'active_model_serializers', '0.10.0.rc4'
+gem 'active_model_serializers', github: 'rails-api/active_model_serializers'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'

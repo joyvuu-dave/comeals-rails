@@ -1,8 +1,8 @@
 class SessionsController < ApplicationController
   def login
-    if params[:username] == 'admin' && params[:password] == 'admin'
+    if params[:username] == 'admin' && params[:password] == Rails.application.secrets.admin_password
       cookies.permanent[:user] = 'admin'
-    elsif params[:username] == 'user' && params[:password] == 'user'
+    elsif params[:username] == 'user' && params[:password] == Rails.application.secrets.user_password
       cookies.permanent[:user] = 'user'
     else
       flash[:error] = 'Incorrect username / password'
