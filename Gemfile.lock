@@ -8,7 +8,7 @@ GIT
 
 GIT
   remote: git://github.com/rails-api/active_model_serializers.git
-  revision: 020db79a09f59f796f97b1b7109ead71d00ce0ad
+  revision: fe6d2da46f0a44dddfff4078090250799abee582
   specs:
     active_model_serializers (0.10.0.rc4)
       actionpack (>= 4.0)
@@ -25,7 +25,7 @@ GIT
 
 GIT
   remote: git://github.com/rails/rails.git
-  revision: e6fc78bfbd53b6426cada34ab40079b44454f708
+  revision: 0e70595acc8796c3e0854ef72df478d597243e68
   specs:
     actioncable (5.0.0.beta2)
       actionpack (= 5.0.0.beta2)
@@ -94,7 +94,7 @@ GIT
 
 GIT
   remote: https://github.com/rspec/rspec-core.git
-  revision: 00a82883e26fa7f7251e24912b58ab6ec7b5ad95
+  revision: 59f4519ee01b66c20d3de39de952f770d1b962eb
   branch: master
   specs:
     rspec-core (3.5.0.pre)
@@ -120,7 +120,7 @@ GIT
 
 GIT
   remote: https://github.com/rspec/rspec-rails.git
-  revision: 8aef271429657ab53f6befb87d37caf054106c6d
+  revision: 897d2a59742aa172ea86918c6efd2193c5918acc
   branch: master
   specs:
     rspec-rails (3.5.0.pre)
@@ -214,6 +214,9 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
+    pry-byebug (3.3.0)
+      byebug (~> 8.0)
+      pry (~> 0.10)
     pry-rails (0.3.4)
       pry (>= 0.9.10)
     puma (2.16.0)
@@ -285,7 +288,6 @@ DEPENDENCIES
   binding_of_caller
   bootstrap-sass (~> 3.3.6)
   bullet
-  byebug
   cocoon
   coffee-rails!
   connection_pool
@@ -296,6 +298,7 @@ DEPENDENCIES
   jquery-rails
   kaminari!
   pg (~> 0.18)
+  pry-byebug
   pry-rails
   puma
   quiet_assets

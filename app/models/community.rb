@@ -16,8 +16,14 @@
 
 class Community < ApplicationRecord
   validates :name, uniqueness: true
+  validate :only_one, on: :create
 
   def cap
     read_attribute(:cap) || Float::INFINITY
   end
+
+  private
+    def only_one
+      errors[:base] << 'Only one community permitted.' if Community.count > 0
+    end
 end

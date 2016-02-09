@@ -8,6 +8,7 @@
     <%= link_to('Units', units_path, class: "btn btn-info btn-xs") if @admin %>
     <%= link_to('Report', report_path, class: "btn btn-info btn-xs") %>
     <%= link_to 'Calendar', calendar_path, class: "btn btn-info btn-xs" %>
+    <%= link_to('Admin', admin_path, class: "btn btn-info btn-xs") if @admin %>
     <%= link_to "Logout#{' Admin' if @admin}", logout_path, method: :post, class: "btn btn-default btn-xs pull-right" %>
   </div>
 <% end %>

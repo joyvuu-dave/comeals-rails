@@ -39,6 +39,7 @@ class CommunitiesController < ApplicationController
     if @community.save
       redirect_to communities_url, notice: 'Community was successfully created.'
     else
+      flash.now[:error] = @community.errors.first[1]
       render :new
     end
   end

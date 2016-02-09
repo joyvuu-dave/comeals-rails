@@ -1,0 +1,35 @@
+<h1>Admin</h1>
+<form accept-charset="UTF-8" action="/api/generate-meal-templates" method="post" class="col-xs-6 well">
+  <h3 class="no-margin-top">Create Meal Templates</h3>
+
+  <!-- Auth Token -->
+  <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+
+  <!-- Start Date -->
+  <div class="form-group">
+    <label>Start Date</label>
+    <input type="date" id="start_date" name="start_date" class="form-control" />
+  </div>
+
+  <!-- End Date -->
+  <div class="form-group">
+    <label>End Date</label>
+    <input type="date" id="end_date" name="end_date" class="form-control" />
+  </div>
+
+  <!-- 1st Week: Common Dinner on Sunday or Monday -->
+  <div class="form-group">
+    <label>1st Week's Common Dinner</label>
+    <br>
+    <label class="radio-inline">
+      <input type="radio" name="first_week_common_dinner" id="sunday" value="0" checked> Sunday
+    </label>
+    <label class="radio-inline">
+      <input type="radio" name="first_week_common_dinner" id="monday" value="1"> Monday
+    </label>
+  </div>
+
+
+  <!-- Submit button -->
+  <button type="submit" class="btn btn-danger">Submit</button>
+</form>

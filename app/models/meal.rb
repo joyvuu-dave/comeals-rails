@@ -62,4 +62,32 @@ class Meal < ApplicationRecord
   def self.ave_number_of_attendees
     (Meal.all.reduce(0) { |sum, meal| sum + meal.attendees } / Meal.count.to_f).round(1)
   end
+
+  def self.create_templates(start_date, end_date, alternating_dinner_day, num_meals_created)
+    # Are we finished?
+    return num_meals_created if start_date >= end_date
+
+    # Is it a common dinner day?
+    if [alternating_dinner_day, 2, 4].any? { |num| num == start_date.wday }
+      # Flip if alternating dinner day
+      if start_date.wday == alternating_dinner_day
+        alternating_dinner_day = (alternating_dinner_day - 1) ** 2
+      end
+
+      if Meal.new(date: start_date, cap: Community.first.cap).save
+        num_meals_created += 1
+      end
+
+      # If common dinner was on a Sunday, we
+      # don't have dinner the next day
+      start_date += 24.hour if start_date.wday == 0
+
+      start_date += 24.hour
+      return create_templates(start_date, end_date, alternating_dinner_day, num_meals_created)
+    end
+
+
+    start_date += 24.hour
+    return create_templates(start_date, end_date, alternating_dinner_day, num_meals_created)
+  end
 end

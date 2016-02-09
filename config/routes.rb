@@ -6,9 +6,11 @@ Rails.application.routes.draw do
 
   get '/calendar', to: 'calendar#index', as: :calendar
   get '/report', to: 'report#show', as: :report
+  get '/admin', to: 'admin#show', as: :admin
 
   namespace :api do
     get '/meals' => 'meals#index'
+    post '/generate-meal-templates' => 'meals#generate_meal_templates'
     get '/bills' => 'bills#index'
     get '/residents' => 'residents#index'
     get '/units' => 'units#index'
