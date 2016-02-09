@@ -29,6 +29,7 @@ gem 'cocoon'
 gem 'dalli'
 gem 'connection_pool'
 gem 'active_model_serializers', github: 'rails-api/active_model_serializers'
+gem 'rails_12factor', group: :production
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
