@@ -27,10 +27,6 @@ RSpec.describe CommunitiesController, type: :routing do
       expect(:get => "/communities/new").to route_to("communities#new")
     end
 
-    it "routes to #show" do
-      expect(:get => "/communities/1").to route_to("communities#show", :id => "1")
-    end
-
     it "routes to #edit" do
       expect(:get => "/communities/1/edit").to route_to("communities#edit", :id => "1")
     end

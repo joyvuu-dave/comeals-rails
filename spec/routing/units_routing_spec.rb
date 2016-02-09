@@ -26,10 +26,6 @@ RSpec.describe UnitsController, type: :routing do
       expect(:get => "/units/new").to route_to("units#new")
     end
 
-    it "routes to #show" do
-      expect(:get => "/units/1").to route_to("units#show", :id => "1")
-    end
-
     it "routes to #edit" do
       expect(:get => "/units/1/edit").to route_to("units#edit", :id => "1")
     end
