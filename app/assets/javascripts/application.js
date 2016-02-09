@@ -10,8 +10,8 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require jquery2
-//= require jquery_ujs
+//= require generated/vendor-bundle
+//= require generated/app-bundle
 //= require bootstrap-sprockets
 //= require cocoon
 //= require spin
