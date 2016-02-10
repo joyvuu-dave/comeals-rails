@@ -1,5 +1,7 @@
 <%= simple_form_for @meal, html: { class: "form-horizontal" } do |f| %>
 
+  <%= f.input :description %>
+
   <!-- Residents -->
   <h3>Residents</h3>
   <div class="scrollable well">
@@ -24,9 +26,9 @@
   <br>
   <br>
 
-  <!-- Submit / Cancel buttons -->
-  <%= f.submit 'Submit', class: "btn btn-primary" %>
-  <%= link_to 'Cancel', meals_path, class: "btn btn-default" %>
+  <!-- Update / Cancel buttons -->
+  <%= f.submit 'Update', class: "btn btn-primary" %>
+  <%= link_to 'Cancel', calendar_path, class: "btn btn-default" %>
 
 <% end %>
 

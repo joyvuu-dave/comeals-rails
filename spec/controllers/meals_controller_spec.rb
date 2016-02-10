@@ -11,6 +11,7 @@
 #  cost                      :integer          default(0), not null
 #  meal_residents_multiplier :integer          default(0), not null
 #  guests_multiplier         :integer          default(0), not null
+#  description               :text
 #  created_at                :datetime         not null
 #  updated_at                :datetime         not null
 #  reconciliation_id         :integer
