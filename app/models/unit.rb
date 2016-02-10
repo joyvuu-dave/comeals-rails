@@ -19,10 +19,12 @@ class Unit < ApplicationRecord
 
   # DERIVED DATA
   def balance
+    return 0 if Meal.unreconciled.count == 0
     residents.reduce(0) { |sum, resident| sum + resident.balance }
   end
 
   def meals_cooked
-    residents.reduce(0) { |sum, resident| sum + resident.bills.count }
+    return 0 if Meal.unreconciled.count == 0
+    residents.reduce(0) { |sum, resident| sum + resident.bills.joins(:meal).where({:meals => {:reconciliation_id =>  nil}}).count }
   end
 end

@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20160202150722
+# Schema version: 20160210160946
 #
 # Table name: meals
 #
@@ -13,9 +13,20 @@
 #  guests_multiplier         :integer          default(0), not null
 #  created_at                :datetime         not null
 #  updated_at                :datetime         not null
+#  reconciliation_id         :integer
+#
+# Indexes
+#
+#  index_meals_on_reconciliation_id  (reconciliation_id)
+#
+# Foreign Keys
+#
+#  fk_rails_4ac0d4ffd3  (reconciliation_id => reconciliations.id)
 #
 
 class Meal < ApplicationRecord
+  scope :unreconciled, -> { where(reconciliation_id: nil) }
+
   attr_readonly :cap
 
   has_many :bills, dependent: :destroy
@@ -54,13 +65,13 @@ class Meal < ApplicationRecord
   end
 
   # Report Methods
-  def self.ave_cost
-    val = 2 * ((Meal.pluck(:cost).reduce(&:+) / Meal.all.reduce(0) { |sum, meal| sum + meal.multiplier }.to_f) / 100.to_f)
+  def self.unreconciled_ave_cost
+    val = 2 * ((Meal.unreconciled.pluck(:cost).reduce(&:+).to_i / Meal.unreconciled.reduce(0) { |sum, meal| sum + meal.multiplier }.to_f) / 100.to_f)
     "$#{sprintf('%0.02f', val)}/adult"
   end
 
-  def self.ave_number_of_attendees
-    (Meal.all.reduce(0) { |sum, meal| sum + meal.attendees } / Meal.count.to_f).round(1)
+  def self.unreconciled_ave_number_of_attendees
+    (Meal.unreconciled.reduce(0) { |sum, meal| sum + meal.attendees } / Meal.unreconciled.count.to_f).round(1)
   end
 
   def self.create_templates(start_date, end_date, alternating_dinner_day, num_meals_created)
@@ -85,7 +96,6 @@ class Meal < ApplicationRecord
       start_date += 24.hour
       return create_templates(start_date, end_date, alternating_dinner_day, num_meals_created)
     end
-
 
     start_date += 24.hour
     return create_templates(start_date, end_date, alternating_dinner_day, num_meals_created)

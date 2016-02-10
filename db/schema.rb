@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160202150722) do
+ActiveRecord::Schema.define(version: 20160210160946) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -70,6 +70,15 @@ ActiveRecord::Schema.define(version: 20160202150722) do
     t.integer  "guests_multiplier",         default: 0, null: false
     t.datetime "created_at",                            null: false
     t.datetime "updated_at",                            null: false
+    t.integer  "reconciliation_id"
+  end
+
+  add_index "meals", ["reconciliation_id"], name: "index_meals_on_reconciliation_id", using: :btree
+
+  create_table "reconciliations", force: :cascade do |t|
+    t.date     "date",       null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "residents", force: :cascade do |t|
@@ -98,5 +107,6 @@ ActiveRecord::Schema.define(version: 20160202150722) do
   add_foreign_key "guests", "residents"
   add_foreign_key "meal_residents", "meals"
   add_foreign_key "meal_residents", "residents"
+  add_foreign_key "meals", "reconciliations"
   add_foreign_key "residents", "units"
 end

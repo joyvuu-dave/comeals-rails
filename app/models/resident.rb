@@ -33,22 +33,27 @@ class Resident < ApplicationRecord
 
   # DERIVED DATA
   def bill_reimbursements
-    bills.reduce(0) { |sum, bill| sum + bill.reimburseable_amount }
+    return 0 if Meal.unreconciled.count == 0
+    bills.joins(:meal).where({:meals => {:reconciliation_id =>  nil}}).reduce(0) { |sum, bill| sum + bill.reimburseable_amount }
   end
 
   def meal_resident_costs
-    meal_residents.reduce(0) { |sum, meal_resident| sum + meal_resident.cost }
+    return 0 if Meal.unreconciled.count == 0
+    meal_residents.joins(:meal).where({:meals => {:reconciliation_id =>  nil}}).reduce(0) { |sum, meal_resident| sum + meal_resident.cost }
   end
 
   def guest_costs
-    guests.reduce(0) { |sum, guest| sum + guest.cost }
+    return 0 if Meal.unreconciled.count == 0
+    guests.joins(:meal).where({:meals => {:reconciliation_id =>  nil}}).reduce(0) { |sum, guest| sum + guest.cost }
   end
 
   def balance
+    return 0 if Meal.unreconciled.count == 0
     bill_reimbursements - meal_resident_costs - guest_costs
   end
 
   def meals_attended
-    meal_residents.count
+    return 0 if Meal.unreconciled.count == 0
+    meal_residents.joins(:meal).where({:meals => {:reconciliation_id =>  nil}}).count
   end
 end

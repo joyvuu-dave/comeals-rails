@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20160202150722
+# Schema version: 20160210160946
 #
 # Table name: meals
 #
@@ -13,6 +13,15 @@
 #  guests_multiplier         :integer          default(0), not null
 #  created_at                :datetime         not null
 #  updated_at                :datetime         not null
+#  reconciliation_id         :integer
+#
+# Indexes
+#
+#  index_meals_on_reconciliation_id  (reconciliation_id)
+#
+# Foreign Keys
+#
+#  fk_rails_4ac0d4ffd3  (reconciliation_id => reconciliations.id)
 #
 
 require "rails_helper"
