@@ -18,3 +18,6 @@
 //= require notie
 //= require moment.min
 //= require fullcalendar
+//= require react
+//= require react_ujs
+//= require components
