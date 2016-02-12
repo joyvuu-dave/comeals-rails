@@ -1,0 +1,15 @@
+<div class="nested-fields well">
+  <%= f.collection_select(
+    :resident_id,
+    Resident.order("units.name").includes(:unit).all,
+    :id,
+    lambda { |r| "#{r&.name} - #{r&.unit&.name}" },
+    { include_blank: "Cook" },
+    { class: 'form-control' }
+  ) %>
+  <%= f.input :amount, label: 'Bill', required: false %>
+
+  <br>
+
+  <%= link_to_remove_association "remove cook", f, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+</div>

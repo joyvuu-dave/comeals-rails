@@ -8,7 +8,7 @@ GIT
 
 GIT
   remote: git://github.com/rails-api/active_model_serializers.git
-  revision: fb48bced5e45ea0fe5e4454d772d2f1f1b9cf3e3
+  revision: b45f7b4ffea36b44fdf7be075295ad9db6bea1b0
   specs:
     active_model_serializers (0.10.0.rc4)
       actionpack (>= 4.0)
@@ -25,7 +25,7 @@ GIT
 
 GIT
   remote: git://github.com/rails/rails.git
-  revision: 31778a34a8c6e1d186c1e807491c1f44c5f07357
+  revision: 737b718ea0c88d3f6c139343f957f386e06fffc9
   specs:
     actioncable (5.0.0.beta2)
       actionpack (= 5.0.0.beta2)
@@ -102,7 +102,7 @@ GIT
 
 GIT
   remote: https://github.com/rspec/rspec-expectations.git
-  revision: 4c1258fc65e494a9b5884dac0d5174b3a90883cf
+  revision: ba6fe09ef90ef8ca84ba5044e9668c09acdc3d60
   branch: master
   specs:
     rspec-expectations (3.5.0.pre)
@@ -149,7 +149,7 @@ GEM
       activerecord (>= 3.2, < 6.0)
       rake (~> 10.4)
     arel (7.0.0)
-    autoprefixer-rails (6.3.1)
+    autoprefixer-rails (6.3.2)
       execjs
       json
     babel-source (5.8.35)

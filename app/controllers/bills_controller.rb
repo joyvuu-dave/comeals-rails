@@ -30,6 +30,10 @@ class BillsController < ApplicationController
     @bills = Bill.order("meals.date desc").includes(:resident, :meal).all.page(params[:page])
   end
 
+  # GET /bills/1
+  def show
+  end
+
   # GET /bills/new
   def new
     @bill = Bill.new(meal_id: params[:meal])
@@ -39,7 +43,7 @@ class BillsController < ApplicationController
   def edit
   end
 
-  # POST /bills
+  # POST /bills/new
   def create
     @bill = Bill.new(bill_params)
     if @bill.save
@@ -60,8 +64,11 @@ class BillsController < ApplicationController
 
   # DELETE /bills/1
   def destroy
-    @bill.destroy
-    redirect_to bills_url, notice: 'Bill was successfully destroyed.'
+    if @bill.destroy
+      redirect_to bills_url, notice: 'Bill was successfully destroyed.'
+    else
+      render :show
+    end
   end
 
   private

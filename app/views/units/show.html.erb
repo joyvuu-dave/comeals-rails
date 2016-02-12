@@ -1,0 +1,34 @@
+<div class="page-header">
+  <h1>Unit</h1>
+</div>
+
+<!-- Errors -->
+<% if @unit.errors.any? %>
+  <div id="error_expl" class="panel panel-danger">
+    <div class="panel-heading">
+      <h3 class="panel-title"><%= pluralize(@unit.errors.count, "error") %> prohibited this unit from being deleted:</h3>
+    </div>
+    <div class="panel-body">
+      <ul>
+      <% @unit.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  </div>
+<% end %>
+
+<!-- Attributes -->
+<dl class="dl-horizontal">
+  <dt><strong>Name:</strong></dt>
+  <dd><%= @unit.name %></dd>
+</dl>
+
+<!-- Back / Edit / Delete buttons -->
+<%= link_to('Back', units_path, class: "btn btn-default") %>
+<%= link_to('Edit', edit_unit_path(@unit), class: "btn btn-default") if @admin %>
+<%= link_to('Delete',
+            unit_path(@unit),
+            method: 'delete',
+            data: { confirm: 'Are you sure?' },
+            class: "btn btn-danger") if @admin %>

@@ -1,10 +1,10 @@
-<%= simple_form_for @unit, html: { class: "form-horizontal unit" } do |f| %>
+<%= simple_form_for @unit, url: { action: lambda { @unit.new_record? ? "create" : "update" }.call }, html: { class: "form-horizontal unit" } do |f| %>
 
   <!-- Errors -->
   <% if @unit.errors.any? %>
     <div id="error_expl" class="panel panel-danger">
       <div class="panel-heading">
-        <h3 class="panel-title"><%= pluralize(@unit.errors.count, "error") %> prohibited this unit from being saved:</h3>
+        <h3 class="panel-title"><%= pluralize(@unit.errors.count, "error") %> prohibited this unit from being <%= @unit.new_record? ? 'created' : 'updated' %>:</h3>
       </div>
       <div class="panel-body">
         <ul>

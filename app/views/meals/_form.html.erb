@@ -1,6 +1,35 @@
-<%= simple_form_for @meal, html: { class: "form-horizontal" } do |f| %>
+<%= simple_form_for @meal, url: { action: lambda { @meal.new_record? ? "create" : "update" }.call }, html: { class: "form-horizontal" } do |f| %>
+
+  <!-- Errors -->
+  <% if @meal.errors.any? %>
+    <div id="error_expl" class="panel panel-danger">
+      <div class="panel-heading">
+        <h3 class="panel-title"><%= pluralize(@meal.errors.count, "error") %> prohibited this meal from being <%= @meal.new_record? ? "created" : "updated" %>:</h3>
+      </div>
+      <div class="panel-body">
+        <ul>
+        <% @meal.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+        </ul>
+      </div>
+    </div>
+  <% end %>
 
   <%= f.input :description %>
+
+  <%= f.input :date, required: false if @meal.new_record? %>
+
+  <!-- Bills (Cooks) -->
+  <h3>Cooks</h3>
+  <div id="bills">
+    <%= f.simple_fields_for :bills do |bill| %>
+      <%= render 'bill_fields', f: bill %>
+    <% end %>
+    <div class="links">
+      <%= link_to_add_association 'add cook', f, :bills, class: 'btn btn-warning' %>
+    </div>
+  </div>
 
   <!-- Residents -->
   <h3>Residents</h3>
@@ -8,7 +37,7 @@
     <%= f.collection_check_boxes(:resident_ids,
      Resident.order("units.name").includes(:unit).all,
      :id,
-     lambda { |r| "#{r.name} - #{r.unit.name}" },
+     lambda { |r| "#{r&.name} - #{r&.unit&.name}" },
      { item_wrapper_class: "checkbox" }) %>
   </div>
 
@@ -27,7 +56,7 @@
   <br>
 
   <!-- Update / Cancel buttons -->
-  <%= f.submit 'Update', class: "btn btn-primary" %>
+  <%= f.submit nil, class: "btn btn-primary" unless @meal.reconciled? %>
   <%= link_to 'Cancel', calendar_path, class: "btn btn-default" %>
 
 <% end %>

@@ -24,6 +24,10 @@ class CommunitiesController < ApplicationController
     @communities = Community.all
   end
 
+  # GET /communities/1
+  def show
+  end
+
   # GET /communities/new
   def new
     @community = Community.new
@@ -33,18 +37,17 @@ class CommunitiesController < ApplicationController
   def edit
   end
 
-  # POST /communities
+  # POST /communities/new
   def create
     @community = Community.new(community_params)
     if @community.save
       redirect_to communities_url, notice: 'Community was successfully created.'
     else
-      flash.now[:error] = @community.errors.first[1]
       render :new
     end
   end
 
-  # PATCH/PUT /communities/1
+  # PATCH /communities/1/edit
   def update
     if @community.update(community_params)
       redirect_to communities_url, notice: 'Community was successfully updated.'
@@ -55,8 +58,11 @@ class CommunitiesController < ApplicationController
 
   # DELETE /communities/1
   def destroy
-    @community.destroy
-    redirect_to communities_url, notice: 'Community was successfully destroyed.'
+    if @community.destroy
+      redirect_to communities_url, notice: 'Community was successfully destroyed.'
+    else
+      render :show
+    end
   end
 
   private

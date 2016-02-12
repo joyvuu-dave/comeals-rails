@@ -15,7 +15,7 @@
 #
 
 class Community < ApplicationRecord
-  validates :name, uniqueness: true
+  validates :name, uniqueness: true, presence: true
   validate :only_one, on: :create
 
   def cap

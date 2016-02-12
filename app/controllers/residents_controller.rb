@@ -66,8 +66,11 @@ class ResidentsController < ApplicationController
 
   # DELETE /residents/1
   def destroy
-    @resident.destroy
-    redirect_to residents_url, notice: 'Resident was successfully destroyed.'
+    if @resident.destroy
+      redirect_to residents_url, notice: 'Resident was successfully destroyed.'
+    else
+      render :show
+    end
   end
 
   private

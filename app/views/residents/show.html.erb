@@ -2,6 +2,22 @@
   <h1>Resident</h1>
 </div>
 
+  <!-- Errors -->
+  <% if @resident.errors.any? %>
+    <div id="error_expl" class="panel panel-danger">
+      <div class="panel-heading">
+        <h3 class="panel-title"><%= pluralize(@resident.errors.count, "error") %> prohibited this resident from being deleted:</h3>
+      </div>
+      <div class="panel-body">
+        <ul>
+        <% @resident.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+        </ul>
+      </div>
+    </div>
+  <% end %>
+
 <!-- Attributes -->
 <dl class="dl-horizontal">
   <dt><strong>Name:</strong></dt>
@@ -11,7 +27,7 @@
   <dd><%= category_helper(@resident.multiplier) %></dd>
 
   <dt><strong>Unit:</strong></dt>
-  <dd><%= @resident.unit.name %></dd>
+  <dd><%= @resident.unit&.name %></dd>
 
   <dt><strong>Bill Costs:</strong></dt>
   <dd><%= number_to_currency(@resident.bill_costs/100.to_f) %></dd>

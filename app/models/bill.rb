@@ -34,7 +34,7 @@ class Bill < ApplicationRecord
 
   # DERIVED DATA
   def reimburseable_amount
-    if meal.is_subsidized
+    if meal.subsidized?
       cost_difference = meal.cost - meal.cap * meal.multiplier
       amount - ((amount / meal.cost.to_f) * cost_difference).ceil
     else

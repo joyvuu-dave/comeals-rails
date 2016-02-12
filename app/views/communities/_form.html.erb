@@ -1,8 +1,24 @@
-<%= simple_form_for @community, html: { class: "form-horizontal community" } do |f| %>
+<%= simple_form_for @community, url: { action: lambda { @community.new_record? ? "create" : "update" }.call }, html: { class: "form-horizontal community" } do |f| %>
+
+  <!-- Errors -->
+  <% if @community.errors.any? %>
+    <div id="error_expl" class="panel panel-danger">
+      <div class="panel-heading">
+        <h3 class="panel-title"><%= pluralize(@community.errors.count, "error") %> prohibited this community from being <%= @community.new_record? ? 'created' : 'updated' %>:</h3>
+      </div>
+      <div class="panel-body">
+        <ul>
+        <% @community.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+        </ul>
+      </div>
+    </div>
+  <% end %>
 
   <!-- Name -->
   <div class="form-group">
-    <%= f.label :name, class: "control-label col-xs-3" %>
+    <%= f.label :name, required: false, class: "control-label col-xs-3" %>
     <div class="col-xs-7">
       <%= f.text_field :name, class: "form-control" %>
     </div>

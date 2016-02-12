@@ -1,6 +1,22 @@
 <%= javascript_include_tag "bills" %>
 
-<%= simple_form_for @bill, html: { class: "form-horizontal bill" } do |f| %>
+<%= simple_form_for @bill, url: { action: lambda { @bill.new_record? ? "create" : "update" }.call }, html: { class: "form-horizontal bill" } do |f| %>
+
+  <!-- Errors -->
+  <% if @bill.errors.any? %>
+    <div id="error_expl" class="panel panel-danger">
+      <div class="panel-heading">
+        <h3 class="panel-title"><%= pluralize(@bill.errors.count, "error") %> prohibited this meal from being <%= @bill.new_record? ? "created" : "updated" %>:</h3>
+      </div>
+      <div class="panel-body">
+        <ul>
+        <% @bill.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+        </ul>
+      </div>
+    </div>
+  <% end %>
 
   <!-- Meal Select -->
   <div class="form-group">
@@ -25,7 +41,7 @@
           :resident_id,
           Resident.order("units.name").includes(:unit).all,
           :id,
-          lambda { |r| "#{r.name} - #{r.unit.name}" },
+          lambda { |r| "#{r&.name} - #{r&.unit&.name}" },
           {},
           { class: "select optional form-control" }
       ) %>

@@ -35,9 +35,10 @@ class Meal < ApplicationRecord
   has_many :guests, inverse_of: :meal, dependent: :destroy
   has_many :residents, through: :meal_residents
 
-  validates :date, uniqueness: true
+  validates :date, uniqueness: true, presence: true
 
-  accepts_nested_attributes_for :guests, allow_destroy: true
+  accepts_nested_attributes_for :guests, allow_destroy: true, reject_if: proc { |attributes| attributes['resident_id'].blank? && attributes['name'].blank? }
+  accepts_nested_attributes_for :bills, allow_destroy: true, reject_if: proc { |attributes| attributes['resident_id'].blank? }
 
   def cap
     read_attribute(:cap) || Float::INFINITY
@@ -61,8 +62,13 @@ class Meal < ApplicationRecord
     end
   end
 
-  def is_subsidized
+  def subsidized?
+    return false if attendees == 0
     chargeable_unit_cost * multiplier - cost < 0
+  end
+
+  def reconciled?
+    reconciliation_id.present?
   end
 
   # Report Methods

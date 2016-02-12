@@ -23,6 +23,10 @@ class UnitsController < ApplicationController
     @units = Unit.order(:name).page(params[:page])
   end
 
+  # GET /units/1
+  def show
+  end
+
   # GET /units/new
   def new
     @unit = Unit.new
@@ -53,8 +57,11 @@ class UnitsController < ApplicationController
 
   # DELETE /units/1
   def destroy
-    @unit.destroy
-    redirect_to units_url, notice: 'Unit was successfully destroyed.'
+    if @unit.destroy
+      redirect_to units_url, notice: 'Unit was successfully destroyed.'
+    else
+      render :show
+    end
   end
 
   private

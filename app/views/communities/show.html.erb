@@ -1,0 +1,37 @@
+<div class="page-header">
+  <h1>Community</h1>
+</div>
+
+<!-- Errors -->
+<% if @community.errors.any? %>
+  <div id="error_expl" class="panel panel-danger">
+    <div class="panel-heading">
+      <h3 class="panel-title"><%= pluralize(@community.errors.count, "error") %> prohibited this community from being deleted:</h3>
+    </div>
+    <div class="panel-body">
+      <ul>
+      <% @community.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  </div>
+<% end %>
+
+<!-- Attributes -->
+<dl class="dl-horizontal">
+  <dt><strong>Name:</strong></dt>
+  <dd><%= @community.name %></dd>
+
+  <dt><strong>Cap:</strong></dt>
+  <dd><%= @community.cap %></dd>
+</dl>
+
+<!-- Back / Edit / Delete buttons -->
+<%= link_to('Back', communities_path, class: "btn btn-default") %>
+<%= link_to('Edit', edit_community_path(@community), class: "btn btn-default") if @admin %>
+<%= link_to('Delete',
+            community_path(@community),
+            method: 'delete',
+            data: { confirm: 'Are you sure?' },
+            class: "btn btn-danger") if @admin %>

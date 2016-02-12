@@ -19,7 +19,10 @@ class Reconciliation < ApplicationRecord
     self.date = Time.now
   end
 
+  # Add reconciliation_id to meals without a
+  # reconciliation_id that have at least one
+  # bill associated with them
   def update_meals
-    Meal.unreconciled.update_all(reconciliation_id: id)
+    Meal.unreconciled.joins(:bills).update_all(reconciliation_id: id)
   end
 end

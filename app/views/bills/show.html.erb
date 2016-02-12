@@ -1,0 +1,40 @@
+<div class="page-header">
+  <h1>Bill</h1>
+</div>
+
+<!-- Errors -->
+<% if @bill.errors.any? %>
+  <div id="error_expl" class="panel panel-danger">
+    <div class="panel-heading">
+      <h3 class="panel-title"><%= pluralize(@bill.errors.count, "error") %> prohibited this bill from being deleted:</h3>
+    </div>
+    <div class="panel-body">
+      <ul>
+      <% @bill.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  </div>
+<% end %>
+
+<!-- Attributes -->
+<dl class="dl-horizontal">
+  <dt><strong>Meal:</strong></dt>
+  <dd><%= @bill.meal.date.inspect %></dd>
+
+  <dt><strong>Resident:</strong></dt>
+  <dd><%= @bill.resident.name %></dd>
+
+  <dt><strong>Amount:</strong></dt>
+  <dd><%= @bill.amount %></dd>
+</dl>
+
+<!-- Back / Edit / Delete buttons -->
+<%= link_to('Back', bills_path, class: "btn btn-default") %>
+<%= link_to('Edit', edit_bill_path(@bill), class: "btn btn-default") if @admin %>
+<%= link_to('Delete',
+            bill_path(@bill),
+            method: 'delete',
+            data: { confirm: 'Are you sure?' },
+            class: "btn btn-danger") if @admin %>
