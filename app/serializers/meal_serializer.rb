@@ -12,6 +12,7 @@
 #  meal_residents_multiplier :integer          default(0), not null
 #  guests_multiplier         :integer          default(0), not null
 #  description               :text
+#  max                       :integer
 #  created_at                :datetime         not null
 #  updated_at                :datetime         not null
 #  reconciliation_id         :integer
@@ -33,7 +34,9 @@ class MealSerializer < ActiveModel::Serializer
              :description
 
   def title
-    "Common Dinner\n#{object.attendees} people"
+    syntax = object.attendees == 1 ? "person" : "people"
+    max_string = object.max ? "(#{object.max} max)" : ""
+    "Common Dinner\n#{object.attendees} #{syntax} #{max_string}"
   end
 
   def start

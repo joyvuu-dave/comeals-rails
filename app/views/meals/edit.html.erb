@@ -10,6 +10,7 @@
 
   <h1><%= @meal.date.inspect %></h1>
   <h4>Cooks: <%= @meal.bills.joins(:resident).pluck(:name).join(', ') %></h4>
+  <h4>Signed Up: <%= @meal.attendees %></h4>
 </div>
 
 <%= render partial: 'form' %>

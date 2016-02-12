@@ -19,7 +19,7 @@ input[type=checkbox] {
 }
 
 .meal_guests_name, .meal_description,
-.meal_bills_amount, .meal_date {
+.meal_bills_amount, .meal_date, .meal_max {
   margin-left: 0 !important;
   margin-right: 0 !important;
 }
@@ -31,4 +31,13 @@ input[type=checkbox] {
 
 .no-margin-top {
   margin-top: 0;
+}
+
+.fade-in {
+  animation: fadein 2s;
+}
+
+@keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
 }

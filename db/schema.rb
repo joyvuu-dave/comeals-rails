@@ -69,6 +69,7 @@ ActiveRecord::Schema.define(version: 20160210160946) do
     t.integer  "meal_residents_multiplier", default: 0, null: false
     t.integer  "guests_multiplier",         default: 0, null: false
     t.text     "description"
+    t.integer  "max"
     t.datetime "created_at",                            null: false
     t.datetime "updated_at",                            null: false
     t.integer  "reconciliation_id"

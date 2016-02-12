@@ -9,6 +9,7 @@ class CreateMeals < ActiveRecord::Migration[5.0]
       t.integer :meal_residents_multiplier, null: false, default: 0
       t.integer :guests_multiplier, null: false, default: 0
       t.text    :description
+      t.integer :max
 
       t.timestamps
     end

@@ -1,4 +1,4 @@
-<div class="nested-fields well">
+<div class="nested-fields well fade-in">
   <%= f.collection_select(
     :resident_id,
     Resident.order("units.name").includes(:unit).all,

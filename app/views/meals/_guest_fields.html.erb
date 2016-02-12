@@ -1,11 +1,12 @@
-<div class="nested-fields well">
+<div class="nested-fields well fade-in js-guest">
   <%= f.input :name, required: false %>
+  <%= f.label 'Host' %>
   <%= f.collection_select(
     :resident_id,
     Resident.order("units.name").includes(:unit).all,
     :id,
     lambda { |r| "#{r&.name} - #{r&.unit&.name}" },
-    { include_blank: "Host" },
+    {},
     { class: 'form-control' }
   ) %>
 

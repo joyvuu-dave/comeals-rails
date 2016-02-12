@@ -1,3 +1,5 @@
+<%= javascript_include_tag "meals" %>
+
 <%= simple_form_for @meal, url: { action: lambda { @meal.new_record? ? "create" : "update" }.call }, html: { class: "form-horizontal" } do |f| %>
 
   <!-- Errors -->
@@ -16,6 +18,8 @@
     </div>
   <% end %>
 
+  <%= f.input :max %>
+
   <%= f.input :description %>
 
   <%= f.input :date, required: false if @meal.new_record? %>
@@ -27,7 +31,7 @@
       <%= render 'bill_fields', f: bill %>
     <% end %>
     <div class="links">
-      <%= link_to_add_association 'add cook', f, :bills, class: 'btn btn-warning' %>
+      <%= link_to_add_association 'add a cook', f, :bills, class: 'btn btn-warning' %>
     </div>
   </div>
 
@@ -37,7 +41,7 @@
     <%= f.collection_check_boxes(:resident_ids,
      Resident.order("units.name").includes(:unit).all,
      :id,
-     lambda { |r| "#{r&.name} - #{r&.unit&.name}" },
+     lambda { |resident| guest_count_string_helper(@meal, resident) },
      { item_wrapper_class: "checkbox" }) %>
   </div>
 
@@ -48,7 +52,7 @@
       <%= render 'guest_fields', f: guest %>
     <% end %>
     <div class="links">
-      <%= link_to_add_association 'add guest', f, :guests, class: 'btn btn-warning' %>
+      <%= link_to_add_association 'add a guest', f, :guests, class: 'btn btn-warning' %>
     </div>
   </div>
 
@@ -56,7 +60,7 @@
   <br>
 
   <!-- Update / Cancel buttons -->
-  <%= f.submit nil, class: "btn btn-primary" unless @meal.reconciled? %>
+  <%= f.submit nil, class: "btn btn-primary js-submit-meal" unless @meal.reconciled? %>
   <%= link_to 'Cancel', calendar_path, class: "btn btn-default" %>
 
 <% end %>

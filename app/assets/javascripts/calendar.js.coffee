@@ -3,10 +3,18 @@ $ ->
 
   $('#calendar').fullCalendar(
     eventSources: [
-      {url: '/api/meals', color: 'blue'},
-      {url: '/api/bills', color: 'purple'}
+      {url: '/api/meals', color: '#729f98'},
+      {url: '/api/bills', color: '#aa863a'}
     ]
     eventRender: (event, element) ->
-      element.qtip({ content: { text: event.description} }) if event.description
+      element.qtip({
+        content: {
+          text: event.description
+        },
+        position: {
+          my: 'bottom center',
+          at: 'top center'
+        }
+      }) if event.description
       return
   )

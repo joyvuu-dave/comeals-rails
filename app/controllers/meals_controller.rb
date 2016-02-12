@@ -12,6 +12,7 @@
 #  meal_residents_multiplier :integer          default(0), not null
 #  guests_multiplier         :integer          default(0), not null
 #  description               :text
+#  max                       :integer
 #  created_at                :datetime         not null
 #  updated_at                :datetime         not null
 #  reconciliation_id         :integer
@@ -76,7 +77,7 @@ class MealsController < ApplicationController
     if @meal.update(meal_params)
       # Workaround for counter_cache not updating this automatically
       MealResident.counter_culture_fix_counts
-      redirect_to calendar_path, notice: 'Meal was successfully updated.'
+      redirect_to calendar_path, notice: "#{@meal.date.inspect} meal was successfully updated."
     else
       render :edit
     end

@@ -114,7 +114,19 @@ end
 
 puts "#{Bill.count} Bills created"
 
-
+# Set description
 Meal.update_all(description: 'Tofu tacos, Sloppy Joe, Beet Salad, Sourdough Rolls, Chocolate Cake, Strawberries')
+
+
+# Set Max
+Meal.all.each_with_index do |meal, index|
+  next if meal.bills.count == 0
+  if index % 2 == 0
+    meal.update_attribute(:max, meal.attendees + 2)
+  else
+    meal.update_attribute(:max, meal.attendees)
+  end
+end
+
 puts "#{Meal.count} Meals created (#{Meal.unreconciled.count} unreconciled)"
 

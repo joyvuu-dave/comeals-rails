@@ -7,12 +7,12 @@ var Report = React.createClass({
       ave_number_of_attendees: '',
       ave_cost: '',
       residents: [{
-        name: 'fetching...',
+        name: 'generating...',
         balance: '',
         meals_attended: ''
       }],
       units: [{
-        name: 'fetching...',
+        name: 'generating...',
         balance: '',
         meals_cooked: ''
       }]
