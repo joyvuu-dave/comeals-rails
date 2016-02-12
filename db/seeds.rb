@@ -115,4 +115,6 @@ end
 puts "#{Bill.count} Bills created"
 
 
+Meal.update_all(description: 'Tofu tacos, Sloppy Joe, Beet Salad, Sourdough Rolls, Chocolate Cake, Strawberries')
 puts "#{Meal.count} Meals created (#{Meal.unreconciled.count} unreconciled)"
+

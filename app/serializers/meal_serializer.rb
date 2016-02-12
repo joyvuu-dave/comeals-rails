@@ -29,7 +29,8 @@ class MealSerializer < ActiveModel::Serializer
   cache key: 'meal'
   attributes :title,
              :start,
-             :url
+             :url,
+             :description
 
   def title
     "Common Dinner\n#{object.attendees} people"
