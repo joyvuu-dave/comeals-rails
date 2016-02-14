@@ -10,7 +10,6 @@ Rails.application.routes.draw do
 
   namespace :api do
     get '/meals' => 'meals#index'
-    post '/generate-meal-templates' => 'meals#generate_meal_templates'
     get '/bills' => 'bills#index'
     get '/residents' => 'residents#index'
     get '/units' => 'units#index'

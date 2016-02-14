@@ -31,6 +31,7 @@ gem 'connection_pool'
 gem 'active_model_serializers', github: 'rails-api/active_model_serializers'
 gem 'rails_12factor', group: :production
 gem 'react-rails', '~> 1.6.0'
+gem 'rack-cors', :require => 'rack/cors'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'

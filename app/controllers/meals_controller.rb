@@ -56,6 +56,8 @@ class MealsController < ApplicationController
 
   # POST /meals
   def create
+    create_meals and return if params[:q] == 'templates'
+
     @meal = Meal.new(meal_params)
     @meal.cap = Community.first&.cap
 
@@ -106,6 +108,22 @@ class MealsController < ApplicationController
     ################
     # Helper Methods
     ################
+    def create_meals
+      unless Community.count > 0
+        flash[:error] = "You must have a Community to generate meal templates."
+        redirect_to admin_path and return
+      end
+
+      start_date = Date.parse(params[:start_date])
+      end_date = Date.parse(params[:end_date])
+      alternating_dinner_day = params[:first_week_common_dinner].to_i
+
+      count = Meal.create_templates(start_date, end_date, alternating_dinner_day, 0)
+      syntax = count == 1 ? 'template was' : 'templates were'
+
+      redirect_to calendar_path, notice: "#{count} meal #{syntax} successfully created."
+    end
+
     def show_current
       if Meal.count == 0
         redirect_to(new_meal_path, notice: 'No meals currently exist. Create one.') and return

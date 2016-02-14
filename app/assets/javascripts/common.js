@@ -6,11 +6,13 @@ var readyStateCheckInterval = setInterval(function() {
   }
 }, 10)
 
+
 // Promt when navigating away from page
 // with un-saved form
 $('form').areYouSure();
 
-// Add helper class to checkboxes that startout checked
+
+// Add helper class to checkboxes that start out checked
 $('input[type=checkbox]').each(function() {
   if(this.checked) {
     $(this).addClass("js-originally-checked")
