@@ -18,6 +18,7 @@ gem 'coffee-rails', github: 'rails/coffee-rails'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
+gem 'faker'
 
 # Use Puma as the app server
 gem 'puma'
@@ -41,7 +42,6 @@ gem 'rack-cors', :require => 'rack/cors'
 
 group :development, :test do
   gem 'pry-byebug'
-  gem 'faker'
   gem 'factory_girl_rails'
   gem 'rails-controller-testing'
 
