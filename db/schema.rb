@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160210160946) do
+ActiveRecord::Schema.define(version: 20160218020330) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,10 +28,11 @@ ActiveRecord::Schema.define(version: 20160210160946) do
   add_index "bills", ["resident_id"], name: "index_bills_on_resident_id", using: :btree
 
   create_table "communities", force: :cascade do |t|
-    t.string   "name",       null: false
+    t.string   "name",            null: false
     t.integer  "cap"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.integer  "rotation_length"
   end
 
   add_index "communities", ["name"], name: "index_communities_on_name", unique: true, using: :btree

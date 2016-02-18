@@ -1,13 +1,14 @@
 # == Schema Information
-# Schema version: 20160202150722
+# Schema version: 20160218020330
 #
 # Table name: communities
 #
-#  id         :integer          not null, primary key
-#  name       :string           not null
-#  cap        :integer
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id              :integer          not null, primary key
+#  name            :string           not null
+#  cap             :integer
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  rotation_length :integer
 #
 # Indexes
 #

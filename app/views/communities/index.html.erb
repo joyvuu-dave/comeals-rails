@@ -9,6 +9,7 @@
     <tr>
       <th>Name</th>
       <th>Cap</th>
+      <th>Rotation</th>
       <th><%= 'Actions' if @admin %></th>
     </tr>
   </thead>
@@ -17,6 +18,7 @@
       <tr>
         <td><%= community.name %></td>
         <td><%= number_to_currency((community.cap)/100.to_f) %>/person unit</td>
+        <td><%= community.rotation_length %> meals</td>
         <td>
           <%= link_to('Edit', edit_community_path(community), class: "btn btn-default btn-xs") if @admin %>
 

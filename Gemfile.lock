@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/amatsuda/kaminari.git
-  revision: 5629661f84ad808411f08bcea9c5513f3bb58265
+  revision: ef09f1dcb9be6177b860dff9979dde90776cc5ee
   specs:
     kaminari (1.0.0.alpha)
       actionpack (>= 3.0.0)
@@ -25,7 +25,7 @@ GIT
 
 GIT
   remote: git://github.com/rails/rails.git
-  revision: 94dbc48887bf39c241ee2ce1741ee680d773f202
+  revision: 00b62719b4ff4fe4e60b00ba46c03cc6209b1f40
   specs:
     actioncable (5.0.0.beta2)
       actionpack (= 5.0.0.beta2)
@@ -94,7 +94,7 @@ GIT
 
 GIT
   remote: https://github.com/rspec/rspec-core.git
-  revision: ceecf84c222c2f6b0c1be9e139cb5510c23043be
+  revision: 44afa9bd83e655b4d1fa60c0d73373a754aa479b
   branch: master
   specs:
     rspec-core (3.5.0.pre)

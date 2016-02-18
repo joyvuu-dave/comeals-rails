@@ -1,13 +1,14 @@
 # == Schema Information
-# Schema version: 20160202150722
+# Schema version: 20160218020330
 #
 # Table name: communities
 #
-#  id         :integer          not null, primary key
-#  name       :string           not null
-#  cap        :integer
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id              :integer          not null, primary key
+#  name            :string           not null
+#  cap             :integer
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  rotation_length :integer
 #
 # Indexes
 #
@@ -73,6 +74,6 @@ class CommunitiesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def community_params
-      params.require(:community).permit(:name, :cap)
+      params.require(:community).permit(:name, :cap, :rotation_length)
     end
 end

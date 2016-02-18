@@ -25,7 +25,7 @@ $ ->
         active_guests += 1
     )
 
-    if (num_checked + active_guests) > max
+    if max && (num_checked + active_guests) > max
       # Alert if num of checked boxes is greater than max
       notie.alert(3, 'Max number of people reached', 2.5)
     else
