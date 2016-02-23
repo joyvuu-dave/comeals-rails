@@ -19,6 +19,7 @@ gem 'coffee-rails', github: 'rails/coffee-rails'
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 gem 'faker'
+gem 'money-rails'
 
 # Use Puma as the app server
 gem 'puma'

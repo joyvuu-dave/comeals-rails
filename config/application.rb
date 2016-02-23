@@ -23,7 +23,7 @@ module Comeals
     config.quiet_assets = false
 
     # Rack/Cors
-    config.middleware.insert_before 0, "Rack::Cors" do
+    config.middleware.insert_before 0, Rack::Cors do
       allow do
         origins '*'
         resource '*', :headers => :any, :methods => [:get, :post, :options]

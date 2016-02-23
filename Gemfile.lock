@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/amatsuda/kaminari.git
-  revision: ef09f1dcb9be6177b860dff9979dde90776cc5ee
+  revision: 27a0c850b50a8bf095665ad3c0907efada919533
   specs:
     kaminari (1.0.0.alpha)
       actionpack (>= 3.0.0)
@@ -8,7 +8,7 @@ GIT
 
 GIT
   remote: git://github.com/rails-api/active_model_serializers.git
-  revision: a6c6979e081fe5c40c471a5fe7cd9d305a471d15
+  revision: 532828b4dad41e1f5b17fe29751bb693b4bc0da2
   specs:
     active_model_serializers (0.10.0.rc4)
       actionpack (>= 4.0)
@@ -25,7 +25,7 @@ GIT
 
 GIT
   remote: git://github.com/rails/rails.git
-  revision: 00b62719b4ff4fe4e60b00ba46c03cc6209b1f40
+  revision: e9b96f0d666adfd3484641a4a55feb1c774d3378
   specs:
     actioncable (5.0.0.beta2)
       actionpack (= 5.0.0.beta2)
@@ -94,7 +94,7 @@ GIT
 
 GIT
   remote: https://github.com/rspec/rspec-core.git
-  revision: 44afa9bd83e655b4d1fa60c0d73373a754aa479b
+  revision: f54edeed49799042b8fffddb278466fb7185314e
   branch: master
   specs:
     rspec-core (3.5.0.pre)
@@ -149,9 +149,8 @@ GEM
       activerecord (>= 3.2, < 6.0)
       rake (~> 10.4)
     arel (7.0.0)
-    autoprefixer-rails (6.3.3)
+    autoprefixer-rails (6.3.3.1)
       execjs
-      json
     babel-source (5.8.35)
     babel-transpiler (0.7.0)
       babel-source (>= 4.0, < 6)
@@ -171,7 +170,7 @@ GEM
       uniform_notifier (~> 1.9.0)
     byebug (8.2.2)
     cocoon (1.2.7)
-    coderay (1.1.0)
+    coderay (1.1.1)
     coffee-script (2.4.1)
       coffee-script-source
       execjs
@@ -192,7 +191,7 @@ GEM
     factory_girl_rails (4.6.0)
       factory_girl (~> 4.5.0)
       railties (>= 3.0.0)
-    faker (1.6.1)
+    faker (1.6.3)
       i18n (~> 0.5)
     globalid (0.3.6)
       activesupport (>= 4.1.0)
@@ -207,9 +206,19 @@ GEM
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
     method_source (0.8.2)
-    mime-types (2.99)
+    mime-types (2.99.1)
     mini_portile2 (2.0.0)
     minitest (5.8.4)
+    monetize (1.4.0)
+      money (~> 6.7)
+    money (6.7.0)
+      i18n (>= 0.6.4, <= 0.7.0)
+      sixarm_ruby_unaccent (>= 1.1.1, < 2)
+    money-rails (1.6.0)
+      activesupport (>= 3.0)
+      monetize (~> 1.4.0)
+      money (~> 6.7)
+      railties (>= 3.0)
     nio4r (1.2.1)
     nokogiri (1.6.7.2)
       mini_portile2 (~> 2.0.0.rc2)
@@ -268,12 +277,13 @@ GEM
     simple_form (3.2.1)
       actionpack (> 4, < 5.1)
       activemodel (> 4, < 5.1)
+    sixarm_ruby_unaccent (1.1.1)
     slop (3.6.0)
     spring (1.6.3)
     sprockets (3.5.2)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
-    sprockets-rails (3.0.1)
+    sprockets-rails (3.0.2)
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
@@ -309,6 +319,7 @@ DEPENDENCIES
   faker
   jquery-rails
   kaminari!
+  money-rails
   pg (~> 0.18)
   pry-byebug
   pry-rails

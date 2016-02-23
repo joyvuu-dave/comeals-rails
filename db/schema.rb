@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160218020330) do
+ActiveRecord::Schema.define(version: 20160223195812) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,9 +19,11 @@ ActiveRecord::Schema.define(version: 20160218020330) do
   create_table "bills", force: :cascade do |t|
     t.integer  "meal_id"
     t.integer  "resident_id"
-    t.integer  "amount",      default: 0, null: false
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
+    t.integer  "amount",          default: 0,     null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.integer  "amount_cents",    default: 0,     null: false
+    t.string   "amount_currency", default: "USD", null: false
   end
 
   add_index "bills", ["meal_id"], name: "index_bills_on_meal_id", using: :btree

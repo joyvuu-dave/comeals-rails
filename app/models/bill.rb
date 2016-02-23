@@ -1,14 +1,16 @@
 # == Schema Information
-# Schema version: 20160131201418
+# Schema version: 20160223195812
 #
 # Table name: bills
 #
-#  id          :integer          not null, primary key
-#  meal_id     :integer
-#  resident_id :integer
-#  amount      :integer          default(0), not null
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
+#  id              :integer          not null, primary key
+#  meal_id         :integer
+#  resident_id     :integer
+#  amount          :integer          default(0), not null
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  amount_cents    :integer          default(0), not null
+#  amount_currency :string           default("USD"), not null
 #
 # Indexes
 #
@@ -31,6 +33,8 @@ class Bill < ApplicationRecord
   validates :meal, presence: true
   validates :resident, presence: true
   validates :amount, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+
+  #monetize :amount_cents
 
   # DERIVED DATA
   def reimburseable_amount
