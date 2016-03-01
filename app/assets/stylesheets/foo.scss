@@ -1,0 +1,221 @@
+/* Global Styling */
+* {
+  box-sizing: border-box;
+  font-family: sans-serif;
+  font-size: 1rem;
+}
+
+
+
+
+/* Poor Man's Grid System */
+.row {
+  display: flex;
+}
+
+.col-1 {
+  flex-basis: 8.333%;
+}
+
+.col-2 {
+  flex-basis: 16.666%;
+}
+
+.col-3 {
+  flex-basis: 25%;
+}
+
+.col-4 {
+  flex-basis: 33.333%;
+}
+
+.col-5 {
+  flex-basis: 41.667%;
+}
+
+.col-6 {
+  flex-basis: 50%;
+}
+
+.col-7 {
+  flex-basis: 58.333%;
+}
+
+.col-8 {
+  flex-basis: 66.667%;
+}
+
+.col-9 {
+  flex-basis: 75%;
+}
+
+.col-10 {
+  flex-basis: 83.333%;
+}
+
+.col-11 {
+  flex-basis: 91.667%;
+}
+
+.col-12 {
+  flex-basis: 100%;
+}
+
+.col-offset-1 {
+  margin-left: 8.333%;
+}
+
+.col-offset-2 {
+  margin-left: 16.666%;
+}
+
+.col-offset-3 {
+  margin-left: 25%;
+}
+
+.col-offset-4 {
+  margin-left: 33.333%;
+}
+
+.col-offset-5 {
+  margin-left: 41.667%;
+}
+
+.col-offset-6 {
+  margin-left: 50%;
+}
+
+.col-offset-7 {
+  margin-left: 58.333%;
+}
+
+.col-offset-8 {
+  margin-left: 66.667%;
+}
+
+.col-offset-9 {
+  margin-left: 75%;
+}
+
+.col-offset-10 {
+  margin-left: 83.333%;
+}
+
+.col-offset-11 {
+  margin-left: 91.667%;
+}
+
+
+
+
+/* Table Styling (copied from Bootstrap 3.3.5) */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  background-color: transparent;
+}
+
+td,
+th {
+  padding: 0;
+}
+
+th {
+  text-align: left;
+}
+
+.table {
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 20px;
+}
+
+.table > thead > tr > th,
+.table > tbody > tr > th,
+.table > thead > tr > td,
+.table > tbody > tr > td {
+  padding: 8px;
+  line-height: 1.42857143;
+  vertical-align: top;
+  border-top: 1px solid #dddddd;
+}
+
+.table > thead > tr > th {
+  vertical-align: bottom;
+  border-bottom: 2px solid #dddddd;
+}
+
+.table > thead:first-child > tr:first-child > th,
+.table > thead:first-child > tr:first-child > td {
+  border-top: 0;
+}
+
+.table > tbody + tbody {
+  border-top: 2px solid #dddddd;
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) {
+  background-color: #f9f9f9;
+}
+
+.table-hover > tbody > tr:hover {
+  background-color: #f5f5f5;
+}
+
+
+
+
+/* Input Styling */
+input {
+  padding: 0.25rem;
+  width: 50%;
+}
+
+
+section {
+  margin: 0.25rem
+}
+
+strong {
+  text-decoration: underline;
+}
+
+p, select {
+  margin-left: 1rem;
+  margin-right: 1rem;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+
+
+
+/* Header Styling */
+select {
+  height: 1.5rem;
+  width: 10rem;
+  border: 1px solid gray;
+}
+
+#date {
+  padding-top: 2rem;
+  overflow: auto;
+  text-align: center;
+  font-size: 1.75rem;
+}
+
+.box {
+  height: 8rem;
+}
+
+textarea {
+  height: 8rem;
+  width: 100%;
+}
+
+li {
+  font-family: monospace;
+}
+
+#test {
+  white-space: nowrap;
+}

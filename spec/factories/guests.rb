@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20160202150722
+# Schema version: 20160301173036
 #
 # Table name: guests
 #
@@ -10,6 +10,8 @@
 #  name        :string           not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
+#  vegetarian  :boolean          default(FALSE), not null
+#  late        :boolean          default(FALSE), not null
 #
 # Indexes
 #

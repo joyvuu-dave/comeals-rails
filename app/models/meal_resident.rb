@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20160202144504
+# Schema version: 20160301173036
 #
 # Table name: meal_residents
 #
@@ -9,6 +9,8 @@
 #  multiplier  :integer          not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
+#  vegetarian  :boolean          default(FALSE), not null
+#  late        :boolean          default(FALSE), not null
 #
 # Indexes
 #

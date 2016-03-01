@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160223195812) do
+ActiveRecord::Schema.define(version: 20160301173036) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,7 +19,6 @@ ActiveRecord::Schema.define(version: 20160223195812) do
   create_table "bills", force: :cascade do |t|
     t.integer  "meal_id"
     t.integer  "resident_id"
-    t.integer  "amount",          default: 0,     null: false
     t.datetime "created_at",                      null: false
     t.datetime "updated_at",                      null: false
     t.integer  "amount_cents",    default: 0,     null: false
@@ -42,10 +41,12 @@ ActiveRecord::Schema.define(version: 20160223195812) do
   create_table "guests", force: :cascade do |t|
     t.integer  "meal_id"
     t.integer  "resident_id"
-    t.integer  "multiplier",  default: 2, null: false
-    t.string   "name",                    null: false
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
+    t.integer  "multiplier",  default: 2,     null: false
+    t.string   "name",                        null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.boolean  "vegetarian",  default: false, null: false
+    t.boolean  "late",        default: false, null: false
   end
 
   add_index "guests", ["meal_id"], name: "index_guests_on_meal_id", using: :btree
@@ -54,9 +55,11 @@ ActiveRecord::Schema.define(version: 20160223195812) do
   create_table "meal_residents", force: :cascade do |t|
     t.integer  "meal_id"
     t.integer  "resident_id"
-    t.integer  "multiplier",  null: false
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.integer  "multiplier",                  null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.boolean  "vegetarian",  default: false, null: false
+    t.boolean  "late",        default: false, null: false
   end
 
   add_index "meal_residents", ["meal_id", "resident_id"], name: "index_meal_residents_on_meal_id_and_resident_id", using: :btree
