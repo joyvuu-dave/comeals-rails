@@ -1,0 +1,34 @@
+<% # rendered by guests %>
+
+<style>
+#guests_table {
+  width: 400px;
+  border: medium solid green;
+  padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+}
+.guest {}
+</style>
+
+<% disable_veg = meal.reconciled? || meal.closed ? "disabled" : "" %>
+<% disable_remove_guest = meal.reconciled? || meal.closed ? "disabled" : "" %>
+
+<table id="guests_table">
+  <thead>
+  <tr>
+    <th>Host</th>
+    <th>Category</th>
+    <th>Vegetarian</th>
+    <th></th>
+  </tr>
+  </thead>
+  <body>
+    <% meal.guests.find_each do |g| %>
+      <tr class="guest">
+        <td><%= g.resident.name %></td>
+        <td><%= category_helper(g.multiplier) %></td>
+        <td><input type="checkbox" <%= g.vegetarian ? "checked" : "" %> <%= disable_veg %> /></td>
+        <td><button type="button" <%= disable_remove_guest %> >- Guest</button></td>
+      </tr>
+    <% end %>
+  </body>
+</table>

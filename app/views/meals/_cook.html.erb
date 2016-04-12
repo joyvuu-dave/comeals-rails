@@ -1,0 +1,58 @@
+<% # rendered by cooks %>
+
+<!-- COOK COMPONENT -->
+<!-- STYLES -->
+<style>
+#cook {}
+
+.cook-select {
+  width: 200px;
+  height: 30px;
+  border: thin solid gray;
+  margin-right: 40px;
+}
+
+.cook-input {
+  width: 150px;
+  height: 30px;
+}
+</style>
+
+
+<!-- VIEW -->
+<% disabled = meal.reconciled? ? "disabled" : "" %>
+<% cost = bill.present? ? bill.amount : "" %>
+
+<section id="cook">
+  <select class="cook-select">
+    <option><%= first %></option>
+    <% Resident.find_each do |r| %>
+      <% if bill.present? && r.id == bill.resident.id %>
+        <option <%= disabled %> value="<%= bill.id %>" selected><%= bill.resident.name %></option>
+      <% else %>
+        <option <%= disabled %> ><%= r.name %></option>
+      <% end %>
+    <% end %>
+  </select>
+
+  $<input <%= disabled %>
+    class="cook-input"
+    type="number"
+    min="0" max="500"
+    step="0.01"
+    placeholder="food cost"
+    value="<%= cost %>" />
+</section>
+
+
+<!-- SCRIPTS -->
+<script>
+var selects = document.getElementsByClassName('cook-select')
+for(var i = 0; i < selects.length; i++) (function(elem) {
+  elem.onchange = updateModel
+})(selects[i])
+
+function updateModel() {
+  console.log(this.value)
+}
+</script>

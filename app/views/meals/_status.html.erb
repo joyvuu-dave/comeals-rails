@@ -1,0 +1,23 @@
+<% # rendered by date_box %>
+
+<style>
+.success {
+  color: green;
+}
+.danger {
+  color: red;
+}
+.warning {
+  color: orange;
+}
+</style>
+
+<section id="status">
+  <% if meal.reconciled? %>
+    <p class="danger">RECONCILED</p>
+  <% elsif meal.closed %>
+    <p class="warning">CLOSED</p>
+  <% elsif meal.date > Time.now %>
+    <p class="success">OPEN</p>
+  <% end %>
+</section>

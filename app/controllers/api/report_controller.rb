@@ -1,6 +1,6 @@
 module Api
   class ReportController < ApplicationController
-    before_action :signed_in?
+    #before_action :signed_in?
 
     def show
       data = {

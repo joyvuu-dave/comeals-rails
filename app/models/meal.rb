@@ -1,5 +1,4 @@
-# == Schema Information
-# Schema version: 20160301173036
+
 #
 # Table name: meals
 #
@@ -16,6 +15,9 @@
 #  created_at                :datetime         not null
 #  updated_at                :datetime         not null
 #  reconciliation_id         :integer
+#  closed                    :boolean          default(FALSE), not null
+#  time_zone                 :string
+#  auto_close                :boolean          default(FALSE), not null
 #
 # Indexes
 #
@@ -34,16 +36,38 @@ class Meal < ApplicationRecord
   has_many :bills, dependent: :destroy
   has_many :meal_residents, inverse_of: :meal, dependent: :destroy
   has_many :guests, inverse_of: :meal, dependent: :destroy
-  has_many :residents, through: :meal_residents
 
   validates :date, uniqueness: true, presence: true
   validates :max, numericality: { only_integer: true }, unless: "max.nil?"
 
-  accepts_nested_attributes_for :guests, allow_destroy: true, reject_if: proc { |attributes| attributes['name'].blank? }
-  accepts_nested_attributes_for :bills, allow_destroy: true, reject_if: proc { |attributes| attributes['resident_id'].blank? }
+  accepts_nested_attributes_for :meal_residents, allow_destroy: true
+  accepts_nested_attributes_for :guests, allow_destroy: true
+  accepts_nested_attributes_for :bills, allow_destroy: true
+
+  def extras
+    max.present? ? max - attendees : 0
+  end
+
+  def extras=(value)
+    unless closed
+      return errors[:base] << "Can't set extras for open meal"
+    end
+
+    self.max = attendees + value
+  end
 
   def cap
     read_attribute(:cap) || Float::INFINITY
+  end
+
+  def epoch
+    hour = date.sunday? ? 18 : 19 # 7pm, but 6pm on Sundays
+    original_time_zone = Time.zone.name
+    Time.zone = time_zone
+    time = Time.zone.parse("#{date.iso8601} #{hour}:00:00")
+    ms = (time.to_f * 1000).to_i
+    Time.zone = original_time_zone
+    ms
   end
 
   # DERIVED DATA
@@ -73,6 +97,22 @@ class Meal < ApplicationRecord
     reconciliation_id.present?
   end
 
+  def next?
+    Meal.where("date > ?", date).count > 0
+  end
+
+  def next
+    Meal.where("date > ?", date).first if next?
+  end
+
+  def prev?
+    Meal.where("date < ?", date).count > 0
+  end
+
+  def prev
+    Meal.where("date < ?", date).first if prev?
+  end
+
   # Report Methods
   def self.unreconciled_ave_cost
     val = 2 * ((Meal.unreconciled.pluck(:cost).reduce(&:+).to_i / Meal.unreconciled.reduce(0) { |sum, meal| sum + meal.multiplier }.to_f) / 100.to_f)
@@ -85,7 +125,7 @@ class Meal < ApplicationRecord
 
   def self.create_templates(start_date, end_date, alternating_dinner_day, num_meals_created)
     # Are we finished?
-    return num_meals_created if start_date >= end_date
+    return num_meals_created if start_date > end_date
 
     # Is it a common dinner day?
     if [alternating_dinner_day, 2, 4].any? { |num| num == start_date.wday }

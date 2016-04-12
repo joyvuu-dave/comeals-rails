@@ -4,16 +4,15 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Comeals - Foo</title>
+    <title>Comeals - Calendar</title>
     <%= csrf_meta_tags %>
-
-    <%= stylesheet_link_tag 'foo', media: 'all' %>
-    <%= javascript_include_tag 'foo' %>
+    <%= stylesheet_link_tag    'calendar', media: 'all' %>
+    <%= javascript_include_tag 'calendar_manifest' %>
   </head>
 
   <body>
-    <div class="container">
-      <%= yield %>
-    </div>
+    <%= render partial: 'layouts/header' %>
+    <%= yield %>
+    <%= javascript_include_tag 'init_qtip' %>
   </body>
 </html>

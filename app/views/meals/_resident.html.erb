@@ -1,0 +1,19 @@
+<% # rendered by residents %>
+
+<style>
+.resident {}
+</style>
+
+<% disable_signup = meal.reconciled? || meal.closed && meal.extras == 0 ? "disabled" : "" %>
+<% disable_late = meal.reconciled? ? "disabled" : "" %>
+<% disable_veg = meal.reconciled? || meal.closed && meal.extras == 0 ? "disabled" : "" %>
+<% disable_add_guest = meal.reconciled? || meal.closed && meal.extras == 0 ? "disabled" : "" %>
+
+<tr class="resident">
+  <td><%= resident.unit.name %></td>
+  <td><input type="checkbox" <%= disable_signup %> /></td>
+  <td><%= resident.name %></td>
+  <td><label><input type="checkbox" value="late" <%= disable_late %> />&nbspLate</label></td>
+  <td><label><input type="checkbox" value="vegetarian" <%= resident.vegetarian ? "checked" : "" %> <%= disable_veg %> />&nbspVeg</label></td>
+  <td><button type="button" class="js-add-guest" <%= disable_add_guest %> >+ Guest</button></td>
+</tr>

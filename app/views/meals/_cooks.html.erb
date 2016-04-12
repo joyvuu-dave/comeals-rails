@@ -1,0 +1,31 @@
+<% # rendered by cooks_and_signups %>
+
+<style>
+#cooks {
+  flex-basis: 60%;
+}
+#cooks_container {
+  display: flex;
+  height: 250px;
+  flex-direction: column;
+  justify-content: space-between;
+  border: thin solid red;
+}
+#cooks_title {
+  align-self: center;
+  text-decoration: underline;
+}
+</style>
+
+<% bill1 = meal.bills[0].present? ? meal.bills[0] : nil %>
+<% bill2 = meal.bills[1].present? ? meal.bills[1] : nil %>
+<% bill3 = meal.bills[2].present? ? meal.bills[2] : nil %>
+
+<section id="cooks">
+  <div id="cooks_container">
+    <h3 id="cooks_title">Cooks</h3>
+    <%= render partial: 'cook', locals: { bill: bill1, meal: meal, first: 'Cook 1' } %>
+    <%= render partial: 'cook', locals: { bill: bill2, meal: meal, first: 'Cook 2' } %>
+    <%= render partial: 'cook', locals: { bill: bill3, meal: meal, first: 'Cook 3' } %>
+  </div>
+</section>

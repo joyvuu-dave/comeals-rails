@@ -1,0 +1,24 @@
+<% # rendered by date_and_menu %>
+
+<style>
+#date_box {
+  flex-basis: 40%;
+  border: thin solid cyan;
+  padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+}
+#date_box_container {
+  display: flex;
+  height: 100px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+</style>
+
+<section id="date_box">
+  <div id="date_box_container">
+    <%= render partial: 'meal_date', locals: { meal: meal } %>
+    <%= render partial: 'prev_next', locals: { meal: meal } %>
+    <%= render partial: 'status', locals: { meal: meal } %>
+  </div>
+</section>

@@ -6,18 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Comeals</title>
     <%= csrf_meta_tags %>
-
     <%= stylesheet_link_tag    'application', media: 'all' %>
     <%= javascript_include_tag 'application' %>
   </head>
 
   <body>
-    <div class="container">
-      <%= render partial: 'layouts/flash' %>
-      <%= render partial: 'layouts/header' %>
-      <%= yield %>
-
-    </div>
-    <%= javascript_include_tag 'common' %>
+    <%= render partial: 'layouts/notice' %>
+    <%= render partial: 'layouts/header' %>
+    <%= yield %>
+    <%= javascript_include_tag 'init' %>
   </body>
 </html>

@@ -1,0 +1,17 @@
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+body {
+  margin-left: auto;
+  margin-right: auto;
+  width: 980px;
+}
+
+a, a:visited {
+  color: blue;
+  text-decoration: none;
+}

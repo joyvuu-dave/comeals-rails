@@ -1,0 +1,15 @@
+<% # rendered by top %>
+
+<style>
+#cooks_and_signups {
+  display: flex;
+  border: thin solid gray;
+  padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+}
+</style>
+
+<section id="cooks_and_signups">
+  <%= render partial: 'cooks', locals: { meal: meal } %>
+  <%= render partial: 'signups', locals: { meal: meal } %>
+  <%= render partial: 'extra', locals: { meal: meal } %>
+</section>

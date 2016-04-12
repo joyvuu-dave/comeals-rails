@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20160218020330
+# Schema version: 20160324173111
 #
 # Table name: communities
 #
@@ -9,6 +9,7 @@
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  rotation_length :integer
+#  time_zone       :string           default("UTC"), not null
 #
 # Indexes
 #

@@ -1,0 +1,21 @@
+<% # rendered by attendees %>
+
+<style>
+#residents_table {
+  width: 500px;
+  border: medium solid gray;
+}
+</style>
+
+<table id="residents_table">
+  <tbody>
+    <% Resident.find_each do |r| %>
+      <% meal_resident = meal.meal_residents.where(resident_id: r.id).first %>
+      <% if meal_resident %>
+        <%= render partial: 'meal_resident', locals: { meal: meal, meal_resident: meal_resident } %>
+      <% else %>
+        <%= render partial: 'resident', locals: { meal: meal, resident: r } %>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>

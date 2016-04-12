@@ -44,4 +44,8 @@ class MealResident < ApplicationRecord
   def cost
     meal.chargeable_unit_cost * multiplier
   end
+
+  def guests_count
+    Guest.where(meal_id: meal.id, resident_id: resident_id).count
+  end
 end

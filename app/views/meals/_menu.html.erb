@@ -1,0 +1,12 @@
+<% # rendered by date_and_menu %>
+
+<style>
+#menu {
+  width: 100%;
+  resize: none;
+}
+</style>
+
+<% disabled = meal.reconciled? || meal.closed ? "disabled" : "" %>
+
+<textarea id="menu" <%= disabled %> placeholder="Menu"><%= meal.description %></textarea>

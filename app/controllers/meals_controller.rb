@@ -1,5 +1,4 @@
-# == Schema Information
-# Schema version: 20160301173036
+
 #
 # Table name: meals
 #
@@ -16,6 +15,9 @@
 #  created_at                :datetime         not null
 #  updated_at                :datetime         not null
 #  reconciliation_id         :integer
+#  closed                    :boolean          default(FALSE), not null
+#  time_zone                 :string
+#  auto_close                :boolean          default(FALSE), not null
 #
 # Indexes
 #
@@ -28,9 +30,7 @@
 
 class MealsController < ApplicationController
   before_action :signed_in?
-  before_action :admin?, only: [:destroy]
   before_action :set_meal, only: [:show, :edit, :update, :destroy]
-  before_action :check_on_next_and_previous, only: [:edit]
 
   # GET /meals
   def index
@@ -50,8 +50,8 @@ class MealsController < ApplicationController
 
   # GET /meals/1/edit
   def edit
-    edit_next     and return if params[:q] == 'next'
-    edit_previous and return if params[:q] == 'prev'
+    @meal = @meal.next if params[:q] == 'next' && @meal.next?
+    @meal = @meal.prev if params[:q] == 'prev' && @meal.prev?
   end
 
   # POST /meals
@@ -87,6 +87,8 @@ class MealsController < ApplicationController
 
   # DELETE /meals/1
   def destroy
+    admin?
+
     if @meal.destroy
       redirect_to meals_url, notice: 'Meal was successfully destroyed.'
     else
@@ -102,7 +104,7 @@ class MealsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def meal_params
-      params.require(:meal).permit(:date, :cap, :description, :max, resident_ids: [], guests_attributes: [:id, :meal_id, :resident_id, :multiplier, :name, :_destroy], bills_attributes: [:id, :meal_id, :resident_id, :amount, :_destroy])
+      params.require(:meal).permit(:date, :cap, :description, :extras, :max, :closed, meal_residents_attributes: [:id, :meal_id, :resident_id, :multiplier, :vegetarian, :late, :_destroy], guests_attributes: [:id, :meal_id, :resident_id, :multiplier, :vegetarian, :late, :name, :_destroy], bills_attributes: [:id, :meal_id, :resident_id, :amount, :amount_cents, :_destroy])
     end
 
     ################
@@ -137,30 +139,5 @@ class MealsController < ApplicationController
       end
 
       redirect_to edit_meal_path(@meal)
-    end
-
-    def edit_next
-      # Render next most recent common meal
-      # If none exists, re-render this meal
-      if @next
-        @meal = Meal.order(:date).where("date > ?", @meal.date).first
-      end
-
-      render 'edit'
-    end
-
-    def edit_previous
-      # Render last common meal before this one
-      # If none exists, re-render this meal
-      if @prev
-        @meal = Meal.order(:date).where("date < ?", @meal.date).last
-      end
-
-      render 'edit'
-    end
-
-    def check_on_next_and_previous
-      @next = Meal.where("date > ?", @meal.date).count > 0
-      @prev = Meal.where("date < ?", @meal.date).count > 0
     end
 end

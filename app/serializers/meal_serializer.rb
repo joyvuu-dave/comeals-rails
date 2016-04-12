@@ -1,5 +1,4 @@
-# == Schema Information
-# Schema version: 20160301173036
+
 #
 # Table name: meals
 #
@@ -16,6 +15,9 @@
 #  created_at                :datetime         not null
 #  updated_at                :datetime         not null
 #  reconciliation_id         :integer
+#  closed                    :boolean          default(FALSE), not null
+#  time_zone                 :string
+#  auto_close                :boolean          default(FALSE), not null
 #
 # Indexes
 #
@@ -28,22 +30,22 @@
 
 class MealSerializer < ActiveModel::Serializer
   cache key: 'meal'
-  attributes :title,
-             :start,
-             :url,
-             :description
-
-  def title
-    syntax = object.attendees == 1 ? "person" : "people"
-    max_string = object.max ? "(#{object.max} max)" : ""
-    "Common Dinner\n#{object.attendees} #{syntax} #{max_string}"
+  attributes :id,
+             :date,
+             :description,
+             :closed_in_database,
+             :epoch,
+             :reconciled,
+             :auto_close
+  def date
+    object.date.inspect
   end
 
-  def start
-    object.date
+  def closed_in_database
+    object.closed
   end
 
-  def url
-    "/meals/#{object.id}/edit"
+  def reconciled
+    object.reconciled?
   end
 end
