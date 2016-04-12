@@ -12,13 +12,11 @@
 //
 //= require jquery2
 //= require jquery_ujs
-//= require bootstrap-sprockets
-//= require cocoon
+
 //= require notie
-//= require moment.min
-//= require fullcalendar
+//= require jquery.are-you-sure
+
 //= require react
 //= require react_ujs
-//= require components
-//= require jquery.are-you-sure
-//= require jquery.qtip
+//= require_tree ./components/admin
+//= require_tree ./components/report

@@ -1,0 +1,16 @@
+<% # rendered by middle %>
+
+<style>
+#guests {
+  border: thin solid cyan;
+}
+#guests_title {
+  text-align: center;
+  text-decoration: underline;
+}
+</style>
+
+<section id="guests">
+  <h3 id="guests_title">Guests</h3>
+  <%= render partial: 'guests_table', locals: { meal: meal } %>
+</section>

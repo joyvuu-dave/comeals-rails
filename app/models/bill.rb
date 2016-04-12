@@ -26,22 +26,22 @@ class Bill < ApplicationRecord
   belongs_to :meal
   belongs_to :resident
 
-  counter_culture :meal, column_name: 'cost', delta_column: 'amount'
-  counter_culture :resident, column_name: 'bill_costs', delta_column: 'amount'
+  counter_culture :meal, column_name: 'cost', delta_column: 'amount_cents'
+  counter_culture :resident, column_name: 'bill_costs', delta_column: 'amount_cents'
 
   validates :meal, presence: true
   validates :resident, presence: true
-  validates :amount, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates :amount_cents, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
 
-  #monetize :amount_cents
+  monetize :amount_cents
 
   # DERIVED DATA
   def reimburseable_amount
     if meal.subsidized?
       cost_difference = meal.cost - meal.cap * meal.multiplier
-      amount - ((amount / meal.cost.to_f) * cost_difference).ceil
+      amount_cents - ((amount_cents / meal.cost.to_f) * cost_difference).ceil
     else
-      amount
+      amount_cents
     end
   end
 end

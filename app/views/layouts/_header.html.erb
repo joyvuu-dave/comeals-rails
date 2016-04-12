@@ -1,6 +1,6 @@
 <!-- Header -->
-<% if @signed_in %>
-  <div class="page-header">
+<header>
+  <% if @signed_in %>
     <%= link_to 'Calendar', calendar_path, class: "btn btn-info btn-xs dark" %>
     <%= link_to('Community', communities_path, class: "btn btn-info btn-xs dark") if @admin %>
     <%= link_to('Meal Forms', meals_path(q: 'current'), class: "btn btn-info btn-xs dark") %>
@@ -10,5 +10,5 @@
     <%= link_to('Balance Report', report_path, class: "btn btn-info btn-xs dark") %>
     <%= link_to('Admin', admin_path, class: "btn btn-info btn-xs dark") if @admin %>
     <%= link_to "Logout#{' Admin' if @admin}", logout_path, method: :post, class: "btn btn-default btn-xs pull-right" %>
-  </div>
-<% end %>
+  <% end %>
+</header>

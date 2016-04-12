@@ -1,16 +1,11 @@
-<div class="page-header">
+<style>
+#main {
+  border: medium solid orange;
+  padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+}
+</style>
 
-  <%= link_to(edit_meal_path(@meal, params: {q: 'prev'})) do %>
-    <span class="glyphicon glyphicon-chevron-left"></span>Prev
-  <% end if @prev %>
-
-  <%= link_to(edit_meal_path(@meal, params: {q: 'next'})) do %>
-    Next<span class="glyphicon glyphicon-chevron-right"></span>
-  <% end if @next %>
-
-  <h1><%= @meal.date.inspect %></h1>
-  <h4>Cooks: <%= @meal.bills.joins(:resident).pluck(:name).join(', ') %></h4>
-  <h4>Signed Up: <%= @meal.attendees %></h4>
-</div>
-
-<%= render partial: 'form' %>
+<main id="main">
+  <%= render partial: 'top', locals: { meal: @meal } %>
+  <%= render partial: 'middle', locals: { meal: @meal } %>
+</main>

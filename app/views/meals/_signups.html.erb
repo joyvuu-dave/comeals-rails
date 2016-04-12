@@ -1,0 +1,37 @@
+<% # Rendered by cooks_and_signups %>
+
+<style>
+#signups {
+  flex-basis: 20%;
+}
+#signups_container {
+  display: flex;
+  height: 250px;
+  border: thin solid violet;
+  padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.circle {
+  padding: 1rem;
+  border: thin solid black;
+  border-radius: 50%;
+}
+</style>
+
+<% vegetarian = meal.meal_residents.where(vegetarian: true).count + meal.guests.where(vegetarian: true).count %>
+<% omnivore = meal.attendees - vegetarian %>
+<% late = meal.meal_residents.where(late: true).count %>
+
+<section id="signups">
+  <div id="signups_container">
+    <strong>Signed Up</strong>
+    <h3 class="circle"><%= meal.attendees %></h3>
+    <ul>
+      <li><%= omnivore %> Omnivore </li>
+      <li><%= vegetarian %> Vegetarian</li>
+      <li><%= late %> Late</li>
+    </ul>
+  </div>
+</section>

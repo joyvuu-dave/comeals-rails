@@ -1,0 +1,14 @@
+<% # rendered by edit %>
+
+<style>
+#middle {
+  display: flex;
+  min-height: 500px;
+  justify-content: space-between;
+}
+</style>
+
+<section id="middle">
+  <%= render partial: 'attendees', locals: { meal: meal } %>
+  <%= render partial: 'guests', locals: { meal: meal } %>
+</section>

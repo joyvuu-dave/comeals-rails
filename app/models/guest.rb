@@ -28,6 +28,12 @@ class Guest < ApplicationRecord
   belongs_to :meal, inverse_of: :guests
   belongs_to :resident
 
+  before_validation :set_name
+
+  def set_name
+    self.name ||= 'Default'
+  end
+
   counter_culture :meal
   counter_culture :meal, column_name: 'guests_multiplier', delta_column: 'multiplier'
 

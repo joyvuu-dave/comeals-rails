@@ -7,7 +7,7 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 # Community
-community = Community.create(name: "Swan's Way", cap: 250)
+community = Community.create(name: "Swan's Way", cap: 250, time_zone: 'Pacific Time (US & Canada)')
 
 puts "#{Community.count} Community created"
 
@@ -19,8 +19,14 @@ puts "#{Community.count} Community created"
                     multiplier: 1, unit_id: unit.id)
     Resident.create(name: Faker::Name.first_name,
                     multiplier: 2, unit_id: unit.id)
-    Resident.create(name: Faker::Name.first_name,
-                    multiplier: 2, unit_id: unit.id)
+
+    if index % 5 == 0
+      Resident.create(name: Faker::Name.first_name,
+                      multiplier: 2, unit_id: unit.id, vegetarian: true)
+    else
+      Resident.create(name: Faker::Name.first_name,
+                      multiplier: 2, unit_id: unit.id)
+    end
   end
 end
 
@@ -30,43 +36,60 @@ puts "#{Resident.count} Residents created"
 # Meals (will be reconciled)
 Meal.create_templates(Date.parse('15-09-2015'), Date.parse('15-12-2015'), 0, 0)
 
+meal_count_1 = Meal.count
 puts "#{Meal.count} Meals created"
 
-# MealResidents & Guests
-Meal.all.each do |meal|
-  Resident.all.shuffle[0..(Random.rand(8..21))].each_with_index do |resident, index|
-    if index % 10 === 0
-      Guest.create(name: "Guest #{resident.id}",
-                   multiplier: 2,
-                   resident_id: resident.id,
-                   meal_id: meal.id)
-    else
-      MealResident.create(resident_id: resident.id,
-                          meal_id: meal.id,
-                          multiplier: resident.multiplier)
+
+def create_guests_and_meal_residents
+  Meal.unreconciled.each do |meal|
+    Resident.all.shuffle[0..(Random.rand(8..21))].each_with_index do |resident, index|
+      if index % 10 == 0
+        guest = Guest.new(name: "Guest #{resident.id}",
+                     multiplier: 2,
+                     resident_id: resident.id,
+                     meal_id: meal.id)
+
+        guest.vegetarian = true if index % 20 == 0
+        guest.save
+      else
+          meal_resident = MealResident.new(resident_id: resident.id,
+                              meal_id: meal.id,
+                              multiplier: resident.multiplier)
+
+          meal_resident.vegetarian = true if index % 5 == 0
+          meal_resident.late       = true if index % 7 == 0
+          meal_resident.save
+      end
     end
   end
 end
 
+# MealResidents & Guests
+create_guests_and_meal_residents
+
+guest_count_1 = Guest.count
 puts "#{Guest.count} Guests created"
+
+meal_resident_count_1 = MealResident.count
 puts "#{MealResident.count} MealResidents created"
 
 # Bills
-Meal.all.each_with_index do |meal, index|
+Meal.unreconciled.each_with_index do |meal, index|
   ids = Resident.pluck(:id).shuffle[0..1]
   if index % 2 == 0
     Bill.create(meal_id: meal.id, resident_id: ids[0],
-                amount: (2500..3500).to_a.shuffle[0])
+                amount: (2500..3500).to_a.shuffle[0]/100.to_f)
     Bill.create(meal_id: meal.id, resident_id: ids[1],
-                amount: (3500..4500).to_a.shuffle[0])
+                amount: (3500..4500).to_a.shuffle[0]/100.to_f)
   else
     Bill.create(meal_id: meal.id, resident_id: ids[0],
-                amount: (5500..6500).to_a.shuffle[0])
+                amount: (5500..6500).to_a.shuffle[0]/100.to_f)
     Bill.create(meal_id: meal.id, resident_id: ids[1],
-                amount: (6500..7500).to_a.shuffle[0])
+                amount: (6500..7500).to_a.shuffle[0]/100.to_f)
   end
 end
 
+bill_count_1 = Bill.count
 puts "#{Bill.count} Bills created"
 
 # Reconciliation
@@ -75,58 +98,48 @@ puts "#{Reconciliation.count} Reconciliation created"
 
 
 # Meals (will not be reconciled)
-Meal.create_templates(Date.parse('16-12-2015'), Date.parse('15-02-2016'), 0, 0)
+Meal.create_templates(Date.parse('16-12-2015'), Date.parse('15-03-2016'), 0, 0)
+
+puts "#{Meal.count - meal_count_1} more Meals created"
 
 # MealResidents & Guests
-Meal.all.each do |meal|
-  Resident.all.shuffle[0..(Random.rand(8..21))].each_with_index do |resident, index|
-    if index % 10 === 0
-      Guest.create(name: "Guest #{resident.id}",
-                   multiplier: 2,
-                   resident_id: resident.id,
-                   meal_id: meal.id)
-    else
-      MealResident.create(resident_id: resident.id,
-                          meal_id: meal.id,
-                          multiplier: resident.multiplier)
-    end
-  end
-end
+create_guests_and_meal_residents
 
-puts "#{Guest.count} Guests created"
-puts "#{MealResident.count} MealResidents created"
+puts "#{Guest.count - guest_count_1} more Guests created"
+puts "#{MealResident.count - meal_resident_count_1} more MealResidents created"
 
 # Bills
-Meal.all.each_with_index do |meal, index|
+Meal.unreconciled.each_with_index do |meal, index|
   ids = Resident.pluck(:id).shuffle[0..1]
   if index % 3 == 0
     Bill.create(meal_id: meal.id, resident_id: ids[0],
-                amount: (2500..3500).to_a.shuffle[0])
+                amount: (2500..3500).to_a.shuffle[0]/100.to_f)
     Bill.create(meal_id: meal.id, resident_id: ids[1],
-                amount: (3500..4500).to_a.shuffle[0])
+                amount: (3500..4500).to_a.shuffle[0]/100.to_f)
   elsif index % 4 == 0
     Bill.create(meal_id: meal.id, resident_id: ids[0],
-                amount: (5500..6500).to_a.shuffle[0])
+                amount: (5500..6500).to_a.shuffle[0]/100.to_f)
     Bill.create(meal_id: meal.id, resident_id: ids[1],
-                amount: (6500..7500).to_a.shuffle[0])
+                amount: (6500..7500).to_a.shuffle[0]/100.to_f)
   end
 end
 
-puts "#{Bill.count} Bills created"
+puts "#{Bill.count - bill_count_1} more Bills created"
 
 # Set description
-Meal.update_all(description: 'Tofu tacos, Sloppy Joe, Beet Salad, Sourdough Rolls, Chocolate Cake, Strawberries')
+Meal.all.each_with_index do |meal, index|
+  if index % 2 == 0
+    meal.update(description: 'Tofu tacos, Beet Salad, Sourdough Rolls, Chocolate Cake')
+  else
+    meal.update(description: 'Sloppy Joe, Ceasar Salad, Whole Wheat Bread, Strawberries')
+  end
+end
 
 
 # Set Max
 Meal.all.each_with_index do |meal, index|
   next if meal.bills.count == 0
-  if index % 2 == 0
-    meal.update_attribute(:max, meal.attendees + 2)
-  else
-    meal.update_attribute(:max, meal.attendees)
-  end
+  meal.closed = true
+  meal.extras = (1..5).to_a.shuffle.first if index % 2 == 0
+  meal.save
 end
-
-puts "#{Meal.count} Meals created (#{Meal.unreconciled.count} unreconciled)"
-

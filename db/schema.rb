@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160301173036) do
+ActiveRecord::Schema.define(version: 20160330153936) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -29,11 +29,12 @@ ActiveRecord::Schema.define(version: 20160301173036) do
   add_index "bills", ["resident_id"], name: "index_bills_on_resident_id", using: :btree
 
   create_table "communities", force: :cascade do |t|
-    t.string   "name",            null: false
+    t.string   "name",                            null: false
     t.integer  "cap"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
     t.integer  "rotation_length"
+    t.string   "time_zone",       default: "UTC", null: false
   end
 
   add_index "communities", ["name"], name: "index_communities_on_name", unique: true, using: :btree
@@ -67,18 +68,21 @@ ActiveRecord::Schema.define(version: 20160301173036) do
   add_index "meal_residents", ["resident_id"], name: "index_meal_residents_on_resident_id", using: :btree
 
   create_table "meals", force: :cascade do |t|
-    t.date     "date",                                  null: false
+    t.date     "date",                                      null: false
     t.integer  "cap"
-    t.integer  "meal_residents_count",      default: 0, null: false
-    t.integer  "guests_count",              default: 0, null: false
-    t.integer  "cost",                      default: 0, null: false
-    t.integer  "meal_residents_multiplier", default: 0, null: false
-    t.integer  "guests_multiplier",         default: 0, null: false
+    t.integer  "meal_residents_count",      default: 0,     null: false
+    t.integer  "guests_count",              default: 0,     null: false
+    t.integer  "cost",                      default: 0,     null: false
+    t.integer  "meal_residents_multiplier", default: 0,     null: false
+    t.integer  "guests_multiplier",         default: 0,     null: false
     t.text     "description"
     t.integer  "max"
-    t.datetime "created_at",                            null: false
-    t.datetime "updated_at",                            null: false
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
     t.integer  "reconciliation_id"
+    t.boolean  "closed",                    default: false, null: false
+    t.string   "time_zone"
+    t.boolean  "auto_close",                default: false, null: false
   end
 
   add_index "meals", ["reconciliation_id"], name: "index_meals_on_reconciliation_id", using: :btree
@@ -90,12 +94,13 @@ ActiveRecord::Schema.define(version: 20160301173036) do
   end
 
   create_table "residents", force: :cascade do |t|
-    t.string   "name",                   null: false
-    t.integer  "multiplier", default: 2, null: false
+    t.string   "name",                       null: false
+    t.integer  "multiplier", default: 2,     null: false
     t.integer  "unit_id"
-    t.integer  "bill_costs", default: 0, null: false
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.integer  "bill_costs", default: 0,     null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.boolean  "vegetarian", default: false, null: false
   end
 
   add_index "residents", ["name"], name: "index_residents_on_name", unique: true, using: :btree

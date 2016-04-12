@@ -1,0 +1,15 @@
+<% # rendered by top %>
+
+<style>
+#date_and_menu {
+  display: flex;
+  height: 150px;
+  border: thin dashed green;
+  padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+}
+</style>
+
+<section id="date_and_menu">
+  <%= render partial: 'date_box', locals: { meal: meal } %>
+  <%= render partial: 'menu', locals: { meal: meal } %>
+</section>

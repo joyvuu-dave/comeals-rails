@@ -1,5 +1,3 @@
-<%= javascript_include_tag "bills" %>
-
 <%= simple_form_for @bill, url: { action: lambda { @bill.new_record? ? "create" : "update" }.call }, html: { class: "form-horizontal bill" } do |f| %>
 
   <!-- Errors -->

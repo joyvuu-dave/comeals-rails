@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20160210160946
+# Schema version: 20160330153936
 #
 # Table name: meals
 #
@@ -16,6 +16,9 @@
 #  created_at                :datetime         not null
 #  updated_at                :datetime         not null
 #  reconciliation_id         :integer
+#  closed                    :boolean          default(FALSE), not null
+#  time_zone                 :string
+#  auto_close                :boolean          default(FALSE), not null
 #
 # Indexes
 #

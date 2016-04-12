@@ -1,0 +1,13 @@
+<% # rendered by edit %>
+
+<style>
+#top {
+  border: thin solid purple;
+  padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+}
+</style>
+
+<section id="top">
+  <%= render partial: 'date_and_menu', locals: { meal: meal } %>
+  <%= render partial: 'cooks_and_signups', locals: { meal: meal } %>
+</section>

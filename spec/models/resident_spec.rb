@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20160202150722
+# Schema version: 20160309185245
 #
 # Table name: residents
 #
@@ -10,6 +10,7 @@
 #  bill_costs :integer          default(0), not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  vegetarian :boolean          default(FALSE), not null
 #
 # Indexes
 #

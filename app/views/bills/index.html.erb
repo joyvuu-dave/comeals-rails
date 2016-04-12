@@ -24,10 +24,10 @@
         <td><%= bill.resident.name %></td>
 
         <!-- Amount -->
-        <td><%= number_to_currency(bill.amount/100.to_f) %></td>
+        <td><%= number_to_currency(bill.amount) %></td>
 
         <!-- Reimbursable Amount -->
-        <% if bill.reimburseable_amount == bill.amount %>
+        <% if bill.reimburseable_amount == bill.amount_cents %>
           <td>same</td>
         <% else %>
           <td class="text-danger"><%= number_to_currency(bill.reimburseable_amount/100.to_f) %></td>

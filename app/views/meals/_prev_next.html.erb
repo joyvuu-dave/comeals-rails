@@ -1,0 +1,54 @@
+<% # rendered by date_box %>
+
+<style>
+/* Icono
+https://github.com/saeedalipoor/icono
+*/
+.icono-next,
+.icono-previous {
+  width: 0;
+  height: 0;
+  border: 10px solid transparent;
+  border-left: 10px solid;
+  border-right: none;
+  margin: 7px 14px 7px 10px;
+  box-shadow: 4px 0;
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+  font-style: normal;
+  color: #dddddd;
+  text-align: left;
+  text-indent: -9999px;
+  direction: ltr;
+  box-sizing: border-box;
+}
+.icono-previous {
+  -webkit-transform: rotate(180deg);
+      -ms-transform: rotate(180deg);
+          transform: rotate(180deg);
+  margin: 7px 10px 7px 14px;
+}
+.icono-next:before, .icono-next:after,
+.icono-previous:before, .icono-previous:after {
+  content: '';
+  pointer-events: none;
+}
+.hidden {
+  visibility: hidden;
+}
+</style>
+
+<section id="prev_next">
+  <% if meal.prev? %>
+    <a href="/meals/<%= meal.id %>/edit?q=prev"><div class="icono-previous"></div>Prev</a>
+  <% else %>
+    <a class="hidden" href="/meals/<%= meal.id %>/edit?q=prev"><div class="icono-previous"></div>Prev</a>
+  <% end %>
+
+  <% if meal.next? %>
+    <a href="/meals/<%= meal.id %>/edit?q=next">Next<div class="icono-next"></div></a>
+  <% else %>
+    <a class="hidden" href="/meals/<%= meal.id %>/edit?q=next">Next<div class="icono-next"></div></a>
+  <% end %>
+</section>
