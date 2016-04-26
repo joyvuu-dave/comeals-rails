@@ -1,8 +1,6 @@
 Rails.application.routes.draw do
   root to: 'static_pages#index'
 
-  get '/foo', to: 'foo#foo', as: :foo
-
   post '/login',  to: 'sessions#login',  as: :login
   post '/logout', to: 'sessions#logout', as: :logout
 
