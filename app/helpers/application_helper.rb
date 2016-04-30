@@ -14,4 +14,10 @@ module ApplicationHelper
 
     name_string
   end
+
+  def format_rotation_length(val)
+    return 'unset' unless val
+    return "#{val} meal" if val == 1
+    return "#{val} meals"
+  end
 end

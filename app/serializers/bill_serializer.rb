@@ -29,7 +29,7 @@ class BillSerializer < ActiveModel::Serializer
              :url
 
   def title
-    "Cook\n#{object.resident.name} - $#{sprintf('%0.02f', (object.amount))}"
+    "Cook\n#{object.resident.name} - $#{sprintf('%0.02f', (object.amount_cents))}"
   end
 
   def start

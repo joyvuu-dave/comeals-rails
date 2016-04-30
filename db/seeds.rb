@@ -7,7 +7,7 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 # Community
-community = Community.create(name: "Swan's Way", cap: 250, time_zone: 'Pacific Time (US & Canada)')
+community = Community.create(name: "Swan's Way", cap: 250, time_zone: 'Pacific Time (US & Canada)', rotation_length: 13)
 
 puts "#{Community.count} Community created"
 
@@ -34,7 +34,7 @@ puts "#{Unit.count} Units created"
 puts "#{Resident.count} Residents created"
 
 # Meals (will be reconciled)
-Meal.create_templates(Date.parse('15-09-2015'), Date.parse('15-12-2015'), 0, 0)
+Meal.create_templates(Date.parse('21-12-2015'), Date.parse('21-03-2016'), 0, 0)
 
 meal_count_1 = Meal.count
 puts "#{Meal.count} Meals created"
@@ -78,14 +78,14 @@ Meal.unreconciled.each_with_index do |meal, index|
   ids = Resident.pluck(:id).shuffle[0..1]
   if index % 2 == 0
     Bill.create(meal_id: meal.id, resident_id: ids[0],
-                amount: (2500..3500).to_a.shuffle[0]/100.to_f)
+                amount_cents: (2500..3500).to_a.shuffle[0])
     Bill.create(meal_id: meal.id, resident_id: ids[1],
-                amount: (3500..4500).to_a.shuffle[0]/100.to_f)
+                amount_cents: (3500..4500).to_a.shuffle[0])
   else
     Bill.create(meal_id: meal.id, resident_id: ids[0],
-                amount: (5500..6500).to_a.shuffle[0]/100.to_f)
+                amount_cents: (5500..6500).to_a.shuffle[0])
     Bill.create(meal_id: meal.id, resident_id: ids[1],
-                amount: (6500..7500).to_a.shuffle[0]/100.to_f)
+                amount_cents: (6500..7500).to_a.shuffle[0])
   end
 end
 
@@ -98,7 +98,7 @@ puts "#{Reconciliation.count} Reconciliation created"
 
 
 # Meals (will not be reconciled)
-Meal.create_templates(Date.parse('16-12-2015'), Date.parse('15-03-2016'), 0, 0)
+Meal.create_templates(Date.parse('22-03-2016'), Date.parse('22-06-2016'), 0, 0)
 
 puts "#{Meal.count - meal_count_1} more Meals created"
 
@@ -113,14 +113,14 @@ Meal.unreconciled.each_with_index do |meal, index|
   ids = Resident.pluck(:id).shuffle[0..1]
   if index % 3 == 0
     Bill.create(meal_id: meal.id, resident_id: ids[0],
-                amount: (2500..3500).to_a.shuffle[0]/100.to_f)
+                amount_cents: (2500..3500).to_a.shuffle[0])
     Bill.create(meal_id: meal.id, resident_id: ids[1],
-                amount: (3500..4500).to_a.shuffle[0]/100.to_f)
+                amount_cents: (3500..4500).to_a.shuffle[0])
   elsif index % 4 == 0
     Bill.create(meal_id: meal.id, resident_id: ids[0],
-                amount: (5500..6500).to_a.shuffle[0]/100.to_f)
+                amount_cents: (5500..6500).to_a.shuffle[0])
     Bill.create(meal_id: meal.id, resident_id: ids[1],
-                amount: (6500..7500).to_a.shuffle[0]/100.to_f)
+                amount_cents: (6500..7500).to_a.shuffle[0])
   end
 end
 

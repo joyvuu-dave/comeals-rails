@@ -7,6 +7,14 @@ GIT
       activesupport (>= 3.0.0)
 
 GIT
+  remote: git://github.com/ctran/annotate_models.git
+  revision: c952306966c9bae4438e4d40351561af3d8005c0
+  specs:
+    annotate (2.7.0)
+      activerecord (>= 3.2, < 6.0)
+      rake (>= 10.4, < 12.0)
+
+GIT
   remote: git://github.com/rails-api/active_model_serializers.git
   revision: 0433869cc1d59af04c115feff1504b4e8b22eef0
   specs:
@@ -131,9 +139,6 @@ GEM
     after_commit_action (1.0.1)
       activerecord (>= 3.0.0)
       activesupport (>= 3.0.0)
-    annotate (2.7.0)
-      activerecord (>= 3.2, < 6.0)
-      rake (~> 10.4)
     arel (7.0.0)
     babel-source (5.8.35)
     babel-transpiler (0.7.0)
@@ -248,7 +253,7 @@ GEM
       method_source
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
-    rake (10.5.0)
+    rake (11.1.2)
     rb-fsevent (0.9.7)
     rb-inotify (0.9.7)
       ffi (>= 0.5.0)
@@ -302,7 +307,7 @@ PLATFORMS
 
 DEPENDENCIES
   active_model_serializers!
-  annotate
+  annotate!
   better_errors
   binding_of_caller
   bullet
