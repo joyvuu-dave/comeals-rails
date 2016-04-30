@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '2.3.0'
+ruby '2.3.1'
 
 gem 'rails', github: 'rails/rails'
 
@@ -29,7 +29,7 @@ gem 'dalli'
 gem 'connection_pool'
 gem 'active_model_serializers', github: 'rails-api/active_model_serializers'
 gem 'rails_12factor', group: :production
-gem 'react-rails', '~> 1.6.0'
+gem 'react-rails'
 gem 'rack-cors', :require => 'rack/cors'
 
 # Use ActiveModel has_secure_password
@@ -51,7 +51,7 @@ end
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', github: 'rails/web-console'
-  gem 'listen', '~> 3.0.5'
+  gem 'listen', '~> 3.1.0'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
