@@ -18,7 +18,7 @@
       <tr>
         <td><%= community.name %></td>
         <td><%= number_to_currency((community.cap)/100.to_f) %>/person unit</td>
-        <td><%= community.rotation_length %> meals</td>
+        <td><%= format_rotation_length(community.rotation_length) %></td>
         <td>
           <%= link_to('Edit', edit_community_path(community), class: "btn btn-default btn-xs") if @admin %>
 

@@ -7,7 +7,7 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 # Community
-community = Community.create(name: "Swan's Way", cap: 250)
+community = Community.create(name: "Swan's Way", cap: 250, rotation_length: 13)
 
 puts "#{Community.count} Community created"
 

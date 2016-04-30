@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20160210160946
+# Schema version: 20160301173036
 #
 # Table name: meals
 #
