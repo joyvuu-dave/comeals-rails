@@ -9,7 +9,6 @@
 # Community
 community = Community.create(name: "Swan's Way", cap: 250, time_zone: 'Pacific Time (US & Canada)', rotation_length: 13)
 
-
 puts "#{Community.count} Community created"
 
 # Units / Residents
@@ -35,7 +34,8 @@ puts "#{Unit.count} Units created"
 puts "#{Resident.count} Residents created"
 
 # Meals (will be reconciled)
-Meal.create_templates(Date.parse('15-12-2015'), Date.parse('15-03-2016'), 0, 0)
+Meal.create_templates(Date.parse('21-12-2015'), Date.parse('21-03-2016'), 0, 0)
+
 
 meal_count_1 = Meal.count
 puts "#{Meal.count} Meals created"
@@ -99,7 +99,8 @@ puts "#{Reconciliation.count} Reconciliation created"
 
 
 # Meals (will not be reconciled)
-Meal.create_templates(Date.parse('16-03-2016'), Date.parse('15-05-2016'), 0, 0)
+Meal.create_templates(Date.parse('22-03-2016'), Date.parse('22-06-2016'), 0, 0)
+
 
 
 # MealResidents & Guests
