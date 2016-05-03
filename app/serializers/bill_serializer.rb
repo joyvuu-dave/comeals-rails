@@ -25,18 +25,33 @@
 class BillSerializer < ActiveModel::Serializer
   cache key: 'bill'
   attributes :title,
+             :header,
+             :body,
              :start,
+             :end,
              :url
 
   def title
-    "Cook\n#{object.resident.name} - $#{sprintf('%0.02f', (object.amount_cents))}"
+    "Unit #{object.resident.unit.name}"
+  end
+
+  def header
+    "Cook"
+  end
+
+  def body
+    "#{object.resident.name} - $#{sprintf('%0.02f', (object.amount_cents/100.to_f))}"
   end
 
   def start
     object.meal.date
   end
 
+  def end
+    object.meal.date
+  end
+
   def url
-    "/bills/#{object.id}/edit"
+    "/meals/#{object.meal.id}"
   end
 end

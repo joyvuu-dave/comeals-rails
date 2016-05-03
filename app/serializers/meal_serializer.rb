@@ -31,22 +31,40 @@
 
 class MealSerializer < ActiveModel::Serializer
   cache key: 'meal'
-  attributes :id,
-             :date,
-             :description,
-             :closed_in_database,
-             :epoch,
-             :reconciled,
-             :auto_close
-  def date
-    object.date.inspect
-  end
-
-  def closed_in_database
-    object.closed
-  end
+  attributes :title,
+             :header,
+             :body,
+             :start,
+             :end,
+             :url
 
   def reconciled
     object.reconciled?
+  end
+
+  def title
+    object.description
+  end
+
+  def header
+    'Common Dinner'
+  end
+
+  def body
+    syntax = object.attendees == 1 ? "person" : "people"
+    max_string = object.max ? "(#{object.max} max)" : ""
+    "#{object.attendees} #{syntax} #{max_string}"
+  end
+
+  def start
+    object.date
+  end
+
+  def end
+    object.date
+  end
+
+  def url
+    "/meals/#{object.id}"
   end
 end

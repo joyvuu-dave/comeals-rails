@@ -29,24 +29,37 @@
 #  fk_rails_4ac0d4ffd3  (reconciliation_id => reconciliations.id)
 #
 
+############
+# NOT IN USE
+############
+
 class CalendarMealSerializer < ActiveModel::Serializer
   cache key: 'calendar_meal'
   attributes :title,
              :start,
+             :end,
              :url,
-             :description
+             :desc
 
   def reconciled
     object.reconciled?
   end
 
   def title
+    "Common Dinner"
+  end
+
+  def desc
     syntax = object.attendees == 1 ? "person" : "people"
     max_string = object.max ? "(#{object.max} max)" : ""
-    "Common Dinner\n#{object.attendees} #{syntax} #{max_string}"
+    "#{object.attendees} #{syntax} #{max_string}"
   end
 
   def start
+    object.date
+  end
+
+  def end
     object.date
   end
 

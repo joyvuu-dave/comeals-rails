@@ -7,8 +7,8 @@ class ReactMealSerializer < ActiveModel::Serializer
              :auto_close,
              :closed,
              :reconciled,
-             :hasNext,
-             :hasPrev,
+             :prevId,
+             :nextId,
              :residents
 
   def residents
@@ -61,13 +61,11 @@ class ReactMealSerializer < ActiveModel::Serializer
     object.reconciled?
   end
 
-  # FIXME: should return the actual id
-  def hasNext
-    object.next?
+  def prevId
+    object.prev? ? object.prev.id  : ''
   end
 
-  # FIXME: should return the actual id
-  def hasPrev
-    object.prev?
+  def nextId
+    object.next? ? object.next.id : ''
   end
 end
