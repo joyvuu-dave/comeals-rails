@@ -15,6 +15,12 @@ GIT
       rake (>= 10.4, < 12.0)
 
 GIT
+  remote: git://github.com/cyu/rack-cors.git
+  revision: 7e58358b5376c00d623b28dd0150b6d06bbc959e
+  specs:
+    rack-cors (0.4.0)
+
+GIT
   remote: git://github.com/rails-api/active_model_serializers.git
   revision: 2b4989935130732d59d7cc1b6228d4a447dd5071
   specs:
@@ -25,7 +31,7 @@ GIT
 
 GIT
   remote: git://github.com/rails/rails.git
-  revision: ac8d0d76cb72bd0542405cfb73552a699f2bc0ef
+  revision: 3bed679670dd8348ffc348509a653677c6ecb7f3
   specs:
     rails (5.0.0.beta4)
       actioncable (= 5.0.0.beta4)
@@ -59,7 +65,7 @@ GIT
 
 GIT
   remote: https://github.com/rspec/rspec-expectations.git
-  revision: d5b6b35d518ab6692f894d2f124608878c1da946
+  revision: 580c199ed66e892e53a64d8a2068c07f243cf373
   branch: master
   specs:
     rspec-expectations (3.5.0.pre)
@@ -77,7 +83,7 @@ GIT
 
 GIT
   remote: https://github.com/rspec/rspec-rails.git
-  revision: ca9e01573edb2e4e7774d42b4aa92ba0959d793d
+  revision: 4bdc9b83175ea3095912c1907f185d5bf5802abc
   branch: master
   specs:
     rspec-rails (3.5.0.pre)
@@ -227,7 +233,6 @@ GEM
       railties (>= 3.1, < 5.0)
     rack (2.0.0.alpha)
       json
-    rack-cors (0.4.0)
     rack-test (0.6.3)
       rack (>= 1.0)
     rails-controller-testing (0.1.1)
@@ -326,7 +331,7 @@ DEPENDENCIES
   pry-rails
   puma
   quiet_assets
-  rack-cors
+  rack-cors!
   rails!
   rails-controller-testing
   rails_12factor

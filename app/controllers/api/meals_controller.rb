@@ -31,7 +31,7 @@ module Api
       end
 
       def meal_params
-        params.require(:meal).permit(:description, :max, :auto_close, :closed, meal_residents_attributes: [:id, :meal_id, :resident_id, :multiplier, :vegetarian, :late, :_destroy], guests_attributes: [:id, :meal_id, :resident_id, :multiplier, :vegetarian, :_destroy], bills_attributes: [:id, :meal_id, :resident_id, :amount, :_destroy])
+        params.require(:meal).permit(:id, :description, :max, :auto_close, :closed, meal_residents_attributes: [:id, :meal_id, :resident_id, :multiplier, :vegetarian, :late, :_destroy], guests_attributes: [:id, :meal_id, :resident_id, :multiplier, :vegetarian, :_destroy], bills_attributes: [:id, :meal_id, :resident_id, :amount, :_destroy])
       end
   end
 end

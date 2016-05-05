@@ -1,15 +1,21 @@
 class ReactMealSerializer < ActiveModel::Serializer
-  attributes :id,
-             :description,
-             :date,
-             :epoch,
-             :max,
-             :auto_close,
-             :closed,
-             :reconciled,
-             :prevId,
-             :nextId,
+  attributes :meal,
              :residents
+
+  def meal
+    {
+      id: object.id,
+      description: object.description,
+      date: object.date.inspect,
+      epoch: object.epoch,
+      max: object.max,
+      auto_close: object.auto_close,
+      closed: object.closed,
+      reconciled: object.reconciled?,
+      prevId: object.prev? ? object.prev.id  : '',
+      nextId: object.next? ? object.next.id : ''
+    }
+  end
 
   def residents
     ActiveModelSerializers::SerializableResource.new(Resident.all, each_serializer: ReactResidentSerializer).as_json
@@ -50,22 +56,5 @@ class ReactMealSerializer < ActiveModel::Serializer
                :resident_id,
                :multiplier,
                :vegetarian
-  end
-
-
-  def date
-    object.date.inspect
-  end
-
-  def reconciled
-    object.reconciled?
-  end
-
-  def prevId
-    object.prev? ? object.prev.id  : ''
-  end
-
-  def nextId
-    object.next? ? object.next.id : ''
   end
 end
