@@ -2,12 +2,12 @@ source 'https://rubygems.org'
 
 ruby '2.3.1'
 
-gem 'rails', github: 'rails/rails'
+gem 'rails', github: 'rails/rails', branch: '5-0-stable'
 
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 0.18'
 # Use SCSS for stylesheets
-gem 'sass-rails', '~> 5.0'
+gem 'sass-rails'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 
@@ -44,7 +44,7 @@ group :development, :test do
   gem 'rails-controller-testing'
 
   %w[rspec-core rspec-expectations rspec-mocks rspec-rails rspec-support].each do |lib|
-    gem lib, :git => "https://github.com/rspec/#{lib}.git", :branch => 'master'
+    gem lib, git: "https://github.com/rspec/#{lib}.git", branch: 'master'
   end
 end
 

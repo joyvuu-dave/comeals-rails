@@ -10,7 +10,7 @@ class ReactMealSerializer < ActiveModel::Serializer
       epoch: object.epoch,
       max: object.max,
       auto_close: object.auto_close,
-      closed: object.closed,
+      closed_in_database: object.closed,
       reconciled: object.reconciled?,
       prevId: object.prev? ? object.prev.id  : '',
       nextId: object.next? ? object.next.id : ''
@@ -38,7 +38,7 @@ class ReactMealSerializer < ActiveModel::Serializer
                :amount
 
     def amount
-      (object.amount_cents.to_f/100).to_s
+      sprintf('%0.02f', object.amount_cents.to_f / 100)
     end
   end
 
