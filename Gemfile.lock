@@ -21,6 +21,22 @@ GIT
     rack-cors (0.4.0)
 
 GIT
+  remote: git://github.com/flyerhzm/bullet.git
+  revision: 0a1db352908685ce4d9e60060b702833968380ce
+  specs:
+    bullet (5.0.0)
+      activesupport (>= 3.0.0)
+      uniform_notifier (~> 1.10.0)
+
+GIT
+  remote: git://github.com/pry/pry.git
+  revision: f5c97cac103a9f04b854ed5b117a8cc27c7e8dd6
+  specs:
+    pry (0.10.3)
+      coderay (~> 1.1.0)
+      method_source (~> 0.8.1)
+
+GIT
   remote: git://github.com/rails-api/active_model_serializers.git
   revision: 2b4989935130732d59d7cc1b6228d4a447dd5071
   specs:
@@ -31,8 +47,8 @@ GIT
 
 GIT
   remote: git://github.com/rails/rails.git
-  revision: 3eb70d0e7c53ab9875835246c72a25cfb540fa40
-  branch: 5-0-stable
+  revision: ec608107801b1e505db03ba76bae4a326a5804ca
+  branch: 5-0-0
   specs:
     rails (5.0.0.rc1)
       actioncable (= 5.0.0.rc1)
@@ -115,19 +131,19 @@ GEM
       actionview (= 5.0.0.rc1)
       activejob (= 5.0.0.rc1)
       mail (~> 2.5, >= 2.5.4)
-      rails-dom-testing (~> 1.0, >= 1.0.5)
+      rails-dom-testing (~> 2.0)
     actionpack (5.0.0.rc1)
       actionview (= 5.0.0.rc1)
       activesupport (= 5.0.0.rc1)
       rack (~> 2.x)
       rack-test (~> 0.6.3)
-      rails-dom-testing (~> 1.0, >= 1.0.5)
+      rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.0.2)
     actionview (5.0.0.rc1)
       activesupport (= 5.0.0.rc1)
       builder (~> 3.1)
       erubis (~> 2.7.0)
-      rails-dom-testing (~> 1.0, >= 1.0.5)
+      rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.0.2)
     activejob (5.0.0.rc1)
       activesupport (= 5.0.0.rc1)
@@ -158,9 +174,6 @@ GEM
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
     builder (3.2.2)
-    bullet (5.0.0)
-      activesupport (>= 3.0.0)
-      uniform_notifier (~> 1.9.0)
     byebug (8.2.5)
     cocoon (1.2.9)
     coderay (1.1.1)
@@ -204,7 +217,7 @@ GEM
     mime-types (3.0)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2016.0221)
-    mini_portile2 (2.0.0)
+    mini_portile2 (2.1.0)
     minitest (5.8.4)
     monetize (1.4.0)
       money (~> 6.7)
@@ -217,13 +230,11 @@ GEM
       money (~> 6.7)
       railties (>= 3.0)
     nio4r (1.2.1)
-    nokogiri (1.6.7.2)
-      mini_portile2 (~> 2.0.0.rc2)
+    nokogiri (1.6.8.rc3)
+      mini_portile2 (~> 2.1.0)
+      pkg-config (~> 1.1.7)
     pg (0.18.4)
-    pry (0.10.3)
-      coderay (~> 1.1.0)
-      method_source (~> 0.8.1)
-      slop (~> 3.4)
+    pkg-config (1.1.7)
     pry-byebug (3.3.0)
       byebug (~> 8.0)
       pry (~> 0.10)
@@ -240,12 +251,9 @@ GEM
       actionpack (~> 5.x)
       actionview (~> 5.x)
       activesupport (~> 5.x)
-    rails-deprecated_sanitizer (1.0.3)
-      activesupport (>= 4.2.0.alpha)
-    rails-dom-testing (1.0.7)
-      activesupport (>= 4.2.0.beta, < 5.0)
+    rails-dom-testing (2.0.0)
+      activesupport (>= 4.2.0, < 6.0)
       nokogiri (~> 1.6.0)
-      rails-deprecated_sanitizer (>= 1.0.1)
     rails-html-sanitizer (1.0.3)
       loofah (~> 2.0)
     rails_12factor (0.0.3)
@@ -284,7 +292,6 @@ GEM
       actionpack (> 4, < 5.1)
       activemodel (> 4, < 5.1)
     sixarm_ruby_unaccent (1.1.1)
-    slop (3.6.0)
     spring (1.7.1)
     spring-watcher-listen (2.0.0)
       listen (>= 2.7, < 4.0)
@@ -303,7 +310,7 @@ GEM
       thread_safe (~> 0.1)
     uglifier (3.0.0)
       execjs (>= 0.3.0, < 3)
-    uniform_notifier (1.9.0)
+    uniform_notifier (1.10.0)
     websocket-driver (0.6.3)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.2)
@@ -316,7 +323,7 @@ DEPENDENCIES
   annotate!
   better_errors
   binding_of_caller
-  bullet
+  bullet!
   cocoon
   connection_pool
   counter_culture
@@ -327,7 +334,9 @@ DEPENDENCIES
   kaminari!
   listen (~> 3.1.0)
   money-rails
+  nokogiri (= 1.6.8.rc3)
   pg (~> 0.18)
+  pry!
   pry-byebug
   pry-rails
   puma

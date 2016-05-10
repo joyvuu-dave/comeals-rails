@@ -2,7 +2,8 @@ source 'https://rubygems.org'
 
 ruby '2.3.1'
 
-gem 'rails', github: 'rails/rails', branch: '5-0-stable'
+gem 'rails', github: 'rails/rails', branch: '5-0-0' # switch to 5-0-stable once merged in
+gem 'nokogiri', '1.6.8.rc3' # can remove once 1.6.8 is released
 
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 0.18'
@@ -39,6 +40,7 @@ gem 'rack-cors', github: 'cyu/rack-cors', require: 'rack/cors'
 # gem 'capistrano-rails', group: :development
 
 group :development, :test do
+  gem 'pry', github: 'pry/pry' # can remove once new version of pry 0.10 is released
   gem 'pry-byebug'
   gem 'factory_girl_rails'
   gem 'rails-controller-testing'
@@ -57,7 +59,7 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'annotate', github: 'ctran/annotate_models'
   gem 'pry-rails'
-  gem 'bullet'
+  gem 'bullet', github: 'flyerhzm/bullet'
   gem 'quiet_assets'
   gem 'better_errors'
   gem 'binding_of_caller'
