@@ -47,18 +47,6 @@ RSpec.describe MealsController, type: :routing do
       expect(:get => "/meals/1/edit").to route_to("meals#edit", :id => "1")
     end
 
-    it "routes to #create" do
-      expect(:post => "/meals").to route_to("meals#create")
-    end
-
-    it "routes to #update via PUT" do
-      expect(:put => "/meals/1").to route_to("meals#update", :id => "1")
-    end
-
-    it "routes to #update via PATCH" do
-      expect(:patch => "/meals/1").to route_to("meals#update", :id => "1")
-    end
-
     it "routes to #destroy" do
       expect(:delete => "/meals/1").to route_to("meals#destroy", :id => "1")
     end

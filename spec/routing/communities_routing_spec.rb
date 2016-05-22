@@ -32,18 +32,6 @@ RSpec.describe CommunitiesController, type: :routing do
       expect(:get => "/communities/1/edit").to route_to("communities#edit", :id => "1")
     end
 
-    it "routes to #create" do
-      expect(:post => "/communities").to route_to("communities#create")
-    end
-
-    it "routes to #update via PUT" do
-      expect(:put => "/communities/1").to route_to("communities#update", :id => "1")
-    end
-
-    it "routes to #update via PATCH" do
-      expect(:patch => "/communities/1").to route_to("communities#update", :id => "1")
-    end
-
     it "routes to #destroy" do
       expect(:delete => "/communities/1").to route_to("communities#destroy", :id => "1")
     end

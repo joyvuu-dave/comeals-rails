@@ -1,12 +1,12 @@
 /*
- * qTip2 - Pretty powerful tooltips - v3.0.2
+ * qTip2 - Pretty powerful tooltips - v3.0.3
  * http://qtip2.com
  *
- * Copyright (c) 2015
+ * Copyright (c) 2016
  * Released under the MIT licenses
  * http://jquery.org/license
  *
- * Date: Tue Dec 8 2015 07:16 GMT+0000
+ * Date: Wed May 11 2016 06:50 EDT-0400
  * Plugins: None
  * Styles: core
  */
@@ -307,7 +307,10 @@ PROTOTYPE.destroy = function(immediate) {
 }
 
 function invalidContent(c) {
-  return !($.isFunction(c) || c && c.attr) || c.length || $.type(c) === 'object' && (c.jquery || c.then);
+  return !($.isFunction(c) ||
+            c && c.attr ||
+            c.length ||
+            $.type(c) === 'object' && (c.jquery || c.then));
 }
 
 // Option object sanitizer
@@ -1772,7 +1775,7 @@ function init(elem, id, opts) {
 
   // Remove title attribute and store it if present
   if(config.suppress && (title = elem.attr('title'))) {
-    // Final attr call fixes event delegatiom and IE default tooltip showing problem
+    // Final attr call fixes event delegation and IE default tooltip showing problem
     elem.removeAttr('title').attr(oldtitle, title).attr('title', '');
   }
 
@@ -1928,7 +1931,7 @@ if(!$.ui) {
   };
 }
 ;// qTip version
-QTIP.version = '3.0.2';
+QTIP.version = '3.0.3';
 
 // Base ID for all qTips
 QTIP.nextid = 0;

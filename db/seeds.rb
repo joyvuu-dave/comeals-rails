@@ -28,7 +28,7 @@ puts "#{Unit.count} Units created"
 puts "#{Resident.count} Residents created"
 
 # Meals (will be reconciled)
-Meal.create_templates(Date.parse('15-12-2015'), Date.parse('15-03-2016'), 0, 0)
+Meal.create_templates(Date.parse('15-01-2016'), Date.parse('15-04-2016'), 0, 0)
 
 puts "#{Meal.count} Meals created"
 
@@ -75,7 +75,7 @@ puts "#{Reconciliation.count} Reconciliation created"
 
 
 # Meals (will not be reconciled)
-Meal.create_templates(Date.parse('16-03-2016'), Date.parse('15-05-2016'), 0, 0)
+Meal.create_templates(Date.parse('16-04-2016'), Date.parse('15-06-2016'), 0, 0)
 
 # MealResidents & Guests
 Meal.all.each do |meal|
