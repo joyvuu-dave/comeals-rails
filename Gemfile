@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '2.3.1'
+ruby '2.4.0'
 
 gem 'rails', github: 'rails/rails', branch: '5-0-stable'
 
@@ -11,7 +11,7 @@ gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .coffee assets and views
-gem 'coffee-rails', github: 'rails/coffee-rails'
+gem 'coffee-rails'
 
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
@@ -24,7 +24,7 @@ gem 'money-rails'
 # Use Puma as the app server
 gem 'puma'
 gem 'counter_culture'
-gem 'kaminari', github: 'amatsuda/kaminari'
+gem 'kaminari'
 gem 'bootstrap-sass', '~> 3.3.6'
 gem 'simple_form'
 gem 'cocoon'
@@ -45,23 +45,19 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'factory_girl_rails'
   gem 'rails-controller-testing'
-
-  %w[rspec-core rspec-expectations rspec-mocks rspec-rails rspec-support].each do |lib|
-    gem lib, :git => "https://github.com/rspec/#{lib}.git", :branch => 'master'
-  end
+  gem 'rspec-rails', '~> 3.5'
 end
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> in views
-  gem 'web-console', github: 'rails/web-console'
+  gem 'web-console'
   gem 'listen', '~> 3.1.0'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
-  gem 'spring-watcher-listen', '~> 2.0.0'
+  gem 'spring-watcher-listen'
   gem 'annotate'
   gem 'pry-rails'
   gem 'bullet'
-  gem 'quiet_assets'
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'sextant' # go to /rails/routes
