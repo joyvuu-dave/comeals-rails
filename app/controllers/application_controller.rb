@@ -19,7 +19,12 @@ class ApplicationController < ActionController::Base
   end
 
   def signed_in?
-    redirect_to :root unless @signed_in == true
+    unless @signed_in == true
+      respond_to do |format|
+        format.html { redirect_to :root }
+        format.json { render json: { error: 'Unauthorized request.' }, status: :unauthorized }
+      end
+    end
   end
 
   def admin?

@@ -70,6 +70,9 @@ class Meal < ApplicationRecord
       unit_cost += 1
       return unit_cost if unit_cost % multiplier == 0
     end
+
+    # Scenario #3: unit_cost is above cap
+    cap
   end
 
   def subsidized?
