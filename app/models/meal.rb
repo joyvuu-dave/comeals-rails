@@ -85,9 +85,16 @@ class Meal < ApplicationRecord
   end
 
   # HELPERS
-  def self.can_add_bill
+  def can_add_bill?
     return true if bills_count == 0
+    return true if cap == Float::INFINITY
+
     cost < cap * multiplier
+  end
+
+  def max_bill_amount
+    return Float::INFINITY if bills_count == 0
+    cap * multiplier - cost
   end
 
   # Report Methods

@@ -33,8 +33,21 @@ class Bill < ApplicationRecord
   validates :meal, presence: true
   validates :resident, presence: true
   validates :amount_cents, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validate :bill_can_be_created, on: :create
+  validate :amount_cents_is_within_meal_limits
 
   monetize :amount_cents
+
+  def bill_can_be_created
+    unless meal.can_add_bill?
+      errors.add(:meal, "Can't add another bill until people sign up.") and return if meal.attendees == 0
+      errors.add(:meal, "Meal cost already exceeds cap.")
+    end
+  end
+
+  def amount_cents_is_within_meal_limits
+    errors.add(:amount_cents, "Amount exceeds limits.") if amount_cents > meal.max_bill_amount
+  end
 
   # DERIVED DATA
   def reimburseable_amount

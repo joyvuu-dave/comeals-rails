@@ -1,4 +1,15 @@
 GIT
+  remote: git://github.com/RubyMoney/money-rails.git
+  revision: 27fe38083d932eb447d20a8d87e7d9c970a5fe30
+  branch: ruby-2-4-0
+  specs:
+    money-rails (1.8.0)
+      activesupport (>= 3.0)
+      monetize (~> 1.6.0)
+      money (~> 6.8.1)
+      railties (>= 3.0)
+
+GIT
   remote: git://github.com/ctran/annotate_models.git
   revision: d108ba8bdec760ded4c8c786b1d7cc72cadba4df
   branch: develop
@@ -118,7 +129,7 @@ GEM
     coffee-script-source (1.12.2)
     concurrent-ruby (1.0.4)
     connection_pool (2.2.1)
-    counter_culture (1.1.0)
+    counter_culture (1.1.1)
       activerecord (>= 3.0.0)
       activesupport (>= 3.0.0)
       after_commit_action (~> 1.0)
@@ -134,7 +145,7 @@ GEM
       railties (>= 3.0.0)
     faker (1.7.2)
       i18n (~> 0.5)
-    ffi (1.9.14)
+    ffi (1.9.15)
     globalid (0.3.7)
       activesupport (>= 4.1.0)
     i18n (0.7.0)
@@ -173,16 +184,11 @@ GEM
     mime-types-data (3.2016.0521)
     mini_portile2 (2.1.0)
     minitest (5.10.1)
-    monetize (1.4.0)
-      money (~> 6.7)
+    monetize (1.6.0)
+      money (~> 6.8)
     money (6.8.1)
       i18n (>= 0.6.4, <= 0.7.0)
       sixarm_ruby_unaccent (>= 1.1.1, < 2)
-    money-rails (1.7.0)
-      activesupport (>= 3.0)
-      monetize (~> 1.4.0)
-      money (~> 6.7)
-      railties (>= 3.0)
     nio4r (2.0.0)
     nokogiri (1.7.0.1)
       mini_portile2 (~> 2.1.0)
@@ -307,7 +313,7 @@ DEPENDENCIES
   jquery-rails
   kaminari
   listen (~> 3.1.0)
-  money-rails
+  money-rails!
   pg (~> 0.18)
   pry-byebug
   pry-rails
