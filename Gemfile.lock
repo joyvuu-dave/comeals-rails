@@ -1,4 +1,13 @@
 GIT
+  remote: git://github.com/ctran/annotate_models.git
+  revision: d108ba8bdec760ded4c8c786b1d7cc72cadba4df
+  branch: develop
+  specs:
+    annotate (2.7.1)
+      activerecord (>= 3.2, < 6.0)
+      rake (>= 10.4, < 12.1)
+
+GIT
   remote: git://github.com/rails-api/active_model_serializers.git
   revision: 93ca27fe444c3a940890cb7a4dedbd8369f481f3
   specs:
@@ -10,7 +19,7 @@ GIT
 
 GIT
   remote: git://github.com/rails/rails.git
-  revision: 81c86196bc80ad0a14781f6c9ae09e19c014c536
+  revision: cada080e82a7e357d767e4bd85451684bd69c4d6
   branch: 5-0-stable
   specs:
     actioncable (5.0.1)
@@ -75,9 +84,6 @@ GEM
     after_commit_action (1.0.1)
       activerecord (>= 3.0.0)
       activesupport (>= 3.0.0)
-    annotate (2.7.1)
-      activerecord (>= 3.2, < 6.0)
-      rake (>= 10.4, < 12.0)
     arel (7.1.4)
     autoprefixer-rails (6.6.1)
       execjs
@@ -209,7 +215,7 @@ GEM
       rails_stdout_logging
     rails_serve_static_assets (0.0.5)
     rails_stdout_logging (0.0.5)
-    rake (11.3.0)
+    rake (12.0.0)
     rb-fsevent (0.9.8)
     rb-inotify (0.9.7)
       ffi (>= 0.5.0)
@@ -286,7 +292,7 @@ PLATFORMS
 
 DEPENDENCIES
   active_model_serializers!
-  annotate
+  annotate!
   better_errors
   binding_of_caller
   bootstrap-sass (~> 3.3.6)

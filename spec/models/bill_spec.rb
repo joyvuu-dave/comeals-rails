@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20160301173036
+# Schema version: 20170112210803
 #
 # Table name: bills
 #
@@ -18,8 +18,8 @@
 #
 # Foreign Keys
 #
-#  fk_rails_a4b9083e79  (meal_id => meals.id)
-#  fk_rails_d7e3fd1337  (resident_id => residents.id)
+#  fk_rails_...  (meal_id => meals.id)
+#  fk_rails_...  (resident_id => residents.id)
 #
 
 require 'rails_helper'

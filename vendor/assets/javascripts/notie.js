@@ -1,769 +1,1126 @@
 /*
- * notie.js - A clean and simple notification plugin (alert/growl style) for javascript, with no dependencies.
- *
- * Copyright (c) 2015 Jared Reich
- *
- * Licensed under the MIT license:
- * http://www.opensource.org/licenses/mit-license.php
- *
- * Project home:
- * https://jaredreich.com/projects/notie.js
- *
- * Version:  2.1.0
- *
+
+notie - a clean and simple notification suite for javascript, with no dependencies
+
+Copyright (c) 2016 Jared Reich
+
+Licensed under the MIT license:
+http://www.opensource.org/licenses/mit-license.php
+
+Project demo:
+https://jaredreich.com/projects/notie
+
 */
-var notieInit = function(){
 
-    // SETTINGS
-    // *********************************************
-
-    // General
-    var shadow = true;
-    var font_size_small = '18px';
-    var font_size_big = '24px';
-    var font_change_screen_width = 600;
-    var animation_delay = 0.3;
-    var background_click_dismiss = true;
-
-    // notie.alert colors
-    var alert_color_success_background = '#57BF57';
-    var alert_color_warning_background = '#E3B771';
-    var alert_color_error_background = '#E1715B';
-    var alert_color_info_background = '#4D82D6';
-    var alert_color_text = '#FFF';
-
-    // notie.confirm colors
-    var confirm_and_input_color_background = '#4D82D6';
-    var confirm_and_input_color_yes_background = '#57BF57';
-    var confirm_and_input_color_no_background = '#E1715B';
-    var confirm_and_input_color_text = '#FFF';
-    var confirm_and_input_color_yes_text = '#FFF';
-    var confirm_and_input_color_no_text = '#FFF';
-
-    // ID's for use within your own .css file (OPTIONAL)
-    // (Be sure to use !important to override the javascript)
-    // Example: #notie-alert-inner { padding: 30px !important; }
-    var alert_outer_id = 'notie-alert-outer';
-    var alert_inner_id = 'notie-alert-inner';
-    var alert_text_id = 'notie-alert-text';
-    var confirm_outer_id = 'notie-confirm-outer';
-    var confirm_inner_id = 'notie-confirm-inner';
-    var confirm_background_id = 'notie-confirm-background';
-    var confirm_yes_id = 'notie-confirm-yes';
-    var confirm_no_id = 'notie-confirm-no';
-    var confirm_text_id = 'notie-confirm-text';
-    var confirm_yes_text_id = 'notie-confirm-yes-text';
-    var confirm_no_text_id = 'notie-confirm-no-text';
-    var input_outer_id = 'notie-input-outer';
-    var input_inner_id = 'notie-input-inner';
-    var input_background_id = 'notie-input-background';
-    var input_div_id = 'notie-input-div';
-    var input_field_id = 'notie-input-field';
-    var input_yes_id = 'notie-input-yes';
-    var input_no_id = 'notie-input-no';
-    var input_text_id = 'notie-input-text';
-    var input_yes_text_id = 'notie-input-yes-text';
-    var input_no_text_id = 'notie-input-no-text';
-
-    // *********************************************
-
-
-
-
-
-    // HELPERS
-    // *********************************************
-
-    // Function for resize listeners for font-size
-    var resizeListener = function resizeListener(ele) {
-        if (window.innerWidth <= font_change_screen_width) { ele.style.fontSize = font_size_small; }
-        else { ele.style.fontSize = font_size_big; }
-    };
-
-
-    // Debounce function (credit to Underscore.js)
-    var debounce_time = 500;
-    var debounce = function debounce(func, wait, immediate) {
-        var timeout;
-        return function() {
-            var context = this, args = arguments;
-            var later = function() {
-                timeout = null;
-                if (!immediate) func.apply(context, args);
-            };
-            var callNow = immediate && !timeout;
-            clearTimeout(timeout);
-            timeout = setTimeout(later, wait);
-            if (callNow) func.apply(context, args);
-        };
+var notie = function () {
+    // Default options
+  var options = {
+    colorSuccess: '',
+    colorWarning: '',
+    colorError: '',
+    colorInfo: '',
+    colorNeutral: '',
+    colorText: '',
+    dateMonths: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+    animationDelay: 300,
+    backgroundClickDismiss: true
+  }
+  function setOptions (customOptions) {
+    // Custom options
+    for (var key in customOptions) {
+      options[key] = customOptions[key]
     }
+  }
 
+    // alert
+  // **************
 
-    // Event listener for enter and escape keys
-    window.addEventListener('keydown', function(event) {
-        var enter_clicked = (event.which == 13 || event.keyCode == 13);
-        var escape_clicked = (event.which == 27 || event.keyCode == 27);
-        if (alert_is_showing) {
-            if (enter_clicked || escape_clicked) {
-                clearTimeout(alert_timeout_1);
-                clearTimeout(alert_timeout_2);
-                alert_hide();
-            }
-        }
-        else if (confirm_is_showing) {
-            if (enter_clicked) {
-                confirm_yes.click();
-            }
-            else if (escape_clicked) {
-                confirm_no.click();
-            }
-        }
-        else if (input_is_showing) {
-            if (enter_clicked) {
-                input_yes.click();
-            }
-            else if (escape_clicked) {
-                input_no.click();
-            }
-        }
-    });
-
-
-    // addEventListener polyfill, fixes a style.height issue for IE8
-    if (typeof Element.prototype.addEventListener === 'undefined') {
-        Element.prototype.addEventListener = Window.prototype.addEventListener = function (e, callback) {
-            e = 'on' + e;
-            return this.attachEvent(e, callback);
-        };
-    }
-
-
-    // Scroll disable and enable for notie.confirm and notie.input
-    var original_body_height, original_body_overflow;
-    function scroll_disable() {
-        original_body_height = document.body.style.height;
-        original_body_overflow = document.body.style.overflow;
-        document.body.style.height = '100%';
-        document.body.style.overflow = 'hidden';
-    }
-    function scroll_enable() {
-        document.body.style.height = original_body_height;
-        document.body.style.overflow = original_body_overflow;
-    }
-    // *********************************************
-
-
-
-    // NOTIE.ALERT
-    // *********************************************
-
-    // notie elements and styling
-    var alert_outer = document.createElement('div');
-    alert_outer.id = alert_outer_id;
-    alert_outer.style.position = 'fixed';
-    alert_outer.style.top = '0';
-    alert_outer.style.left = '0';
-    alert_outer.style.zIndex = '999999999';
-    alert_outer.style.height = 'auto';
-    alert_outer.style.width = '100%';
-    alert_outer.style.display = 'none';
-    alert_outer.style.textAlign = 'center';
-    alert_outer.style.cursor = 'default';
-    alert_outer.style.MozTransition = '';
-    alert_outer.style.WebkitTransition = '';
-    alert_outer.style.transition = '';
-    alert_outer.style.cursor = 'pointer';
+    // create alert container
+  var alertOuter = document.createElement('div')
+  alertOuter.id = 'notie-alert-outer'
 
     // Hide alert on click
-    alert_outer.onclick = function() {
-        clearTimeout(alert_timeout_1);
-        clearTimeout(alert_timeout_2);
-        alert_hide();
-    };
+  alertOuter.onclick = function () {
+    alertHide()
+  }
 
-    var alert_inner = document.createElement('div');
-    alert_inner.id = alert_inner_id;
-    alert_inner.style.padding = '20px';
-    alert_inner.style.display = 'table-cell';
-    alert_inner.style.verticalAlign = 'middle';
-    alert_outer.appendChild(alert_inner);
+  // add alert to body
+  document.body.appendChild(alertOuter)
 
-    // Initialize notie text
-    var alert_text = document.createElement('span');
-    alert_text.id = alert_text_id;
-    alert_text.style.color = alert_color_text;
-    if (window.innerWidth <= font_change_screen_width) { alert_text.style.fontSize = font_size_small; }
-    else { alert_text.style.fontSize = font_size_big; }
-    window.addEventListener('resize', debounce(resizeListener.bind(null, alert_text), debounce_time), true);
-    alert_inner.appendChild(alert_text);
+    // create alert inner container
+  var alertInner = document.createElement('div')
+  alertInner.id = 'notie-alert-inner'
+  alertOuter.appendChild(alertInner)
 
-    // Attach notie to the body element
-    document.body.appendChild(alert_outer);
+    // create alert content container
+  var alertContent = document.createElement('div')
+  alertContent.id = 'notie-alert-content'
+  alertInner.appendChild(alertContent)
 
-    // Declare variables
-    var height = 0;
-    var alert_is_showing = false;
-    var alert_timeout_1;
-    var alert_timeout_2;
-    var was_clicked_counter = 0;
+  // Initialize alert text
+  var alertText = document.createElement('span')
+  alertText.id = 'notie-alert-text'
+  alertContent.appendChild(alertText)
 
-    function alert(type, message, seconds) {
+  // alert helper variables
+  var alertIsShowing = false
+  var alertTimeout1
+  var alertTimeout2
+  var wasClickedCounter = 0
 
-        // Blur active element for use of enter key, focus input
-        document.activeElement.blur();
+  function alert (type, message, seconds) {
+    if (options.colorText.length > 0) alertText.style.color = options.colorText
 
-        was_clicked_counter++;
+    blur()
 
-        setTimeout(function() {
-            was_clicked_counter--;
-        }, (animation_delay * 1000 + 10));
+    wasClickedCounter++
 
-        if (was_clicked_counter == 1) {
+    setTimeout(function () {
+      wasClickedCounter--
+    }, (options.animationDelay + 10))
 
-            if (alert_is_showing) {
+    if (wasClickedCounter === 1) {
+      if (alertIsShowing) {
+        alertHide(function () {
+          alertShow(type, message, seconds)
+        })
+      } else {
+        alertShow(type, message, seconds)
+      }
+    }
+  }
 
-                clearTimeout(alert_timeout_1);
-                clearTimeout(alert_timeout_2);
+  function alertShow (type, message, seconds) {
+    alertIsShowing = true
 
-                alert_hide(function() {
-                    alert_show(type, message, seconds);
-                });
+    var duration = 0
+    if (typeof seconds === 'undefined' || seconds === 0) {
+      duration = 86400000
+    } else if (seconds > 0 && seconds < 1) {
+      duration = 1000
+    } else {
+      duration = seconds * 1000
+    }
 
+    // Remove all color classes first
+    removeClass(alertOuter, 'notie-background-success')
+    removeClass(alertOuter, 'notie-background-warning')
+    removeClass(alertOuter, 'notie-background-error')
+    removeClass(alertOuter, 'notie-background-info')
+
+    // Set notie type (background color)
+    switch (type) {
+      case 1:
+      case 'success':
+        if (options.colorSuccess.length > 0) alertOuter.style.backgroundColor = options.colorSuccess
+        else addClass(alertOuter, 'notie-background-success')
+        break
+      case 2:
+      case 'warning':
+        if (options.colorWarning.length > 0) alertOuter.style.backgroundColor = options.colorWarning
+        else addClass(alertOuter, 'notie-background-warning')
+        break
+      case 3:
+      case 'error':
+        if (options.colorError.length > 0) alertOuter.style.backgroundColor = options.colorError
+        else addClass(alertOuter, 'notie-background-error')
+        break
+      case 4:
+      case 'info':
+        if (options.colorInfo.length > 0) alertOuter.style.backgroundColor = options.colorInfo
+        else addClass(alertOuter, 'notie-background-info')
+        break
+    }
+
+    // Set notie text
+    alertText.innerHTML = message
+
+    alertOuter.style.top = '-10000px'
+    alertOuter.style.display = 'table'
+    alertOuter.style.top = '-' + alertOuter.offsetHeight - 5 + 'px'
+
+    alertTimeout1 = setTimeout(function () {
+      addClass(alertOuter, 'notie-transition')
+
+      alertOuter.style.top = 0
+
+      alertTimeout2 = setTimeout(function () {
+        alertHide(function () {
+          // Nothing
+        })
+      }, duration)
+    }, 20)
+  }
+
+  function alertHide (callback) {
+    clearTimeout(alertTimeout1)
+    clearTimeout(alertTimeout2)
+
+    alertOuter.style.top = '-' + alertOuter.offsetHeight - 5 + 'px'
+
+    setTimeout(function () {
+      removeClass(alertOuter, 'notie-transition')
+
+      alertOuter.style.top = '-10000px'
+
+      alertIsShowing = false
+
+      if (callback) callback()
+    }, (options.animationDelay + 10))
+  }
+
+  // force
+  // **************
+
+  var forceOuter = document.createElement('div')
+  forceOuter.id = 'notie-force-outer'
+
+  var forceInner = document.createElement('div')
+  forceInner.id = 'notie-force-inner'
+  forceOuter.appendChild(forceInner)
+
+  var forceText = document.createElement('span')
+  forceText.id = 'notie-force-text'
+  forceInner.appendChild(forceText)
+
+  var forceButton = document.createElement('div')
+  forceButton.id = 'notie-force-button'
+  forceOuter.appendChild(forceButton)
+
+  var forceBackground = document.createElement('div')
+  forceBackground.id = 'notie-force-background'
+  addClass(forceBackground, 'notie-transition')
+
+  // Attach force elements to the body element
+  document.body.appendChild(forceOuter)
+  document.body.appendChild(forceBackground)
+
+    // force helper variables
+  var forceIsShowing = false
+
+  function force (type, message, buttonText, callback) {
+    if (options.colorText.length > 0) {
+      forceText.style.color = options.colorText
+      forceButton.style.color = options.colorText
+    }
+
+    blur()
+
+    if (alertIsShowing) {
+    // Hide notie.alert
+      alertHide(function () {
+        forceShow(type, message, buttonText, callback)
+      })
+    } else {
+      forceShow(type, message, buttonText, callback)
+    }
+  }
+
+  function forceShow (type, message, buttonText, callback) {
+    scrollDisable()
+
+    // Callback function
+    forceButton.onclick = function () {
+      forceHide()
+      if (callback) {
+        setTimeout(function () {
+          callback()
+        }, (options.animationDelay + 10))
+      }
+    }
+
+    // Remove all color classes first
+    removeClass(forceOuter, 'notie-background-success')
+    removeClass(forceOuter, 'notie-background-warning')
+    removeClass(forceOuter, 'notie-background-error')
+    removeClass(forceOuter, 'notie-background-info')
+
+    // Set notie type (background color)
+    switch (type) {
+      case 1:
+      case 'success':
+        if (options.colorSuccess.length > 0) forceOuter.style.backgroundColor = options.colorSuccess
+        else addClass(forceOuter, 'notie-background-success')
+        break
+      case 2:
+      case 'warning':
+        if (options.colorWarning.length > 0) forceOuter.style.backgroundColor = options.colorWarning
+        else addClass(forceOuter, 'notie-background-warning')
+        break
+      case 3:
+      case 'error':
+        if (options.colorError.length > 0) forceOuter.style.backgroundColor = options.colorError
+        else addClass(forceOuter, 'notie-background-error')
+        break
+      case 4:
+      case 'info':
+        if (options.colorInfo.length > 0) forceOuter.style.backgroundColor = options.colorInfo
+        else addClass(forceOuter, 'notie-background-info')
+        break
+    }
+
+    function forceShowInner () {
+      // Set force text
+      forceText.innerHTML = message
+      forceButton.innerHTML = buttonText
+
+      // Get force's height
+      forceOuter.style.top = '-10000px'
+      forceOuter.style.display = 'table'
+      forceOuter.style.top = '-' + forceOuter.offsetHeight - 5 + 'px'
+      forceBackground.style.display = 'block'
+
+      setTimeout(function () {
+        addClass(forceOuter, 'notie-transition')
+
+        forceOuter.style.top = 0
+        forceBackground.style.opacity = '0.75'
+
+        setTimeout(function () {
+          forceIsShowing = true
+        }, (options.animationDelay + 10))
+      }, 20)
+    }
+
+    if (forceIsShowing) {
+      forceHide()
+      setTimeout(function () {
+        forceShowInner()
+      }, (options.animationDelay + 10))
+    } else {
+      forceShowInner()
+    }
+  }
+
+  function forceHide () {
+    forceOuter.style.top = '-' + forceOuter.offsetHeight - 5 + 'px'
+    forceBackground.style.opacity = '0'
+
+    setTimeout(function () {
+      removeClass(forceOuter, 'notie-transition')
+      forceOuter.style.top = '-10000px'
+      forceBackground.style.display = 'none'
+
+      scrollEnable()
+
+      forceIsShowing = false
+    }, (options.animationDelay + 10))
+  }
+
+  // confirm
+  // **************
+
+  var confirmOuter = document.createElement('div')
+  confirmOuter.id = 'notie-confirm-outer'
+
+  var confirmInner = document.createElement('div')
+  confirmInner.id = 'notie-confirm-inner'
+  confirmOuter.appendChild(confirmInner)
+
+  var confirmText = document.createElement('span')
+  confirmText.id = 'notie-confirm-text'
+  confirmInner.appendChild(confirmText)
+
+  var confirmYes = document.createElement('div')
+  confirmYes.id = 'notie-confirm-yes'
+  confirmOuter.appendChild(confirmYes)
+
+  var confirmNo = document.createElement('div')
+  confirmNo.id = 'notie-confirm-no'
+  confirmOuter.appendChild(confirmNo)
+
+  var confirmTextYes = document.createElement('span')
+  confirmTextYes.id = 'notie-confirm-text-yes'
+  confirmYes.appendChild(confirmTextYes)
+
+  var confirmTextNo = document.createElement('span')
+  confirmTextNo.id = 'notie-confirm-text-no'
+  confirmNo.appendChild(confirmTextNo)
+
+  var confirmBackground = document.createElement('div')
+  confirmBackground.id = 'notie-confirm-background'
+  addClass(confirmBackground, 'notie-transition')
+
+  // Hide notie.confirm on no click and background click
+  confirmBackground.onclick = function () {
+    if (options.backgroundClickDismiss) {
+      confirmHide()
+    }
+  }
+
+  // Attach confirm elements to the body element
+  document.body.appendChild(confirmOuter)
+  document.body.appendChild(confirmBackground)
+
+    // confirm helper variables
+  var confirmIsShowing = false
+
+  function confirm (title, yesText, noText, yesCallback, noCallback) {
+    if (options.colorInfo.length > 0) confirmInner.style.backgroundColor = options.colorInfo
+    if (options.colorSuccess.length > 0) confirmYes.style.backgroundColor = options.colorSuccess
+    if (options.colorError.length > 0) confirmNo.style.backgroundColor = options.colorError
+    if (options.colorText.length > 0) {
+      confirmText.style.color = options.colorText
+      confirmTextYes.style.color = options.colorText
+      confirmTextNo.style.color = options.colorText
+    }
+
+    blur()
+
+    if (alertIsShowing) {
+    // Hide notie.alert
+      alertHide(function () {
+        confirmShow(title, yesText, noText, yesCallback, noCallback)
+      })
+    } else {
+      confirmShow(title, yesText, noText, yesCallback, noCallback)
+    }
+  }
+
+  function confirmShow (title, yesText, noText, yesCallback, noCallback) {
+    scrollDisable()
+
+    // Yes callback function
+    confirmYes.onclick = function () {
+      confirmHide()
+      if (yesCallback) {
+        setTimeout(function () {
+          yesCallback()
+        }, (options.animationDelay + 10))
+      }
+    }
+
+    // No callback function
+    confirmNo.onclick = function () {
+      confirmHide()
+      if (noCallback) {
+        setTimeout(function () {
+          noCallback()
+        }, (options.animationDelay + 10))
+      }
+    }
+
+    function confirmShowInner () {
+      // Set confirm text
+      confirmText.innerHTML = title
+      confirmTextYes.innerHTML = yesText
+      confirmTextNo.innerHTML = noText
+
+      // Get confirm's height
+      confirmOuter.style.top = '-10000px'
+      confirmOuter.style.display = 'table'
+      confirmOuter.style.top = '-' + confirmOuter.offsetHeight - 5 + 'px'
+      confirmBackground.style.display = 'block'
+
+      setTimeout(function () {
+        addClass(confirmOuter, 'notie-transition')
+
+        confirmOuter.style.top = 0
+        confirmBackground.style.opacity = '0.75'
+
+        setTimeout(function () {
+          confirmIsShowing = true
+        }, (options.animationDelay + 10))
+      }, 20)
+    }
+
+    if (confirmIsShowing) {
+      confirmHide()
+      setTimeout(function () {
+        confirmShowInner()
+      }, (options.animationDelay + 10))
+    } else {
+      confirmShowInner()
+    }
+  }
+
+  function confirmHide () {
+    confirmOuter.style.top = '-' + confirmOuter.offsetHeight - 5 + 'px'
+    confirmBackground.style.opacity = '0'
+
+    setTimeout(function () {
+      removeClass(confirmOuter, 'notie-transition')
+      confirmOuter.style.top = '-10000px'
+      confirmBackground.style.display = 'none'
+
+      scrollEnable()
+
+      confirmIsShowing = false
+    }, (options.animationDelay + 10))
+  }
+
+  // input
+  // **********
+
+  var inputOuter = document.createElement('div')
+  inputOuter.id = 'notie-input-outer'
+
+  var inputBackground = document.createElement('div')
+  inputBackground.id = 'notie-input-background'
+  addClass(inputBackground, 'notie-transition')
+
+  var inputInner = document.createElement('div')
+  inputInner.id = 'notie-input-inner'
+  inputOuter.appendChild(inputInner)
+
+  var inputField = document.createElement('input')
+  inputField.id = 'notie-input-field'
+  inputOuter.appendChild(inputField)
+
+  var inputYes = document.createElement('div')
+  inputYes.id = 'notie-input-yes'
+  inputOuter.appendChild(inputYes)
+
+  var inputNo = document.createElement('div')
+  inputNo.id = 'notie-input-no'
+  inputOuter.appendChild(inputNo)
+
+  var inputText = document.createElement('span')
+  inputText.id = 'notie-input-text'
+  inputInner.appendChild(inputText)
+
+  var inputTextYes = document.createElement('span')
+  inputTextYes.id = 'notie-input-text-yes'
+  inputYes.appendChild(inputTextYes)
+
+  var inputTextNo = document.createElement('span')
+  inputTextNo.id = 'notie-input-text-no'
+  inputNo.appendChild(inputTextNo)
+
+  // Attach input elements to the body element
+  document.body.appendChild(inputOuter)
+  document.body.appendChild(inputBackground)
+
+  // Hide input on no click and background click
+  inputBackground.onclick = function () {
+    if (options.backgroundClickDismiss) {
+      inputHide()
+    }
+  }
+
+  // input helper variables
+  var inputIsShowing = false
+
+  function input (settings, title, submitText, cancelText, submitCallback, cancelCallback) {
+    if (options.colorInfo.length > 0) inputInner.style.backgroundColor = options.colorInfo
+    if (options.colorSuccess.length > 0) inputYes.style.backgroundColor = options.colorSuccess
+    if (options.colorError.length > 0) inputNo.style.backgroundColor = options.colorError
+    if (options.colorText.length > 0) {
+      inputText.style.color = options.colorText
+      inputTextYes.style.color = options.colorText
+      inputTextNo.style.color = options.colorText
+    }
+
+    blur()
+
+    inputField.setAttribute('autocapitalize', settings.autocapitalize || 'none')
+    inputField.setAttribute('autocomplete', settings.autocomplete || 'off')
+    inputField.setAttribute('autocorrect', settings.autocorrect || 'off')
+    inputField.setAttribute('autofocus', settings.autofocus || 'true')
+    inputField.setAttribute('inputmode', settings.inputmode || 'verbatim')
+    inputField.setAttribute('max', settings.max || '')
+    inputField.setAttribute('maxlength', settings.maxlength || '')
+    inputField.setAttribute('min', settings.min || '')
+    inputField.setAttribute('minlength', settings.minlength || '')
+    inputField.setAttribute('placeholder', settings.placeholder || '')
+    inputField.setAttribute('spellcheck', settings.spellcheck || 'default')
+    inputField.setAttribute('step', settings.step || 'any')
+    inputField.setAttribute('type', settings.type || 'text')
+
+    inputField.value = settings.prefilledValue || ''
+
+    // As-you-type input restrictions
+    if (settings.allowed) {
+      inputField.oninput = function () {
+        if (Array.isArray(settings.allowed)) {
+          var regexString = ''
+          var allowed = settings.allowed
+          for (var i = 0; i < allowed.length; i++) {
+            if (allowed[i] === 'an') {
+              regexString += '0-9a-zA-Z'
+            } else if (allowed[i] === 'a') {
+              regexString += 'a-zA-Z'
+            } else if (allowed[i] === 'n') {
+              regexString += '0-9'
             }
-            else {
-                alert_show(type, message, seconds);
+            if (allowed[i] === 'sp') {
+              regexString += ' '
             }
-
+          }
+          var regex = new RegExp('[^' + regexString + ']', 'g')
+        } else if (typeof settings.allowed === 'object') {
+          regex = settings.allowed
         }
-
+        inputField.value = inputField.value.replace(regex, '')
+      }
+    } else {
+      inputField.oninput = function () {
+        return true
+      }
     }
 
-    function alert_show(type, message, seconds) {
+    if (alertIsShowing) {
+      // Hide alert
+      alertHide(function () {
+        inputShow(title, submitText, cancelText, submitCallback, cancelCallback)
+      })
+    } else {
+      inputShow(title, submitText, cancelText, submitCallback, cancelCallback)
+    }
+  }
 
-        alert_is_showing = true;
+  function inputShow (title, submitText, cancelText, submitCallback, cancelCallback) {
+    scrollDisable()
 
-        var duration = 0;
-        if (typeof seconds == 'undefined') {
-            var duration = 3000;
-        }
-        else if (seconds < 1) {
-            duration = 1000;
-        }
-        else {
-            duration = seconds * 1000;
-        }
-
-        // Set notie type (background color)
-        switch(type) {
-            case 1:
-                alert_outer.style.backgroundColor = alert_color_success_background;
-                break;
-            case 2:
-                alert_outer.style.backgroundColor = alert_color_warning_background;
-                break;
-            case 3:
-                alert_outer.style.backgroundColor = alert_color_error_background;
-                break;
-            case 4:
-                alert_outer.style.backgroundColor = alert_color_info_background;
-                break;
-        }
-
-        // Set notie text
-        alert_text.innerHTML = message;
-
-        // Get notie's height
-        alert_outer.style.top = '-10000px';
-        alert_outer.style.display = 'table';
-        alert_outer.style.top = '-' + alert_outer.offsetHeight - 5 + 'px';
-
-        alert_timeout_1 = setTimeout(function() {
-
-            if (shadow) { alert_outer.style.boxShadow = '0px 0px 10px 0px rgba(0,0,0,0.5)'; }
-            alert_outer.style.MozTransition = 'all ' + animation_delay + 's ease';
-            alert_outer.style.WebkitTransition = 'all ' + animation_delay + 's ease';
-            alert_outer.style.transition = 'all ' + animation_delay + 's ease';
-
-            alert_outer.style.top = 0;
-
-            alert_timeout_2 = setTimeout(function() {
-
-                alert_hide(function() {
-                    // Nothing
-                });
-
-            }, duration);
-
-        }, 20);
-
+    // Yes callback function
+    inputYes.onclick = function () {
+      inputHide()
+      if (submitCallback) {
+        setTimeout(function () {
+          submitCallback(inputField.value)
+        }, (options.animationDelay + 10))
+      }
     }
 
-    function alert_hide(callback) {
-
-        alert_outer.style.top = '-' + alert_outer.offsetHeight - 5 + 'px';
-
-        setTimeout(function() {
-
-            if (shadow) { alert_outer.style.boxShadow = ''; }
-            alert_outer.style.MozTransition = '';
-            alert_outer.style.WebkitTransition = '';
-            alert_outer.style.transition = '';
-
-            alert_outer.style.top = '-10000px';
-
-            alert_is_showing = false;
-
-            if (callback) { callback(); }
-
-        }, (animation_delay * 1000 + 10));
-
+    // No callback function
+    inputNo.onclick = function () {
+      inputHide()
+      if (cancelCallback) {
+        setTimeout(function () {
+          cancelCallback(inputField.value)
+        }, (options.animationDelay + 10))
+      }
     }
 
+    function inputShowInner () {
+      // Set input text
+      inputText.innerHTML = title
+      inputTextYes.innerHTML = submitText
+      inputTextNo.innerHTML = cancelText
 
+      // Get input's height
+      inputOuter.style.top = '-10000px'
+      inputOuter.style.display = 'table'
+      inputOuter.style.top = '-' + inputOuter.offsetHeight - 5 + 'px'
+      inputBackground.style.display = 'block'
 
-    // NOTIE.CONFIRM
-    // *********************************************
+      setTimeout(function () {
+        addClass(inputOuter, 'notie-transition')
 
-    // confirm elements and styling
-    var confirm_outer = document.createElement('div');
-    confirm_outer.id = confirm_outer_id;
-    confirm_outer.style.position = 'fixed';
-    confirm_outer.style.top = '0';
-    confirm_outer.style.left = '0';
-    confirm_outer.style.zIndex = '999999998';
-    confirm_outer.style.height = 'auto';
-    confirm_outer.style.width = '100%';
-    confirm_outer.style.display = 'none';
-    confirm_outer.style.textAlign = 'center';
-    confirm_outer.style.MozTransition = '';
-    confirm_outer.style.WebkitTransition = '';
-    confirm_outer.style.transition = '';
+        inputOuter.style.top = 0
+        inputBackground.style.opacity = '0.75'
 
-    var confirm_background = document.createElement('div');
-    confirm_background.id = confirm_background_id;
-    confirm_background.style.position = 'fixed';
-    confirm_background.style.top = '0';
-    confirm_background.style.left = '0';
-    confirm_background.style.zIndex = '999999997';
-    confirm_background.style.height = '100%';
-    confirm_background.style.width = '100%';
-    confirm_background.style.display = 'none';
-    confirm_background.style.backgroundColor = 'white';
-    confirm_background.style.MozTransition = 'all ' + animation_delay + 's ease';
-    confirm_background.style.WebkitTransition = 'all ' + animation_delay + 's ease';
-    confirm_background.style.transition = 'all ' + animation_delay + 's ease';
-    confirm_background.style.opacity = '0';
+        setTimeout(function () {
+          inputIsShowing = true
 
-    // Hide notie.confirm on background click
-    confirm_background.onclick = function() {
-        if (background_click_dismiss) {
-            confirm_hide();
-        }
-    };
-
-    var confirm_inner = document.createElement('div');
-    confirm_inner.id = confirm_inner_id;
-    confirm_inner.style.boxSizing = 'border-box';
-    confirm_inner.style.width = '100%';
-    confirm_inner.style.padding = '20px';
-    confirm_inner.style.display = 'block';
-    confirm_inner.style.cursor = 'default';
-    confirm_inner.style.backgroundColor = confirm_and_input_color_background;
-    confirm_outer.appendChild(confirm_inner);
-
-    var confirm_yes = document.createElement('div');
-    confirm_yes.id = confirm_yes_id;
-    confirm_yes.style.cssFloat = 'left';
-    confirm_yes.style.height = '50px';
-    confirm_yes.style.lineHeight = '50px';
-    confirm_yes.style.width = '50%';
-    confirm_yes.style.cursor = 'pointer';
-    confirm_yes.style.backgroundColor = confirm_and_input_color_yes_background;
-    confirm_outer.appendChild(confirm_yes);
-
-    var confirm_no = document.createElement('div');
-    confirm_no.id = confirm_no_id;
-    confirm_no.style.cssFloat = 'right';
-    confirm_no.style.height = '50px';
-    confirm_no.style.lineHeight = '50px';
-    confirm_no.style.width = '50%';
-    confirm_no.style.cursor = 'pointer';
-    confirm_no.style.backgroundColor = confirm_and_input_color_no_background;
-    confirm_no.onclick = function() { confirm_hide(); }
-    confirm_outer.appendChild(confirm_no);
-
-    // Initialize confirm text
-    var confirm_text = document.createElement('span');
-    confirm_text.id = confirm_text_id;
-    confirm_text.style.color = confirm_and_input_color_text;
-    if (window.innerWidth <= font_change_screen_width) { confirm_text.style.fontSize = font_size_small; }
-    else { confirm_text.style.fontSize = font_size_big; }
-    window.addEventListener('resize', debounce(resizeListener.bind(null, confirm_text), debounce_time), true);
-    confirm_inner.appendChild(confirm_text);
-
-    var confirm_yes_text = document.createElement('span');
-    confirm_yes_text.id = confirm_yes_text_id;
-    confirm_yes_text.style.color = confirm_and_input_color_yes_text;
-    if (window.innerWidth <= font_change_screen_width) { confirm_yes_text.style.fontSize = font_size_small; }
-    else { confirm_yes_text.style.fontSize = font_size_big; }
-    window.addEventListener('resize', debounce(resizeListener.bind(null, confirm_yes_text), debounce_time), true);
-    confirm_yes.appendChild(confirm_yes_text);
-
-    var confirm_no_text = document.createElement('span');
-    confirm_no_text.id = confirm_no_text_id;
-    confirm_no_text.style.color = confirm_and_input_color_no_text;
-    if (window.innerWidth <= font_change_screen_width) { confirm_no_text.style.fontSize = font_size_small; }
-    else { confirm_no_text.style.fontSize = font_size_big; }
-    window.addEventListener('resize', debounce(resizeListener.bind(null, confirm_no_text), debounce_time), true);
-    confirm_no.appendChild(confirm_no_text);
-
-    // Attach confirm elements to the body element
-    document.body.appendChild(confirm_outer);
-    document.body.appendChild(confirm_background);
-
-    // Declare variables
-    var confirm_height = 0;
-    var confirm_is_showing = false;
-
-    function confirm(title, yes_text, no_text, yes_callback) {
-
-        // Blur active element for use of enter key
-        document.activeElement.blur();
-
-        if (alert_is_showing) {
-            // Hide notie.alert
-            clearTimeout(alert_timeout_1);
-            clearTimeout(alert_timeout_2);
-            alert_hide(function() {
-                confirm_show(title, yes_text, no_text, yes_callback);
-            });
-        }
-        else {
-            confirm_show(title, yes_text, no_text, yes_callback);
-        }
-
-
-    }
-    function confirm_show(title, yes_text, no_text, yes_callback) {
-
-        scroll_disable();
-
-        // Yes callback function
-        confirm_yes.onclick = function() {
-            confirm_hide();
-            setTimeout(function() {
-                yes_callback();
-            }, (animation_delay * 1000 + 10));
-        }
-
-        function confirm_show_inner() {
-
-            // Set confirm text
-            confirm_text.innerHTML = title;
-            confirm_yes_text.innerHTML = yes_text;
-            confirm_no_text.innerHTML = no_text;
-
-            // Get confirm's height
-            confirm_outer.style.top = '-10000px';
-            confirm_outer.style.display = 'table';
-            confirm_outer.style.top = '-' + confirm_outer.offsetHeight - 5 + 'px';
-            confirm_background.style.display = 'block';
-
-            setTimeout(function() {
-
-                if (shadow) { confirm_outer.style.boxShadow = '0px 0px 10px 0px rgba(0,0,0,0.5)'; }
-                confirm_outer.style.MozTransition = 'all ' + animation_delay + 's ease';
-                confirm_outer.style.WebkitTransition = 'all ' + animation_delay + 's ease';
-                confirm_outer.style.transition = 'all ' + animation_delay + 's ease';
-
-                confirm_outer.style.top = 0;
-                confirm_background.style.opacity = '0.75';
-
-                setTimeout(function() {
-                    confirm_is_showing = true;
-                }, (animation_delay * 1000 + 10));
-
-            }, 20);
-
-        }
-
-        if (confirm_is_showing) {
-            confirm_hide();
-            setTimeout(function() {
-                confirm_show_inner();
-            }, (animation_delay * 1000 + 10));
-        }
-        else {
-            confirm_show_inner();
-        }
-
+          // put focus on input field
+          inputField.focus()
+        }, (options.animationDelay + 10))
+      }, 20)
     }
 
-    function confirm_hide() {
+    if (inputIsShowing) {
+      inputHide()
+      setTimeout(function () {
+        inputShowInner()
+      }, (options.animationDelay + 10))
+    } else {
+      inputShowInner()
+    }
+  }
 
-        confirm_outer.style.top = '-' + confirm_outer.offsetHeight - 5 + 'px';
-        confirm_background.style.opacity = '0';
+  function inputHide () {
+    inputOuter.style.top = '-' + inputOuter.offsetHeight - 5 + 'px'
+    inputBackground.style.opacity = '0'
 
-        setTimeout(function() {
+    setTimeout(function () {
+      removeClass(inputOuter, 'notie-transition')
+      inputBackground.style.display = 'none'
 
-            if (shadow) { confirm_outer.style.boxShadow = ''; }
-            confirm_outer.style.MozTransition = '';
-            confirm_outer.style.WebkitTransition = '';
-            confirm_outer.style.transition = '';
-            confirm_background.style.display = 'none';
+      inputOuter.style.top = '-10000px'
 
-            confirm_outer.style.top = '-10000px';
+      scrollEnable()
 
-            scroll_enable();
+      inputIsShowing = false
+    }, (options.animationDelay + 10))
+  }
 
-            confirm_is_showing = false;
+  // select
+  // **************
 
-        }, (animation_delay * 1000 + 10));
+  var selectOuter = document.createElement('div')
+  selectOuter.id = 'notie-select-outer'
 
+  var selectInner = document.createElement('div')
+  selectInner.id = 'notie-select-inner'
+  selectOuter.appendChild(selectInner)
+
+  var selectText = document.createElement('span')
+  selectText.id = 'notie-select-text'
+  selectInner.appendChild(selectText)
+
+  var selectBackground = document.createElement('div')
+  selectBackground.id = 'notie-select-background'
+  addClass(selectBackground, 'notie-transition')
+
+  var selectChoices = document.createElement('div')
+  selectChoices.id = 'notie-select-choices'
+  selectOuter.appendChild(selectChoices)
+
+  var selectCancel = document.createElement('div')
+  selectCancel.id = 'notie-select-cancel'
+  selectOuter.appendChild(selectCancel)
+
+  // Attach select elements to the body element
+  document.body.appendChild(selectOuter)
+  document.body.appendChild(selectBackground)
+
+  // Hide input on no click and background click
+  selectBackground.onclick = function () {
+    if (options.backgroundClickDismiss) {
+      selectHide()
+    }
+  }
+
+  selectCancel.onclick = function () {
+    selectHide()
+  }
+
+  // select helper variables
+  var selectIsShowing = false
+
+  function select (title, cancelText, choices) {
+    if (options.colorInfo.length > 0) selectInner.style.backgroundColor = options.colorInfo
+    if (options.colorNeutral.length > 0) selectCancel.style.backgroundColor = options.colorNeutral
+    if (options.colorText.length > 0) {
+      selectText.style.color = options.colorText
+      selectCancel.style.color = options.colorText
     }
 
+    blur()
 
-
-
-    // NOTIE.INPUT
-    // *********************************************
-
-    // input elements and styling
-    var input_outer = document.createElement('div');
-    input_outer.id = input_outer_id;
-    input_outer.style.position = 'fixed';
-    input_outer.style.top = '0';
-    input_outer.style.left = '0';
-    input_outer.style.zIndex = '999999998';
-    input_outer.style.height = 'auto';
-    input_outer.style.width = '100%';
-    input_outer.style.display = 'none';
-    input_outer.style.textAlign = 'center';
-    input_outer.style.MozTransition = '';
-    input_outer.style.WebkitTransition = '';
-    input_outer.style.transition = '';
-
-    var input_background = document.createElement('div');
-    input_background.id = input_background_id;
-    input_background.style.position = 'fixed';
-    input_background.style.top = '0';
-    input_background.style.left = '0';
-    input_background.style.zIndex = '999999997';
-    input_background.style.height = '100%';
-    input_background.style.width = '100%';
-    input_background.style.display = 'none';
-    input_background.style.backgroundColor = 'white';
-    input_background.style.MozTransition = 'all ' + animation_delay + 's ease';
-    input_background.style.WebkitTransition = 'all ' + animation_delay + 's ease';
-    input_background.style.transition = 'all ' + animation_delay + 's ease';
-    input_background.style.opacity = '0';
-
-    // Hide notie.input on background click
-    input_background.onclick = function() {
-        if (background_click_dismiss) {
-            input_hide();
-        }
-    };
-
-    var input_inner = document.createElement('div');
-    input_inner.id = input_inner_id;
-    input_inner.style.boxSizing = 'border-box';
-    input_inner.style.width = '100%';
-    input_inner.style.padding = '20px';
-    input_inner.style.display = 'block';
-    input_inner.style.cursor = 'default';
-    input_inner.style.backgroundColor = confirm_and_input_color_background;
-    input_outer.appendChild(input_inner);
-
-    var input_div = document.createElement('div');
-    input_div.id = input_div_id;
-    input_div.style.boxSizing = 'border-box';
-    input_div.style.height = '55px';
-    input_div.style.width = '100%';
-    input_div.style.display = 'block';
-    input_div.style.cursor = 'default';
-    input_div.style.backgroundColor = '#FFF';
-    input_outer.appendChild(input_div);
-
-    var input_field = document.createElement('input');
-    input_field.id = input_field_id;
-    input_field.setAttribute('autocomplete', 'off');
-    input_field.setAttribute('autocorrect', 'off');
-    input_field.setAttribute('autocapitalize', 'off');
-    input_field.setAttribute('spellcheck', 'false');
-    input_field.style.boxSizing = 'border-box';
-    input_field.style.height = '55px';
-    input_field.style.width = '100%';
-    input_field.style.textAlign = 'center';
-    input_field.style.textIndent = '10px';
-    input_field.style.paddingRight = '10px';
-    input_field.style.outline = '0';
-    input_field.style.border = '0';
-    input_field.style.fontFamily = 'inherit';
-    input_field.style.fontSize = font_size_big;
-    if (window.innerWidth <= font_change_screen_width) { input_field.style.fontSize = font_size_small; }
-    else { input_field.style.fontSize = font_size_big; }
-    window.addEventListener('resize', debounce(resizeListener.bind(null, input_field), debounce_time), true);
-    input_div.appendChild(input_field);
-
-    var input_yes = document.createElement('div');
-    input_yes.id = input_yes_id;
-    input_yes.style.cssFloat = 'left';
-    input_yes.style.height = '50px';
-    input_yes.style.lineHeight = '50px';
-    input_yes.style.width = '50%';
-    input_yes.style.cursor = 'pointer';
-    input_yes.style.backgroundColor = confirm_and_input_color_yes_background;
-    input_outer.appendChild(input_yes);
-
-    var input_no = document.createElement('div');
-    input_no.id = input_no_id;
-    input_no.style.cssFloat = 'right';
-    input_no.style.height = '50px';
-    input_no.style.lineHeight = '50px';
-    input_no.style.width = '50%';
-    input_no.style.cursor = 'pointer';
-    input_no.style.backgroundColor = confirm_and_input_color_no_background;
-    input_no.onclick = function() { input_hide(); }
-    input_outer.appendChild(input_no);
-
-    // Initialize input text
-    var input_text = document.createElement('span');
-    input_text.id = input_text_id;
-    input_text.style.color = confirm_and_input_color_text;
-    if (window.innerWidth <= font_change_screen_width) { input_text.style.fontSize = font_size_small; }
-    else { input_text.style.fontSize = font_size_big; }
-    window.addEventListener('resize', debounce(resizeListener.bind(null, input_text), debounce_time), true);
-    input_inner.appendChild(input_text);
-
-    var input_yes_text = document.createElement('span');
-    input_yes_text.id = input_yes_text_id;
-    input_yes_text.style.color = confirm_and_input_color_yes_text;
-    if (window.innerWidth <= font_change_screen_width) { input_yes_text.style.fontSize = font_size_small; }
-    else { input_yes_text.style.fontSize = font_size_big; }
-    window.addEventListener('resize', debounce(resizeListener.bind(null, input_yes_text), debounce_time), true);
-    input_yes.appendChild(input_yes_text);
-
-    var input_no_text = document.createElement('span');
-    input_no_text.id = input_no_text_id;
-    input_no_text.style.color = confirm_and_input_color_no_text;
-    if (window.innerWidth <= font_change_screen_width) { input_no_text.style.fontSize = font_size_small; }
-    else { input_no_text.style.fontSize = font_size_big; }
-    window.addEventListener('resize', debounce(resizeListener.bind(null, input_no_text), debounce_time), true);
-    input_no.appendChild(input_no_text);
-
-    // Attach input elements to the body element
-    document.body.appendChild(input_outer);
-    document.body.appendChild(input_background);
-
-    // Declare variables
-    var input_height = 0;
-    var input_is_showing = false;
-
-    function input(title, submit_text, cancel_text, type, placeholder, submit_callback, prefilled_value_optional) {
-
-        // Blur active element for use of enter key, focus input
-        document.activeElement.blur();
-        setTimeout(function() { input_field.focus(); }, (animation_delay * 1000));
-
-        input_field.setAttribute('type', type);
-        input_field.setAttribute('placeholder', placeholder);
-        input_field.value = '';
-        if (typeof prefilled_value_optional !== 'undefined' && prefilled_value_optional.length > 0) { input_field.value = prefilled_value_optional }
-
-        if (alert_is_showing) {
-            // Hide notie.alert
-            clearTimeout(alert_timeout_1);
-            clearTimeout(alert_timeout_2);
-            alert_hide(function() {
-                input_show(title, submit_text, cancel_text, submit_callback);
-            });
-        }
-        else {
-            input_show(title, submit_text, cancel_text, submit_callback);
-        }
-
+    if (alertIsShowing) {
+      // Hide notie.alert
+      alertHide(function () {
+        selectShow(title, cancelText, choices)
+      })
+    } else {
+      selectShow(title, cancelText, choices)
     }
-    function input_show(title, submit_text, cancel_text, submit_callback) {
+  }
 
-        scroll_disable();
+  function selectShow (title, cancelText, choices) {
+    scrollDisable()
 
-        // Yes callback function
-        input_yes.onclick = function() {
-            input_hide();
-            setTimeout(function() {
-                submit_callback(input_field.value);
-            }, (animation_delay * 1000 + 10));
+    document.getElementById('notie-select-choices').innerHTML = ''
+    selectCancel.innerHTML = cancelText
+
+    var selectChoicePrevious
+
+    for (var i = 0; i < choices.length; i++) {
+      var selectChoice = document.createElement('div')
+      selectChoice.innerHTML = choices[i].title
+      addClass(selectChoice, 'notie-select-choice')
+      selectChoices.appendChild(selectChoice)
+      if (options.colorText.length > 0) selectChoice.style.color = options.colorText
+
+      if (choices[i].type) {
+        switch (choices[i].type) {
+          case 1:
+            if (options.colorSuccess.length > 0) selectChoice.style.backgroundColor = options.colorSuccess
+            else addClass(selectChoice, 'notie-background-success')
+            break
+          case 2:
+            if (options.colorWarning.length > 0) selectChoice.style.backgroundColor = options.colorWarning
+            else addClass(selectChoice, 'notie-background-warning')
+            break
+          case 3:
+            if (options.colorError.length > 0) selectChoice.style.backgroundColor = options.colorError
+            else addClass(selectChoice, 'notie-background-error')
+            break
+          case 4:
+            if (options.colorInfo.length > 0) selectChoice.style.backgroundColor = options.colorInfo
+            else addClass(selectChoice, 'notie-background-info')
+            break
         }
+      } else if (choices[i].color) {
+        selectChoice.style.backgroundColor = choices[i].color
+      }
 
-        function input_show_inner() {
+      selectChoice.style.backgroundColor = window.getComputedStyle(selectChoice).backgroundColor
+      if (i > 0 && selectChoice.style.backgroundColor === selectChoicePrevious.style.backgroundColor) {
+        addClass(selectChoicePrevious, 'notie-select-choice-bottom-border')
+      }
 
-            // Set input text
-            input_text.innerHTML = title;
-            input_yes_text.innerHTML = submit_text;
-            input_no_text.innerHTML = cancel_text;
+      // onclick for this choice
+      if (choices[i].handler) {
+        selectChoice.onclick = (function (i) {
+          return function () {
+            selectHide()
+            setTimeout(function () {
+              choices[i].handler()
+            }, (options.animationDelay + 10))
+          }
+        })(i)
+      } else {
+        throw new Error('notie.select choice "' + selectChoice.title + '" must have a handler')
+      }
 
-            // Get input's height
-            input_outer.style.top = '-10000px';
-            input_outer.style.display = 'table';
-            input_outer.style.top = '-' + input_outer.offsetHeight - 5 + 'px';
-            input_background.style.display = 'block';
-
-            setTimeout(function() {
-
-                if (shadow) { input_outer.style.boxShadow = '0px 0px 10px 0px rgba(0,0,0,0.5)'; }
-                input_outer.style.MozTransition = 'all ' + animation_delay + 's ease';
-                input_outer.style.WebkitTransition = 'all ' + animation_delay + 's ease';
-                input_outer.style.transition = 'all ' + animation_delay + 's ease';
-
-                input_outer.style.top = 0;
-                input_background.style.opacity = '0.75';
-
-                setTimeout(function() {
-                    input_is_showing = true;
-                }, (animation_delay * 1000 + 10));
-
-            }, 20);
-
-        }
-
-        if (input_is_showing) {
-            input_hide();
-            setTimeout(function() {
-                input_show_inner();
-            }, (animation_delay * 1000 + 10));
-        }
-        else {
-            input_show_inner();
-        }
-
+      selectChoicePrevious = selectChoice
     }
 
-    function input_hide() {
+    function selectShowInner (title) {
+      // Set select text
+      selectText.innerHTML = title
 
-        input_outer.style.top = '-' + input_outer.offsetHeight - 5 + 'px';
-        input_background.style.opacity = '0';
+      // Get select's height
+      selectOuter.style.bottom = '-10000px'
+      selectOuter.style.display = 'table'
+      selectOuter.style.bottom = '-' + selectOuter.offsetHeight - 5 + 'px'
+      selectBackground.style.display = 'block'
 
-        setTimeout(function() {
+      setTimeout(function () {
+        addClass(selectOuter, 'notie-transition')
 
-            if (shadow) { input_outer.style.boxShadow = ''; }
-            input_outer.style.MozTransition = '';
-            input_outer.style.WebkitTransition = '';
-            input_outer.style.transition = '';
-            input_background.style.display = 'none';
+        selectOuter.style.bottom = 0
+        selectBackground.style.opacity = '0.75'
 
-            input_outer.style.top = '-10000px';
-
-            scroll_enable();
-
-            input_is_showing = false;
-
-        }, (animation_delay * 1000 + 10));
-
+        setTimeout(function () {
+          selectIsShowing = true
+        }, (options.animationDelay + 10))
+      }, 20)
     }
-    return {
-        alert: alert,
-        confirm: confirm,
-        input: input
-    };
-};
+
+    if (selectIsShowing) {
+      selectHide()
+      setTimeout(function () {
+        selectShowInner(title)
+      }, (options.animationDelay + 10))
+    } else {
+      selectShowInner(title)
+    }
+  }
+
+  function selectHide () {
+    selectOuter.style.bottom = '-' + selectOuter.offsetHeight - 5 + 'px'
+    selectBackground.style.opacity = '0'
+
+    setTimeout(function () {
+      removeClass(selectOuter, 'notie-transition')
+      selectOuter.style.bottom = '-10000px'
+      selectBackground.style.display = 'none'
+
+      scrollEnable()
+
+      selectIsShowing = false
+    }, (options.animationDelay + 10))
+  }
+
+  function isShowing () {
+    return alertIsShowing || confirmIsShowing || inputIsShowing || selectIsShowing || dateIsShowing
+  }
+
+  // date
+  // **************
+  var dateOuter = document.createElement('div')
+  dateOuter.id = 'notie-date-outer'
+
+  var dateSelector = document.createElement('div')
+  dateSelector.id = 'notie-date-selector'
+  dateOuter.appendChild(dateSelector)
+
+  var dateInner = document.createElement('div')
+  dateInner.id = 'notie-date-inner'
+  dateOuter.appendChild(dateInner)
+
+  var dateUpArrow = '<div class="notie-date-arrow-up"></div>'
+  var dateDownArrow = '<div class="notie-date-arrow-down"></div>'
+
+  var dateUpMonth = document.createElement('div')
+  dateUpMonth.className = 'notie-date-up'
+  dateUpMonth.innerHTML = dateUpArrow
+  dateSelector.appendChild(dateUpMonth)
+  dateUpMonth.onclick = dateUpMonthClick
+
+  var dateUpDay = document.createElement('div')
+  dateUpDay.className = 'notie-date-up'
+  dateUpDay.innerHTML = dateUpArrow
+  dateSelector.appendChild(dateUpDay)
+  dateUpDay.onclick = dateUpDayClick
+
+  var dateUpYear = document.createElement('div')
+  dateUpYear.className = 'notie-date-up'
+  dateUpYear.innerHTML = dateUpArrow
+  dateSelector.appendChild(dateUpYear)
+  dateUpYear.onclick = dateUpYearClick
+
+  var dateMonth = document.createElement('div')
+  dateMonth.className = 'notie-date-text'
+  dateSelector.appendChild(dateMonth)
+
+  var dateDay = document.createElement('div')
+  dateDay.className = 'notie-date-text'
+  dateSelector.appendChild(dateDay)
+
+  var dateYear = document.createElement('div')
+  dateYear.className = 'notie-date-text'
+  dateSelector.appendChild(dateYear)
+
+  var dateDownMonth = document.createElement('div')
+  dateDownMonth.className = 'notie-date-down'
+  dateDownMonth.innerHTML = dateDownArrow
+  dateSelector.appendChild(dateDownMonth)
+  dateDownMonth.onclick = dateDownMonthClick
+
+  var dateDownDay = document.createElement('div')
+  dateDownDay.className = 'notie-date-down'
+  dateDownDay.innerHTML = dateDownArrow
+  dateSelector.appendChild(dateDownDay)
+  dateDownDay.onclick = dateDownDayClick
+
+  var dateDownYear = document.createElement('div')
+  dateDownYear.className = 'notie-date-down'
+  dateDownYear.innerHTML = dateDownArrow
+  dateSelector.appendChild(dateDownYear)
+  dateDownYear.onclick = dateDownYearClick
+
+  var dateYes = document.createElement('div')
+  dateYes.id = 'notie-date-yes'
+  dateInner.appendChild(dateYes)
+
+  var dateNo = document.createElement('div')
+  dateNo.id = 'notie-date-no'
+  dateInner.appendChild(dateNo)
+
+  var dateBackground = document.createElement('div')
+  dateBackground.id = 'notie-date-background'
+  addClass(dateBackground, 'notie-transition')
+
+  // Hide notie.date on no click and background click
+  dateBackground.onclick = function () {
+    if (options.backgroundClickDismiss) {
+      dateHide()
+    }
+  }
+
+  // Attach date elements to the body element
+  document.body.appendChild(dateOuter)
+  document.body.appendChild(dateBackground)
+
+    // date helper variables
+  var dateIsShowing = false
+  var dateSelected
+
+  function date (dateOptions) {
+    if (options.colorInfo.length > 0) {
+      dateInner.style.backgroundColor = options.colorInfo
+    }
+    if (options.colorSuccess.length > 0) dateYes.style.backgroundColor = options.colorSuccess
+    if (options.colorError.length > 0) dateNo.style.backgroundColor = options.colorError
+    if (options.colorText.length > 0) dateInner.style.color = options.colorText
+
+    blur()
+
+    if (alertIsShowing) {
+    // Hide notie.alert
+      alertHide(function () {
+        dateShow(dateOptions)
+      })
+    } else {
+      dateShow(dateOptions)
+    }
+  }
+
+  function dateShow (dateOptions) {
+    scrollDisable()
+
+    // Yes callback function
+    dateYes.onclick = function () {
+      dateHide()
+      if (dateOptions.yesCallback) {
+        setTimeout(function () {
+          dateOptions.yesCallback(dateSelected)
+        }, (options.animationDelay + 10))
+      }
+    }
+
+    // No callback function
+    dateNo.onclick = function () {
+      dateHide()
+      if (dateOptions.noCallback) {
+        setTimeout(function () {
+          dateOptions.noCallback(dateSelected)
+        }, (options.animationDelay + 10))
+      }
+    }
+
+    function dateShowInner () {
+      dateSelected = dateOptions.initial || new Date()
+      dateSet(dateSelected)
+      dateYes.innerHTML = dateOptions.yesText || 'OK'
+      dateNo.innerHTML = dateOptions.noText || 'Cancel'
+
+      // Get dates's height
+      dateOuter.style.top = '-10000px'
+      dateOuter.style.display = 'table'
+      dateOuter.style.top = '-' + dateOuter.offsetHeight - 5 + 'px'
+      dateBackground.style.display = 'block'
+
+      setTimeout(function () {
+        addClass(dateOuter, 'notie-transition')
+
+        dateOuter.style.top = 0
+        dateBackground.style.opacity = '0.75'
+
+        setTimeout(function () {
+          dateIsShowing = true
+        }, (options.animationDelay + 10))
+      }, 20)
+    }
+
+    if (dateIsShowing) {
+      dateHide()
+      setTimeout(function () {
+        dateShowInner()
+      }, (options.animationDelay + 10))
+    } else {
+      dateShowInner()
+    }
+  }
+
+  function dateSet (date) {
+    dateMonth.innerHTML = options.dateMonths[date.getMonth()]
+    dateDay.innerHTML = date.getDate()
+    dateYear.innerHTML = date.getFullYear()
+  }
+
+  function dateUpMonthClick () {
+    dateSelected.setMonth(dateSelected.getMonth() - 1)
+    dateSet(dateSelected)
+  }
+  function dateDownMonthClick () {
+    dateSelected.setMonth(dateSelected.getMonth() + 1)
+    dateSet(dateSelected)
+  }
+  function dateUpDayClick () {
+    dateSelected.setDate(dateSelected.getDate() - 1)
+    dateSet(dateSelected)
+  }
+  function dateDownDayClick () {
+    dateSelected.setDate(dateSelected.getDate() + 1)
+    dateSet(dateSelected)
+  }
+  function dateUpYearClick () {
+    dateSelected.setFullYear(dateSelected.getFullYear() - 1)
+    dateSet(dateSelected)
+  }
+  function dateDownYearClick () {
+    dateSelected.setFullYear(dateSelected.getFullYear() + 1)
+    dateSet(dateSelected)
+  }
+
+  function dateHide () {
+    dateOuter.style.top = '-' + dateOuter.offsetHeight - 5 + 'px'
+    dateBackground.style.opacity = '0'
+
+    setTimeout(function () {
+      removeClass(dateOuter, 'notie-transition')
+      dateOuter.style.top = '-10000px'
+      dateBackground.style.display = 'none'
+
+      scrollEnable()
+
+      dateIsShowing = false
+    }, (options.animationDelay + 10))
+  }
+
+  // Internal helper functions
+  // #################
+
+  function addClass (element, className) {
+    if (element.classList) {
+      element.classList.add(className)
+    } else {
+      element.className += ' ' + className
+    }
+  }
+  function removeClass (element, className) {
+    if (element.classList) {
+      element.classList.remove(className)
+    } else {
+      element.className = element.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ')
+    }
+  }
+
+  function blur () {
+    document.activeElement && document.activeElement.blur()
+  }
+
+  var originalBodyHeight, originalBodyOverflow
+  function scrollDisable () {
+    originalBodyHeight = document.body.style.height
+    originalBodyOverflow = document.body.style.overflow
+    document.body.style.height = '100%'
+    document.body.style.overflow = 'hidden'
+  }
+  function scrollEnable () {
+    document.body.style.height = originalBodyHeight
+    document.body.style.overflow = originalBodyOverflow
+  }
+
+  // Event listener for keydown enter and escape keys
+  window.addEventListener('keydown', function (event) {
+    var enterClicked = (event.which === 13 || event.keyCode === 13)
+    var escapeClicked = (event.which === 27 || event.keyCode === 27)
+    if (alertIsShowing) {
+      if (enterClicked || escapeClicked) {
+        alertHide()
+      }
+    } else if (confirmIsShowing) {
+      if (enterClicked) {
+        confirmYes.click()
+      } else if (escapeClicked) {
+        confirmHide()
+      }
+    } else if (inputIsShowing) {
+      if (enterClicked) {
+        inputYes.click()
+      } else if (escapeClicked) {
+        inputHide()
+      }
+    } else if (selectIsShowing) {
+      if (escapeClicked) {
+        selectHide()
+      }
+    } else if (dateIsShowing) {
+      if (enterClicked) {
+        dateYes.click()
+      } else if (escapeClicked) {
+        dateHide()
+      }
+    }
+  })
+
+  return {
+    setOptions: setOptions,
+    alert: alert,
+    alertHide: alertHide,
+    force: force,
+    confirm: confirm,
+    input: input,
+    select: select,
+    date: date,
+    isShowing: isShowing
+  }
+}
+
+// Export
+if (typeof window !== 'undefined' && window) {
+  if (typeof module === 'object' && module.exports) {
+    // Node.js
+    module.exports = notie()
+  } else {
+    // Browser
+    window.notie = notie()
+  }
+}

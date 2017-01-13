@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20160301173036
+# Schema version: 20170112210803
 #
 # Table name: guests
 #
@@ -20,8 +20,8 @@
 #
 # Foreign Keys
 #
-#  fk_rails_47de94cfe5  (meal_id => meals.id)
-#  fk_rails_96051864fd  (resident_id => residents.id)
+#  fk_rails_...  (meal_id => meals.id)
+#  fk_rails_...  (resident_id => residents.id)
 #
 
 FactoryGirl.define do

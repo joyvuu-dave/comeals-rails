@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20160202150722
+# Schema version: 20170112210803
 #
 # Table name: residents
 #
@@ -18,7 +18,7 @@
 #
 # Foreign Keys
 #
-#  fk_rails_8ddf6a82d6  (unit_id => units.id)
+#  fk_rails_...  (unit_id => units.id)
 #
 
 require 'rails_helper'

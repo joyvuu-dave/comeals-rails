@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160301173036) do
+ActiveRecord::Schema.define(version: 20170112210803) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -74,6 +74,7 @@ ActiveRecord::Schema.define(version: 20160301173036) do
     t.datetime "created_at",                            null: false
     t.datetime "updated_at",                            null: false
     t.integer  "reconciliation_id"
+    t.integer  "bills_count",               default: 0, null: false
     t.index ["reconciliation_id"], name: "index_meals_on_reconciliation_id", using: :btree
   end
 

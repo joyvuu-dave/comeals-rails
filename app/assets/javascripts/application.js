@@ -10,12 +10,12 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require jquery2
+//= require jquery3
 //= require jquery_ujs
 //= require bootstrap-sprockets
 //= require cocoon
 //= require notie
-//= require moment.min
+//= require moment
 //= require fullcalendar
 //= require react
 //= require react_ujs

@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20160301173036
+# Schema version: 20170112210803
 #
 # Table name: bills
 #
@@ -18,14 +18,15 @@
 #
 # Foreign Keys
 #
-#  fk_rails_a4b9083e79  (meal_id => meals.id)
-#  fk_rails_d7e3fd1337  (resident_id => residents.id)
+#  fk_rails_...  (meal_id => meals.id)
+#  fk_rails_...  (resident_id => residents.id)
 #
 
 class Bill < ApplicationRecord
   belongs_to :meal
   belongs_to :resident
 
+  counter_culture :meal
   counter_culture :meal, column_name: 'cost', delta_column: 'amount_cents'
   counter_culture :resident, column_name: 'bill_costs', delta_column: 'amount_cents'
 
@@ -37,11 +38,13 @@ class Bill < ApplicationRecord
 
   # DERIVED DATA
   def reimburseable_amount
-    if meal.subsidized?
-      cost_difference = meal.cost - meal.cap * meal.multiplier
-      amount_cents - ((amount_cents / meal.cost.to_f) * cost_difference).ceil
-    else
-      amount_cents
+    return meal.cost - meal.cap * meal.multiplier if meal.subsidized?
+
+    adj_amount = amount_cents
+    while adj_amount % meal.multiplier != 0
+      adj_amount += 1
     end
+    adj_amount
   end
+
 end

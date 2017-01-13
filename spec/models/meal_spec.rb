@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20160301173036
+# Schema version: 20170112210803
 #
 # Table name: meals
 #
@@ -16,6 +16,7 @@
 #  created_at                :datetime         not null
 #  updated_at                :datetime         not null
 #  reconciliation_id         :integer
+#  bills_count               :integer          default(0), not null
 #
 # Indexes
 #
@@ -23,7 +24,7 @@
 #
 # Foreign Keys
 #
-#  fk_rails_4ac0d4ffd3  (reconciliation_id => reconciliations.id)
+#  fk_rails_...  (reconciliation_id => reconciliations.id)
 #
 
 require 'rails_helper'

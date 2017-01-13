@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20160301173036
+# Schema version: 20170112210803
 #
 # Table name: meals
 #
@@ -16,6 +16,7 @@
 #  created_at                :datetime         not null
 #  updated_at                :datetime         not null
 #  reconciliation_id         :integer
+#  bills_count               :integer          default(0), not null
 #
 # Indexes
 #
@@ -23,7 +24,7 @@
 #
 # Foreign Keys
 #
-#  fk_rails_4ac0d4ffd3  (reconciliation_id => reconciliations.id)
+#  fk_rails_...  (reconciliation_id => reconciliations.id)
 #
 
 class Meal < ApplicationRecord
@@ -56,11 +57,18 @@ class Meal < ApplicationRecord
   end
 
   def chargeable_unit_cost
-    if attendees == 0
-      0
-    else
-      fraction = cost / multiplier.to_f
-      [(fraction.nan? ? 0 : fraction).ceil, cap].min
+    return 0 if cost == 0 # no bills
+    return 0 if multiplier == 0 # no attendees
+
+    unit_cost = (cost / multiplier.to_f).ceil
+
+    # Scenario #1: our initial value fits
+    return unit_cost if unit_cost <= cap && unit_cost % multiplier == 0
+
+    # Scenario #2: unit_cost is below cap
+    while unit_cost < cap do
+      unit_cost += 1
+      return unit_cost if unit_cost % multiplier == 0
     end
   end
 
@@ -71,6 +79,12 @@ class Meal < ApplicationRecord
 
   def reconciled?
     reconciliation_id.present?
+  end
+
+  # HELPERS
+  def self.can_add_bill
+    return true if bills_count == 0
+    cost < cap * multiplier
   end
 
   # Report Methods
