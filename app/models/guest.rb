@@ -37,6 +37,6 @@ class Guest < ApplicationRecord
   validates :multiplier, numericality: { only_integer: true }
 
   def cost
-    meal.chargeable_unit_cost * multiplier
+    meal.unit_cost * multiplier
   end
 end

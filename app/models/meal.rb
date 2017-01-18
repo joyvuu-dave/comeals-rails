@@ -56,28 +56,21 @@ class Meal < ApplicationRecord
     meal_residents_count + guests_count
   end
 
-  def chargeable_unit_cost
-    return 0 if cost == 0 # no bills
-    return 0 if multiplier == 0 # no attendees
+  def modified_cost
+    bills.map(&:reimburseable_amount).inject(0, :+)
+  end
 
-    unit_cost = (cost / multiplier.to_f).ceil
+  def unit_cost
+    bills.map(&:unit_cost).inject(0, :+)
+  end
 
-    # Scenario #1: our initial value fits
-    return unit_cost if unit_cost <= cap && unit_cost % multiplier == 0
-
-    # Scenario #2: unit_cost is below cap
-    while unit_cost < cap do
-      unit_cost += 1
-      return unit_cost if unit_cost % multiplier == 0
-    end
-
-    # Scenario #3: unit_cost is above cap
-    cap
+  def collected
+    unit_cost * multiplier
   end
 
   def subsidized?
-    return false if attendees == 0
-    chargeable_unit_cost * multiplier - cost < 0
+    return false if multiplier == 0
+    cost > max_cost
   end
 
   def reconciled?
@@ -85,16 +78,31 @@ class Meal < ApplicationRecord
   end
 
   # HELPERS
-  def can_add_bill?
-    return true if bills_count == 0
-    return true if cap == Float::INFINITY
-
-    cost < cap * multiplier
+  def max_cost
+    cap * multiplier
   end
 
-  def max_bill_amount
-    return Float::INFINITY if bills_count == 0
-    cap * multiplier - cost
+  # TEST
+  def balanced?
+    bills.map(&:reimburseable_amount).inject(0, :+) == modified_cost
+  end
+
+  def whats_wrong
+    return nil if diff == 0
+
+    message = diff > 0 ?
+      "more collected than given to cooks." :
+      "more given to cooks than collected."
+
+    "#{diff} #{message}"
+  end
+
+  def diff
+    collected - modified_cost
+  end
+
+  def naive_unit_cost
+    (cost / multiplier.to_f).ceil
   end
 
   # Report Methods

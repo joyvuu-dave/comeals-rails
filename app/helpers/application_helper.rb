@@ -20,4 +20,20 @@ module ApplicationHelper
     return "#{val} meal" if val == 1
     return "#{val} meals"
   end
+
+  def resident_name_helper(name)
+    first = name.split(' ')[0]
+    last = name.split(' ')[1]
+
+    names = Resident.pluck(:name).map { |name| name.split(' ')[0] }
+
+    # Scenario #1: Name is just a first name (already unique)
+    return name if last.nil?
+
+    # Scenario #2: first name is unique
+    return first if names.count(first) == 1
+
+    # Scenario #3: first name is not unique
+    return "#{first} #{last[0]}"
+  end
 end

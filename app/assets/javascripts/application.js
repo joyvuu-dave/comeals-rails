@@ -14,7 +14,6 @@
 //= require jquery_ujs
 //= require bootstrap-sprockets
 //= require cocoon
-//= require notie
 //= require moment
 //= require fullcalendar
 //= require react

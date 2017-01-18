@@ -35,9 +35,13 @@ class MealSerializer < ActiveModel::Serializer
              :description
 
   def title
-    syntax = object.attendees == 1 ? "person" : "people"
-    max_string = object.max ? "(#{object.max} max)" : ""
-    "Common Dinner\n#{object.attendees} #{syntax} #{max_string}"
+    modifier = object.balanced? ? nil : "(#{object.id}#{object.subsidized? ? "*" : nil})"
+
+    Date.today > object.date ?
+      "#{modifier} Dinner: #{object.attendees} present" :
+      object.max ?
+        "#{modifier} Dinner: #{object.max} max (#{object.max - object.attendees} left)" :
+        "#{modifier} Dinner: no max"
   end
 
   def start

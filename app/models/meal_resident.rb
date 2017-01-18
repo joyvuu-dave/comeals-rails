@@ -42,6 +42,6 @@ class MealResident < ApplicationRecord
   end
 
   def cost
-    meal.chargeable_unit_cost * multiplier
+    meal.unit_cost * multiplier
   end
 end

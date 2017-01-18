@@ -30,34 +30,37 @@ class Bill < ApplicationRecord
   counter_culture :meal, column_name: 'cost', delta_column: 'amount_cents'
   counter_culture :resident, column_name: 'bill_costs', delta_column: 'amount_cents'
 
+  delegate :multiplier, to: :meal
+
   validates :meal, presence: true
   validates :resident, presence: true
   validates :amount_cents, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
-  validate :bill_can_be_created, on: :create
-  validate :amount_cents_is_within_meal_limits
 
   monetize :amount_cents
 
-  def bill_can_be_created
-    unless meal.can_add_bill?
-      errors.add(:meal, "Can't add another bill until people sign up.") and return if meal.attendees == 0
-      errors.add(:meal, "Meal cost already exceeds cap.")
-    end
-  end
-
-  def amount_cents_is_within_meal_limits
-    errors.add(:amount_cents, "Amount exceeds limits.") if amount_cents > meal.max_bill_amount
-  end
-
   # DERIVED DATA
   def reimburseable_amount
-    return meal.cost - meal.cap * meal.multiplier if meal.subsidized?
+    return 0 if amount_cents == 0
+    return 0 if meal.multiplier == 0
 
-    adj_amount = amount_cents
-    while adj_amount % meal.multiplier != 0
-      adj_amount += 1
+    value = max_amount
+    until value % meal.multiplier == 0 do
+      value += 1
     end
-    adj_amount
+    value
+  end
+
+  def unit_cost
+    return 0 if multiplier == 0
+    reimburseable_amount / multiplier
+  end
+
+  # HELPERS
+  def max_amount
+    return amount_cents unless persisted?
+
+    return amount_cents if meal.cost == 0
+    (amount_cents / meal.cost).to_f.round(2) * 100
   end
 
 end

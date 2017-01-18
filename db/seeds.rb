@@ -15,14 +15,21 @@ puts "#{Community.count} Community created"
 ('A'..'Z').to_a.each_with_index do |letter, index|
   unless letter == 'O' || letter == 'I'
     unit = Unit.create(name: letter)
-    Resident.create(name: Faker::Name.name,
+    Resident.create(name: "#{Faker::Name.first_name} #{Faker::Name.last_name}",
                     multiplier: 1, unit_id: unit.id)
-    Resident.create(name: Faker::Name.first_name,
+    Resident.create(name: "#{Faker::Name.first_name} #{Faker::Name.last_name}",
                     multiplier: 2, unit_id: unit.id)
-    Resident.create(name: Faker::Name.first_name,
+    Resident.create(name: "#{Faker::Name.first_name} #{Faker::Name.last_name}",
                     multiplier: 2, unit_id: unit.id)
   end
 end
+
+# Give 3 Residents the same First Name
+first_name = Faker::Name.first_name
+Resident.where(id: Resident.where(multiplier: 2).pluck(:id).shuffle.take(3)).each do |resident|
+  resident.update_attributes(name: "#{first_name} #{Faker::Name.last_name}")
+end
+
 
 puts "#{Unit.count} Units created"
 puts "#{Resident.count} Residents created"
@@ -54,7 +61,12 @@ puts "#{MealResident.count} MealResidents created"
 # Bills
 Meal.all.each_with_index do |meal, index|
   ids = Resident.pluck(:id).shuffle[0..1]
-  if index % 2 == 0
+  if index % 2 == 0 && index % 3 == 0
+    Bill.create(meal_id: meal.id, resident_id: ids[0],
+                amount_cents: (3500..6500).to_a.shuffle[0])
+    Bill.create(meal_id: meal.id, resident_id: ids[1],
+                amount_cents: 0)
+  elsif index % 2 == 0
     Bill.create(meal_id: meal.id, resident_id: ids[0],
                 amount_cents: (2500..3500).to_a.shuffle[0])
     Bill.create(meal_id: meal.id, resident_id: ids[1],
@@ -99,7 +111,12 @@ puts "#{MealResident.count} MealResidents created"
 # Bills
 Meal.all.each_with_index do |meal, index|
   ids = Resident.pluck(:id).shuffle[0..1]
-  if index % 3 == 0
+  if index % 3 == 0 && index % 4 == 0
+    Bill.create(meal_id: meal.id, resident_id: ids[0],
+                amount_cents: (3500..6500).to_a.shuffle[0])
+    Bill.create(meal_id: meal.id, resident_id: ids[1],
+                amount_cents: 0)
+  elsif index % 3 == 0
     Bill.create(meal_id: meal.id, resident_id: ids[0],
                 amount_cents: (2500..3500).to_a.shuffle[0])
     Bill.create(meal_id: meal.id, resident_id: ids[1],
@@ -121,12 +138,7 @@ Meal.update_all(description: 'Tofu tacos, Sloppy Joe, Beet Salad, Sourdough Roll
 # Set Max
 Meal.all.each_with_index do |meal, index|
   next if meal.bills.count == 0
-  if index % 2 == 0
-    meal.update_attribute(:max, meal.attendees + 2)
-  else
-    meal.update_attribute(:max, meal.attendees)
-  end
+  meal.update_attribute(:max, meal.attendees + rand(0..3)) if index % 2 == 0
 end
 
 puts "#{Meal.count} Meals created (#{Meal.unreconciled.count} unreconciled)"
-
