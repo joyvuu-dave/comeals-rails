@@ -41,10 +41,10 @@ class Bill < ApplicationRecord
   # DERIVED DATA
   def reimburseable_amount
     return 0 if amount_cents == 0
-    return 0 if meal.multiplier == 0
+    return 0 if multiplier == 0
 
     value = max_amount
-    until value % meal.multiplier == 0 do
+    until value % multiplier == 0 do
       value += 1
     end
     value
@@ -60,7 +60,7 @@ class Bill < ApplicationRecord
     return amount_cents unless persisted?
 
     return amount_cents if meal.cost == 0
-    (amount_cents / meal.cost).to_f.round(2) * 100
+    (amount_cents / meal.cost).to_f.round(2) * amount_cents
   end
 
 end
