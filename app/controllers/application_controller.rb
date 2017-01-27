@@ -1,25 +1,18 @@
 class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
-  protect_from_forgery with: :exception
+  # protect_from_forgery with: :null_session
 
-  before_action :authenticate
+  before_action :set_status
 
-  def authenticate
-    if cookies[:user] == 'admin'
-      @signed_in = true
-      @admin = true
-    elsif cookies[:user] == 'user'
-      @signed_in = true
-      @admin = false
-    else
-      @signed_in = false
-      @admin = false
-    end
+  def set_status
+    @resident_id = cookies.signed[:resident_id]
+    @signed_in = true if cookies.signed[:signed_in]
+    @admin = true if cookies.signed[:admin]
   end
 
   def signed_in?
-    unless @signed_in == true
+    unless @signed_in
       respond_to do |format|
         format.html { redirect_to :root }
         format.json { render json: { error: 'Unauthorized request.' }, status: :unauthorized }

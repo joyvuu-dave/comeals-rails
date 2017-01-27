@@ -1,20 +1,22 @@
 # == Schema Information
-# Schema version: 20170112210803
 #
 # Table name: residents
 #
-#  id         :integer          not null, primary key
-#  name       :string           not null
-#  multiplier :integer          default(2), not null
-#  unit_id    :integer
-#  bill_costs :integer          default(0), not null
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id              :integer          not null, primary key
+#  name            :string           not null
+#  multiplier      :integer          default(2), not null
+#  unit_id         :integer
+#  bill_costs      :integer          default(0), not null
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  password_digest :string
+#  admin           :boolean          default(FALSE), not null
 #
 # Indexes
 #
-#  index_residents_on_name     (name) UNIQUE
-#  index_residents_on_unit_id  (unit_id)
+#  index_residents_on_name             (name) UNIQUE
+#  index_residents_on_password_digest  (password_digest) UNIQUE
+#  index_residents_on_unit_id          (unit_id)
 #
 # Foreign Keys
 #
@@ -22,6 +24,8 @@
 #
 
 class Resident < ApplicationRecord
+  has_secure_password validations: false
+
   belongs_to :unit
   has_many :bills, dependent: :destroy
   has_many :meal_residents, dependent: :destroy
@@ -29,7 +33,9 @@ class Resident < ApplicationRecord
   has_many :guests, dependent: :destroy
 
   validates :name, presence: true, uniqueness: true
+  validates :password_digest, presence: true, if: "admin"
   validates :multiplier, numericality: { only_integer: true }
+
 
   # DERIVED DATA
   def bill_reimbursements

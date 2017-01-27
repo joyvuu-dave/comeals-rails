@@ -5,7 +5,13 @@
 
   <!-- Username -->
   <div class="form-group">
-    <input type="text" class="form-control" id="username" name="username" placeholder="Username">
+    <select name="resident_id" class="form-control">
+        <option value="">Blank</option>
+        <option value="-1">foo</option>
+      <% Resident.includes(:unit).order("units.name").order(:name).all.each do |resident| %>
+        <option value="<%= resident.id %>"><%= "#{resident.unit.name} - #{resident.name}#{"*" if resident.admin}" %></option>
+      <% end %>
+    </select>
   </div>
 
   <!-- Password -->

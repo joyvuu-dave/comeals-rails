@@ -1,14 +1,15 @@
 <!-- Header -->
-<% if @signed_in %>
-  <div class="page-header">
-    <%= link_to 'Calendar', calendar_path, class: "btn btn-info btn-xs dark" %>
-    <%= link_to('Community', communities_path, class: "btn btn-info btn-xs dark") if @admin %>
-    <%= link_to('Meal Forms', meals_path(q: 'current'), class: "btn btn-info btn-xs dark") %>
-    <%= link_to('Bills', bills_path, class: "btn btn-info btn-xs dark") if @admin %>
-    <%= link_to('Residents', residents_path, class: "btn btn-info btn-xs dark") if @admin %>
-    <%= link_to('Units', units_path, class: "btn btn-info btn-xs dark") if @admin %>
-    <%= link_to('Balance Report', report_path, class: "btn btn-info btn-xs dark") %>
-    <%= link_to('Admin', admin_path, class: "btn btn-info btn-xs dark") if @admin %>
-    <%= link_to "Logout#{' Admin' if @admin}", logout_path, method: :post, class: "btn btn-default btn-xs pull-right" %>
-  </div>
-<% end %>
+<div class="page-header">
+  <%= link_to 'Calendar', root_path, class: "btn btn-info btn-xs dark" %>
+  <%= link_to('Community', communities_path, class: "btn btn-info btn-xs dark") if @admin %>
+  <%= link_to('Meal Forms', meals_path(q: 'current'), class: "btn btn-info btn-xs dark") %>
+  <%= link_to('Bills', bills_path, class: "btn btn-info btn-xs dark") if @admin %>
+  <%= link_to('Residents', residents_path, class: "btn btn-info btn-xs dark") if @admin %>
+  <%= link_to('Units', units_path, class: "btn btn-info btn-xs dark") if @admin %>
+  <%= link_to('Balance Report', report_path, class: "btn btn-info btn-xs dark") %>
+  <%= link_to('Admin', admin_path, class: "btn btn-info btn-xs dark") if @admin %>
+  <%= link_to "Log Out #{resident_name_helper(Resident.find(@resident_id).name)} #{' (admin)' if @admin}", logout_path, method: :post, class: "btn btn-default btn-xs pull-right" if @signed_in %>
+  <% if params[:controller] != 'sessions' %>
+    <%= link_to "Log In", login_path, class: "btn btn-default btn-xs pull-right" unless @signed_in %>
+  <% end %>
+</div>

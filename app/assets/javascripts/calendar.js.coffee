@@ -1,6 +1,9 @@
 $ ->
   $('a').qtip()
 
+  spinner = new Spinner().spin()
+  document.body.appendChild(spinner.el)
+
   $('#calendar').fullCalendar(
     eventSources: [
       {url: '/api/meals', color: '#729f98'},
@@ -17,4 +20,6 @@ $ ->
         }
       }) if event.description
       return
+    eventAfterAllRender: (view) ->
+      spinner.stop()
   )

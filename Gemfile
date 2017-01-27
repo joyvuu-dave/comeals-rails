@@ -25,7 +25,7 @@ gem 'money-rails', github: 'RubyMoney/money-rails', branch: 'ruby-2-4-0'
 gem 'puma'
 gem 'counter_culture'
 gem 'kaminari'
-gem 'bootstrap-sass', '~> 3.3.6'
+gem 'bootstrap-sass', '~> 3.3.7'
 gem 'simple_form'
 gem 'cocoon'
 gem 'dalli'
@@ -36,7 +36,7 @@ gem 'react-rails'
 gem 'rack-cors', :require => 'rack/cors'
 
 # Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
+gem 'bcrypt', '~> 3.1.7'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development

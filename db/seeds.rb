@@ -20,7 +20,7 @@ puts "#{Community.count} Community created"
     Resident.create(name: "#{Faker::Name.first_name} #{Faker::Name.last_name}",
                     multiplier: 2, unit_id: unit.id)
     Resident.create(name: "#{Faker::Name.first_name} #{Faker::Name.last_name}",
-                    multiplier: 2, unit_id: unit.id)
+                    multiplier: 2, unit_id: unit.id, password: 'password', admin: index % 7 == 0)
   end
 end
 
@@ -32,7 +32,7 @@ end
 
 
 puts "#{Unit.count} Units created"
-puts "#{Resident.count} Residents created"
+puts "#{Resident.count} Residents created (#{Resident.where(admin: true).count} admins)"
 
 # Meals (will be reconciled)
 Meal.create_templates(Date.parse('15-09-2016'), Date.parse('29-12-2016'), 0, 0)

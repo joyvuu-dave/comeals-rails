@@ -1,10 +1,10 @@
 Rails.application.routes.draw do
-  root to: 'static_pages#index'
+  root to: 'calendar#index'
 
-  post '/login',  to: 'sessions#login',  as: :login
-  post '/logout', to: 'sessions#logout', as: :logout
+  get '/login', to: 'sessions#new'
+  post '/login',  to: 'sessions#create'
+  post '/logout', to: 'sessions#delete'
 
-  get '/calendar', to: 'calendar#index', as: :calendar
   get '/report', to: 'report#show', as: :report
   get '/admin', to: 'admin#show', as: :admin
 

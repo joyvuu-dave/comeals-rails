@@ -21,3 +21,4 @@
 //= require components
 //= require jquery.are-you-sure
 //= require jquery.qtip
+//= require spin

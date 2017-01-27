@@ -1,5 +1,4 @@
 # == Schema Information
-# Schema version: 20160218020330
 #
 # Table name: communities
 #
