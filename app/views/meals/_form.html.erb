@@ -61,7 +61,7 @@
 
   <!-- Update / Cancel buttons -->
   <%= f.submit nil, class: "btn btn-primary js-submit-meal" unless @meal.reconciled? %>
-  <%= link_to 'Cancel', calendar_path, class: "btn btn-default" %>
+  <%= link_to 'Cancel', root_path, class: "btn btn-default" %>
 
 <% end %>
 

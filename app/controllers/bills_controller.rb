@@ -48,7 +48,7 @@ class BillsController < ApplicationController
   def create
     @bill = Bill.new(bill_params)
     if @bill.save
-      redirect_to calendar_path, notice: 'Bill was successfully created.'
+      redirect_to root_path, notice: 'Bill was successfully created.'
     else
       render :new
     end
@@ -57,7 +57,7 @@ class BillsController < ApplicationController
   # PATCH/PUT /bills/1
   def update
     if @bill.update(bill_params)
-      redirect_to calendar_path, notice: 'Bill was successfully updated.'
+      redirect_to root_path, notice: 'Bill was successfully updated.'
     else
       render :edit
     end

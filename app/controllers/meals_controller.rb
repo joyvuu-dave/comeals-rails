@@ -27,7 +27,7 @@
 #
 
 class MealsController < ApplicationController
-  before_action :signed_in?
+  #before_action :signed_in?
   before_action :admin?, only: [:destroy]
   before_action :set_meal, only: [:show, :edit, :update, :destroy]
   before_action :check_on_next_and_previous, only: [:edit]
@@ -79,7 +79,7 @@ class MealsController < ApplicationController
     if @meal.update(meal_params)
       # Workaround for counter_cache not updating this automatically
       MealResident.counter_culture_fix_counts
-      redirect_to calendar_path, notice: "#{@meal.date.inspect} meal was successfully updated."
+      redirect_to root_path, notice: "#{@meal.date.inspect} meal was successfully updated."
     else
       render :edit
     end
@@ -121,7 +121,7 @@ class MealsController < ApplicationController
       count = Meal.create_templates(start_date, end_date, alternating_dinner_day, 0)
       syntax = count == 1 ? 'template was' : 'templates were'
 
-      redirect_to calendar_path, notice: "#{count} meal #{syntax} successfully created."
+      redirect_to root_path, notice: "#{count} meal #{syntax} successfully created."
     end
 
     def show_current

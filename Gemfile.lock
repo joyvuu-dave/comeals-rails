@@ -30,7 +30,7 @@ GIT
 
 GIT
   remote: git://github.com/rails/rails.git
-  revision: d16b100750ae0afa2810ad297cdff0b6ebe4a7eb
+  revision: cc9d656d81fdd7fcf7c1deaeba82ff4fe89fe6d3
   branch: 5-0-stable
   specs:
     actioncable (5.0.1)
@@ -55,7 +55,7 @@ GIT
       builder (~> 3.1)
       erubis (~> 2.7.0)
       rails-dom-testing (~> 2.0)
-      rails-html-sanitizer (~> 1.0, >= 1.0.2)
+      rails-html-sanitizer (~> 1.0, >= 1.0.3)
     activejob (5.0.1)
       activesupport (= 5.0.1)
       globalid (>= 0.3.6)
@@ -96,7 +96,7 @@ GEM
       activerecord (>= 3.0.0)
       activesupport (>= 3.0.0)
     arel (7.1.4)
-    autoprefixer-rails (6.7.0)
+    autoprefixer-rails (6.7.1)
       execjs
     babel-source (5.8.35)
     babel-transpiler (0.7.0)
@@ -203,7 +203,7 @@ GEM
       pry (~> 0.10)
     pry-rails (0.3.4)
       pry (>= 0.9.10)
-    puma (3.6.2)
+    puma (3.7.0)
     rack (2.0.1)
     rack-cors (0.4.0)
     rack-test (0.6.3)
