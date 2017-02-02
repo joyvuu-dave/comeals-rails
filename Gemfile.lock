@@ -11,7 +11,7 @@ GIT
 
 GIT
   remote: git://github.com/ctran/annotate_models.git
-  revision: d108ba8bdec760ded4c8c786b1d7cc72cadba4df
+  revision: 625e0d0dc1bd49f1a1bfaa6bb5e405fb7786abe5
   branch: develop
   specs:
     annotate (2.7.1)
@@ -20,7 +20,7 @@ GIT
 
 GIT
   remote: git://github.com/rails-api/active_model_serializers.git
-  revision: 9ccdb15610a200870135635fd346e895916a0096
+  revision: 58e3983e4c18baea937535038c1324017793f166
   specs:
     active_model_serializers (0.10.4)
       actionpack (>= 4.1, < 6)
@@ -30,7 +30,7 @@ GIT
 
 GIT
   remote: git://github.com/rails/rails.git
-  revision: cc9d656d81fdd7fcf7c1deaeba82ff4fe89fe6d3
+  revision: 24c585df91a5d34b0986e58ac1b46b61dd3647b5
   branch: 5-0-stable
   specs:
     actioncable (5.0.1)
@@ -96,7 +96,7 @@ GEM
       activerecord (>= 3.0.0)
       activesupport (>= 3.0.0)
     arel (7.1.4)
-    autoprefixer-rails (6.7.1)
+    autoprefixer-rails (6.7.2)
       execjs
     babel-source (5.8.35)
     babel-transpiler (0.7.0)
@@ -205,7 +205,7 @@ GEM
       pry (>= 0.9.10)
     puma (3.7.0)
     rack (2.0.1)
-    rack-cors (0.4.0)
+    rack-cors (0.4.1)
     rack-test (0.6.3)
       rack (>= 1.0)
     rails-controller-testing (1.0.1)

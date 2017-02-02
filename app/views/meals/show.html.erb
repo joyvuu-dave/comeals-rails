@@ -31,11 +31,13 @@
 
   <dt><strong>Person Units:</strong></dt>
   <dd><%= @meal.multiplier %></dd>
+
+  <% @meal.meal_residents.each do |mr| %>
+    <div><%= mr.resident.name %></div>
+  <% end %>
 </dl>
 
 <!-- Back / Edit / Delete buttons -->
-<%= link_to 'Back', meals_path, class: "btn btn-default" %>
-<%= link_to 'Edit', edit_meal_path(@meal), class: "btn btn-default" %>
 <%= link_to('Delete',
              meal_path(@meal),
              method: 'delete',

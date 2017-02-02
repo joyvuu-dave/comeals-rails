@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  root to: 'calendar#index'
+  root to: 'meals#show'
 
   get '/login', to: 'sessions#new'
   post '/login',  to: 'sessions#create'

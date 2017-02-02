@@ -1,6 +1,5 @@
 <!-- Header -->
 <div class="page-header">
-  <%= link_to 'Calendar', root_path, class: "btn btn-info btn-xs dark" %>
   <%= link_to('Community', communities_path, class: "btn btn-info btn-xs dark") if @admin %>
   <%= link_to('Meal Forms', meals_path(q: 'current'), class: "btn btn-info btn-xs dark") %>
   <%= link_to('Bills', bills_path, class: "btn btn-info btn-xs dark") if @admin %>

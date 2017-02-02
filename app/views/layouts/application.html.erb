@@ -13,12 +13,19 @@
   </head>
 
   <body>
-    <div class="container">
+    <div class="container" style="min-width: 1200px; max-width: 1600px">
       <%= render partial: 'layouts/flash' %>
       <%= render partial: 'layouts/header' %>
-      <%= yield %>
+
+      <div class="row">
+        <div id="calendar" class="col-xs-9"></div>
+        <div class="col-xs-3">
+          <%= yield %>
+        </div>
+      </div>
 
     </div>
+    <%= javascript_include_tag 'calendar' %>
     <%= javascript_include_tag 'common' %>
     <script src="https://unpkg.com/notie"></script>
   </body>

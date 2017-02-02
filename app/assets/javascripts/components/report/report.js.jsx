@@ -1,5 +1,6 @@
 var Report = React.createClass({
   getInitialState: function() {
+
     return {
       start_date: '',
       end_date: '',
@@ -15,11 +16,20 @@ var Report = React.createClass({
         name: 'generating...',
         balance: '',
         meals_cooked: ''
-      }]
+      }],
+      fetching_residents: true,
+      fetching_units: true
     }
   },
 
   componentDidMount: function() {
+    // Start Spinners
+    var residents = document.getElementById('residents-spinner')
+    var residents_spinner = new Spinner().spin(residents)
+
+    var units = document.getElementById('units-spinner')
+    var units_spinner = new Spinner().spin(units)
+
     // Fetch report data
     this.reportRequest = $.get('/api/report', function (data) {
       this.setState({
@@ -34,15 +44,21 @@ var Report = React.createClass({
     // Fetch Resident data
     this.residentsRequest = $.get('/api/residents', function (data) {
       this.setState({
-        residents: data
+        residents: data,
+        fetching_residents: false
       });
+
+      residents_spinner.stop()
     }.bind(this));
 
     // Fetch Unit data
     this.unitsRequest = $.get('/api/units', function (data) {
       this.setState({
-        units: data
+        units: data,
+        fetching_units: false
       });
+
+      units_spinner.stop()
     }.bind(this));
   },
 
@@ -53,6 +69,13 @@ var Report = React.createClass({
   },
 
   render: function() {
+    const spinnerStyle = {
+      width: "100px",
+      height: "100px",
+      position: "relative",
+      display: "inline-block"
+    }
+
     return (
       <div>
         <h1>{this.state.start_date} - {this.state.end_date}</h1>
@@ -65,7 +88,7 @@ var Report = React.createClass({
 
         <br/>
 
-        <h2>Residents</h2>
+        <h2>Residents</h2>{this.state.fetching_residents ? <div id="residents-spinner" style={spinnerStyle}></div> : null}
         <table className="table table-striped">
           <thead>
             <tr>
@@ -89,7 +112,7 @@ var Report = React.createClass({
 
         <br/>
 
-        <h2>Units</h2>
+        <h2>Units</h2>{this.state.fetching_units ? <div id="units-spinner" style={spinnerStyle}></div> : null}
         <table className="table table-striped">
           <thead>
             <tr>

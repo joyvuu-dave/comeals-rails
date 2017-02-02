@@ -97,6 +97,7 @@ class MealsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_meal
+      show_current and return unless params[:id].present?
       @meal = Meal.find(params[:id])
     end
 
@@ -136,7 +137,7 @@ class MealsController < ApplicationController
         @meal = Meal.order(:date).where("date < ?", current_date).last
       end
 
-      redirect_to edit_meal_path(@meal)
+      #redirect_to edit_meal_path(@meal)
     end
 
     def edit_next
