@@ -19,7 +19,7 @@ gem 'coffee-rails'
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 gem 'faker'
-gem 'money-rails', github: 'RubyMoney/money-rails', branch: 'ruby-2-4-0'
+gem 'money-rails'
 
 # Use Puma as the app server
 gem 'puma'
